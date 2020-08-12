@@ -1,0 +1,9 @@
+numpy>=1.19.0
+mne>=0.19.1
+argparse
+pytest<5.4
+pytest-cov
+pytest-sugar
+check-manifest
+pydocstyle
+flake8

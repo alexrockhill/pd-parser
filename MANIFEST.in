@@ -1,0 +1,10 @@
+include *.py
+include *.txt
+include *.xml
+include LICENSE
+include Makefile
+recursive-include pd_parser *.DS_Store
+include pd_parser/parse_pd.py
+include pd_parser/tests/test_parse_pd.py
+include pd_parser/tests/data/pd_data.tsv
+include pd_parser/tests/data/events.tsv
