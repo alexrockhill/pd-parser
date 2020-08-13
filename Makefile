@@ -30,7 +30,7 @@ inplace:
 
 test: inplace check-manifest
 	rm -f .coverage
-	$(PYTESTS) ephys_anonymizer
+	$(PYTESTS) pd_parser
 
 test-doc:
 	$(PYTESTS) --doctest-modules --doctest-ignore-import-errors pd_parser

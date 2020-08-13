@@ -58,7 +58,9 @@ if __name__ == "__main__":
           entry_points={'console_scripts': [
               'parse_pd = pd_parser.commands.run:parse_pd',
               'add_relative_events = '
-              'pd_parser.commands.run:add_relative_events'
+              'pd_parser.commands.run:add_relative_events',
+              'add_events_to_raw = '
+              'pd_parser.commands.run:add_events_to_raw'
           ]},
           project_urls={
               'Bug Reports':
