@@ -10,13 +10,55 @@ the event time samples at which it turned on.
 
 import os
 import os.path as op
-from shutils import copyfile
 import numpy as np
-
-from pandas import read_csv
 from tqdm import tqdm
 
 import mne
+
+
+def _read_tsv(fname):
+    if op.splitext(fname)[-1] != '.tsv':
+        raise ValueError(f'Unable to read {fname}, tab-separated-value '
+                         '(tsv) is required.')
+    if op.getsize(fname) == 0:
+        raise ValueError(f'Error in reading tsv, file {fname} empty')
+    df = dict()
+    with open(fname, 'r') as fid:
+        headers = fid.readline().rstrip().split('\t')
+        for header in headers:
+            df[header] = list()
+        for line in fid:
+            line_data = line.rstrip().split('\t')
+            if len(line_data) != len(headers):
+                raise ValueError(f'Error with file {fname}, the columns are '
+                                 'different lengths')
+            for i, data in enumerate(line_data):
+                numeric = all([c.isdigit() or c in ('.', '-')
+                               for c in data])
+                if numeric:
+                    if data.isdigit():
+                        df[headers[i]].append(int(data))
+                    else:
+                        df[headers[i]].append(float(data))
+                else:
+                    df[headers[i]].append(data)
+    if any([not val for val in df.values()]):  # no empty lists
+        raise ValueError(f'Error in reading tsv, file {fname} '
+                         'contains no data')
+    return df
+
+
+def _to_tsv(fname, df):
+    if op.splitext(fname)[-1] != '.tsv':
+        raise ValueError(f'Unable to write to {fname}, tab-separated-value '
+                         '(tsv) is required.')
+    if len(df.keys()) == 0:
+        raise ValueError('Empty data file, no keys')
+    first_column = list(df.keys())[0]
+    with open(fname, 'w') as fid:
+        fid.write('\t'.join([str(k) for k in df.keys()]) + '\n')
+        for i in range(len(df[first_column])):
+            fid.write('\t'.join([str(val[i]) for val in df.values()]) + '\n')
 
 
 def _read_raw(fname, verbose=True):
@@ -25,15 +67,15 @@ def _read_raw(fname, verbose=True):
     if verbose:
         print('Reading in {}'.format(fname))
     if ext == '.fif':
-        raw = mne.io.read_raw_fif(fname, preload=False)
+        raw = mne.io.read_raw_fif(fname, preload=True)
     elif ext == '.edf':
-        raw = mne.io.read_raw_edf(fname, preload=False)
+        raw = mne.io.read_raw_edf(fname, preload=True)
     elif ext == '.bdf':
-        raw = mne.io.read_raw_bdf(fname, preload=False)
+        raw = mne.io.read_raw_bdf(fname, preload=True)
     elif ext == '.vhdr':
-        raw = mne.io.read_raw_brainvision(fname, preload=False)
+        raw = mne.io.read_raw_brainvision(fname, preload=True)
     elif ext == '.set':
-        raw = mne.io.read_raw_eeglab(fname, preload=False)
+        raw = mne.io.read_raw_eeglab(fname, preload=True)
     else:
         raise ValueError('Extension {} not recognized, options are'
                          'fif, edf, bdf, vhdr (brainvision) and set '
@@ -43,18 +85,12 @@ def _read_raw(fname, verbose=True):
 
 def _load_beh_df(behf, beh_col, verbose=True):
     """Load the behavioral data frame and check columns."""
-    try:
-        df = read_csv(behf, sep='\t')
-    except Exception as e:
-        if verbose:
-            print(e)
-        raise ValueError('Unable to read tab-separated-value (tsv) file, '
-                         'check that behf is a properly formated tsv file')
-    if beh_col not in df.columns:
+    df = _read_tsv(behf)
+    if beh_col not in df:
         raise ValueError(f'beh_col {beh_col} not in the columns of '
                          f'behf {behf}. Please check that the correct '
                          'column is provided')
-    return np.array(df[beh_col]), df
+    return df[beh_col], df
 
 
 def _get_pd_data(raw, pd_ch_names):
@@ -84,12 +120,13 @@ def _get_pd_data(raw, pd_ch_names):
                       'for common referenced photodiode data or '
                       '2 names for bipolar reference')
         pd_ch_names = [ch.strip() for ch in pd_ch_names.split(',')]
-        # get pd data using channel names
-        if len(pd_ch_names) == 2:
-            pd = raw._data[raw.ch_names.index(pd_ch_names[0])]
-            pd -= raw._data[raw.ch_names.index(pd_ch_names[1])]
-        else:
-            pd = raw._data[raw.ch_names.index(pd_ch_names[0])]
+    # get pd data using channel names
+    if len(pd_ch_names) == 2:
+        pd = raw._data[raw.ch_names.index(pd_ch_names[0])]
+        pd -= raw._data[raw.ch_names.index(pd_ch_names[1])]
+    else:
+        pd = raw._data[raw.ch_names.index(pd_ch_names[0])]
+    pd -= np.median(pd)
     return pd, pd_ch_names
 
 
@@ -150,15 +187,20 @@ def _find_best_alignment(beh_events, pd_candidates, sorted_pds,
     min_error = best_alignment = best_errors = None
     max_index = max(pd_candidates)
     # may want first_alignment to be small to avoid drift
-    for i in tqdm(range(len(pd_candidates) - first_alignment_n)):
-        these_beh_events = beh_events.copy() + sorted_pds[i]
+    for i, pd_i in tqdm(enumerate(sorted_pds)):  # try starting with each pd
+        these_beh_events = beh_events.copy() + pd_i
         errors = list()
         for b_event in these_beh_events[:first_alignment_n]:
             errors.append(_pd_event_dist(b_event, pd_candidates, max_index))
-        median_error = np.median(errors)
-        if min_error is None or median_error < min_error:
+        # use the third quartile for robustness-- because of multiple
+        # comparisons, some may have a better median by chance, this
+        # is less likely for the third quartile. On the other hand,
+        # several events may be outliers but this event is robust
+        # to a full quarter of events being lost
+        error_metric = np.quantile(errors, 0.75)
+        if min_error is None or error_metric < min_error:
             best_alignment = i
-            min_error = median_error
+            min_error = error_metric
             best_errors = errors
     if verbose:
         print('Best alignment starting with photodiode event '
@@ -175,6 +217,7 @@ def _exclude_ambiguous_events(beh_events, pd_candidates, sorted_pds,
     """Exclude all events that are outside the given shift compared to beh."""
     if verbose:
         import matplotlib.pyplot as plt
+        pd_section_data = dict(b_event=list(), title=list())
         print('Excluding events that have zero close events or more than '
               'one photodiode event within `chunk` time')
     events = dict()
@@ -183,17 +226,14 @@ def _exclude_ambiguous_events(beh_events, pd_candidates, sorted_pds,
     chunk_i = int(sfreq * chunk)
     exclude_shift_i = int(sfreq * exclude_shift)
     beh_events_aligned = beh_events.copy() + sorted_pds[best_alignment]
+
     for i, b_event in enumerate(beh_events_aligned):
         j = _pd_event_dist(b_event, pd_candidates, max_index)
         if j > exclude_shift_i:
             if verbose:
-                print('Excluding event %i off by %i samples, ' % (i, j))
-                pd_section = pd[int(b_event - 10 * sfreq):
-                                int(b_event + 10 * sfreq)]
-                plt.plot(np.linspace(-10, 10, pd_section.size), pd_section)
-                plt.ylabel('voltage')
-                plt.xlabel('time')
-                plt.show()
+                pd_section_data['b_event'].append(b_event)
+                pd_section_data['title'].append(
+                    f'Excluding event {i}\noff by {j} samples')
         else:
             if int(b_event + j) in pd_candidates:
                 beh_events_aligned += j
@@ -209,24 +249,44 @@ def _exclude_ambiguous_events(beh_events, pd_candidates, sorted_pds,
                 events.pop(i)
                 errors.pop(i)
                 if verbose:
-                    print('%i events found for behvaior event %i, excluding' %
-                          (sum(pd_events), i))
-                    plt.plot(pd[int(b_event - 10 * sfreq):
-                                int(b_event + 10 * sfreq)])
-                    plt.show()
+                    pd_section_data['b_event'].append(b_event)
+                    pd_section_data['title'].append(
+                        f'{sum(pd_events)} events found '
+                        f'for\nbeh event {i}, excluding')
     if verbose:
-        print(errors)
+        n_events_ex = len(pd_section_data['b_event'])
+        if n_events_ex:  # only plot if some events were excluded
+            nrows = int(n_events_ex**0.5)
+            ncols = int(np.ceil(n_events_ex / nrows))
+            fig, axes = plt.subplots(nrows, ncols, figsize=(nrows * 5,
+                                                            ncols * 3))
+            fig.suptitle('Excluded Events')
+            fig.subplots_adjust(hspace=0.5, wspace=0.5)
+            axes = axes.flatten()
+            for ax in axes[n_events_ex:]:
+                ax.axis('off')  # turn off all unused axes
+            for b_event, title, ax in zip(pd_section_data['b_event'],
+                                          pd_section_data['title'],
+                                          axes[:n_events_ex]):
+                pd_section = pd[int(b_event - 10 * sfreq):
+                                int(b_event + 10 * sfreq)]
+                ax.plot(np.linspace(-10, 10, pd_section.size), pd_section)
+                ax.set_title(title, fontsize=12)
+                ax.set_ylabel('voltage')
+                ax.set_xlabel('time')
+            fig.show()
         print('Final behavior event-photodiode event differences '
               'min %i, q1 %i, med %i, q3 %i, max %i ' %
               (min(errors.values()), np.quantile(list(errors.values()), 0.25),
                np.median(list(errors.values())),
                np.quantile(list(errors.values()), 0.75), max(errors.values())))
         trials = sorted(errors.keys())
-        plt.plot(trials, [errors[t] for t in trials])
-        plt.ylabel('Difference (samples)')
-        plt.xlabel('Trial')
-        plt.title('Photodiode Events Compared to Behavior Events')
-        plt.show()
+        fig, ax = plt.subplots()
+        ax.plot(trials, [errors[t] for t in trials])
+        ax.set_ylabel('Difference (samples)')
+        ax.set_xlabel('Trial')
+        ax.set_title('Photodiode Events Compared to Behavior Events')
+        fig.show()
     return events
 
 
@@ -236,18 +296,24 @@ def _save_pd_data(fname, raw, events, event_id, pd_ch_names, beh_df=None):
     pd_data_dir = op.join(op.dirname(fname), basename + '_pd_data')
     if not op.isdir(pd_data_dir):
         os.makedirs(pd_data_dir)
+    if beh_df is not None:
+        if 'pd_sample' in beh_df:
+            raise ValueError(
+                'The column name `pd_sample` is not allowed in the behavior '
+                'tsv file (it\'s reserved for internal use. Please rename '
+                'that column to continue.')
+        beh_df['pd_sample'] = \
+            [events[i] if i in events else 'n/a' for i in
+             range(len(beh_df[list(beh_df.keys())[0]]))]
+        _to_tsv(op.join(pd_data_dir, basename + '_beh_df.tsv'), beh_df)
     onsets = np.array([events[i] for i in sorted(events.keys())])
     annot = mne.Annotations(onset=raw.times[onsets],
                             duration=np.repeat(0.1, len(onsets)),
                             description=np.repeat(event_id,
                                                   len(onsets)))
-    events, event_id = mne.events_from_annotations(raw)
     annot.save(op.join(pd_data_dir, basename + '_pd_annot.fif'))
     with open(op.join(pd_data_dir, basename + 'pd_ch_names.tsv'), 'w') as fid:
         fid.write('\t'.join(pd_ch_names))
-    if beh_df is not None:
-        beh_df.to_csv(op.join(pd_data_dir, basename + '_beh_df.tsv'),
-                      sep='\t', index=False)
 
 
 def _load_pd_data(fname):
@@ -263,17 +329,169 @@ def _load_pd_data(fname):
                          f'{pd_channels_fname}. Either `parse_pd` was '
                          f'not run, or it failed or {pd_data_dir} '
                          'may have been moved or deleted. Rerun '
-                         '`parse_pd` and optionally `add_relative_events` '
+                         '`parse_pd` and optionally `add_pd_relative_events` '
                          'to fix this')
     with open(pd_channels_fname, 'r') as fid:
         pd_ch_names = fid.readline().rstrip().split('\t')
-    return mne.read_annotations(annot_fname), pd_ch_names, behf
+    beh_df = _read_tsv(behf) if op.isfile(behf) else None
+    return mne.read_annotations(annot_fname), pd_ch_names, beh_df
 
 
-def parse_pd(fname, pd_event_name='Fixation', behf=None, beh_col=None,
-             pd_ch_names=None, chunk=2, baseline=0.25, overlap=0.25,
-             exclude_shift=0.1, zscore=10, min_i=10, alignment_prop=0.2,
-             overwrite=False, verbose=True):
+def find_pd_params(fname, pd_ch_names=None, verbose=True):
+    """ Plots the data so the user can determine the right parameters.
+
+    The user can adjust window size to determine chunk, horizontal
+    line height to determine zscore and seperation length of two
+    vertical lines to determine min_i.
+    Parameters
+    ----------
+    fname: str
+        The filepath to the electrophysiology file (meg/eeg/ieeg).
+    pd_ch_names : list
+        Names of the channel(s) containing the photodiode data.
+        One channel is to be given for a common reference and
+        two for a bipolar reference. If no channels are provided,
+        the data will be plotted and the user will provide them.
+    verbose : bool
+        Whether to display or supress text output on the progress
+        of the function.
+    """
+    # load raw data file with the photodiode data
+    import matplotlib as mpl
+    mpl.rcParams['toolbar'] = 'None'
+    import matplotlib.pyplot as plt
+    raw = _read_raw(fname, verbose=verbose)
+    pd, _ = _get_pd_data(raw, pd_ch_names)
+    fig, ax = plt.subplots()
+    fig.subplots_adjust(top=0.75, left=0.15)
+    plot_data = dict()
+
+    def zoom(amount):
+        ymin, ymax = ax.get_ylim()
+        # ymin < 0 and ymax > 0 because median subtracted
+        ymin *= amount
+        ymax *= amount
+        ax.set_ylim([ymin, ymax])
+        fig.canvas.draw()
+
+    def set_min_i(event):
+        if event.key == 'enter':
+            xmin, xmax = ax.get_xlim()
+            chunk = (xmax - xmin) * 1.1
+            b = pd[raw.time_as_index(xmin)[0]: raw.time_as_index(
+                xmin + (xmax - xmin) * 0.25)[0]]  # 0.25 == default baseline
+            zy = plot_data['zscore'].get_ydata()[0]
+            zscore = (zy - np.median(b)) / np.std(b)
+            min_i = plot_data['min_i'].get_xdata()[0]
+            min_i -= plot_data['zero'].get_xdata()[0]
+            min_i = int(min_i * raw.info['sfreq'])
+            ax.set_title('Recommendations\nchunk: {:.2f}, zscore: {:.2f}, '
+                         'min_i: {:d}\nYou may now close the window\n'
+                         'Try using these parameters for `parse_pd` and\n'
+                         'please report to the developers if there are issues'
+                         ''.format(chunk, zscore, min_i))
+            fig.canvas.draw()
+        elif event.key in ('left', 'right'):
+            min_i_x = plot_data['min_i'].get_xdata()[0]
+            min_i_x += 0.01 if event.key == 'left' else -0.01
+            plot_data['min_i'].set_xdata([min_i_x, min_i_x])
+            fig.canvas.draw()
+
+    def set_zscore(event):
+        if event.key == 'enter':
+            eid = fig.canvas.mpl_connect('key_press_event', set_min_i)
+            fig.canvas.mpl_disconnect(eid - 1)  # disconnect previous
+            xmin, xmax = ax.get_xlim()
+            zerox = plot_data['zero'].get_xdata()[0]
+            min_i_x = (xmax + zerox) / 2
+            ymin, ymax = ax.get_ylim()
+            plot_data['min_i'] = ax.plot([min_i_x, min_i_x], [ymin, ymax],
+                                         color='r')[0]
+            ax.set_title(
+                'Length\nUse the left/right arrows to set the vertical\n'
+                'line to a point on the photodiode plateau\n'
+                'where all events would still be on the plateau\n'
+                'press enter when finished')
+            fig.canvas.draw()
+        elif event.key in ('up', 'down'):
+            ymin, ymax = ax.get_ylim()
+            delta = (ymax - ymin) / 100
+            zy = plot_data['zscore'].get_ydata()[0]
+            zy += delta if event.key == 'up' else -delta
+            plot_data['zscore'].set_ydata(np.ones((pd.size)) * zy)
+            fig.canvas.draw()
+
+    def set_chunk(event):
+        if event.key == 'enter':
+            eid = fig.canvas.mpl_connect('key_press_event', set_zscore)
+            fig.canvas.mpl_disconnect(eid - 1)  # disconnect previous
+            plot_data['zscore'] = ax.plot(
+                raw.times, np.ones((pd.size)) * np.quantile(pd, 0.25),
+                color='g')[0]
+            ax.set_title(
+                'Scale\nUse the up/down arrows to set the horizontal\n'
+                'line at a level where the plateau of all the\n'
+                'photodiode events would still be above the line\n'
+                'press enter when finished')
+            fig.canvas.draw()
+        elif event.key in ('up', 'down'):
+            xmin, xmax = ax.get_xlim()
+            # ymin < 0 and ymax > 0 because median subtracted
+            xmin += 0.1 if event.key == 'up' else -0.1
+            xmax -= 0.1 if event.key == 'up' else -0.1
+            ax.set_xlim([xmin, xmax])
+            fig.canvas.draw()
+
+    def align_keypress(event):
+        if event.key == 'enter':
+            eid = fig.canvas.mpl_connect('key_press_event', set_chunk)
+            fig.canvas.mpl_disconnect(eid - 1)  # disconnect previous
+            ax.set_title(
+                'Window\nUse the up/down arrows to increase/decrease the\n'
+                'size of the window so that only one pd event is in the\n'
+                'window (leave room for the longest event if this isn\'t it)\n'
+                'press enter when finished')
+            fig.canvas.draw()
+        elif event.key in ('-', '+', '='):
+            zoom(1.1 if event.key == '-' else 0.9)
+        elif event.key in ('left', 'right'):
+            xmin, xmax = ax.get_xlim()
+            xmin += 0.1 if event.key == 'right' else -0.1
+            xmax += 0.1 if event.key == 'right' else -0.1
+            ax.set_xlim([xmin, xmax])
+            zerox = plot_data['zero'].get_xdata()[0]
+            zerox += 0.1 if event.key == 'right' else -0.1
+            plot_data['zero'].set_xdata([zerox, zerox])
+            fig.canvas.draw()
+        elif event.key in ('up', 'down'):
+            ymin, ymax = ax.get_ylim()
+            delta = (ymax - ymin) / 100
+            ymin += delta if event.key == 'up' else -delta
+            ymax += delta if event.key == 'up' else -delta
+            ax.set_ylim([ymin, ymax])
+            fig.canvas.draw()
+
+    ax.set_title(
+        'Align\nUse the left/right keys to find a photodiode event\n'
+        'and align the onset to the center of the window\n'
+        'use +/- to zoom the yaxis in and out (up/down to translate)\n'
+        'press enter when finished')
+    ax.set_xlabel('time (s)')
+    ax.set_ylabel('voltage')
+    ax.plot(raw.times, pd, color='b')
+    midpoint = raw.times[pd.size // 2]
+    plot_data['zero'] = ax.plot(
+        [midpoint, midpoint], [pd.min() * 10, pd.max() * 10], color='k')[0]
+    ax.set_xlim(midpoint - 2.5, midpoint + 2.5)
+    ax.set_ylim(pd.min() * 1.25, pd.max() * 1.25)
+    fig.canvas.mpl_connect('key_press_event', align_keypress)
+    fig.show()
+
+
+def parse_pd(fname, pd_event_name='Fixation', behf=None,
+             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.1,
+             chunk=2, zscore=10, min_i=10, alignment_prop=0.1,
+             baseline=0.25, overlap=0.25, overwrite=False, verbose=True):
     """ Parses photodiode events from a likely very corrupted channel
         using behavioral data to sync events to determine which
         behavioral events don't have a match and are thus corrupted
@@ -286,36 +504,44 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None, beh_col=None,
     pd_event_name: str
         The name of the event corresponding to the photodiode.
     behf : str
-        The filepath to a tsv file with the behavioral timing
+        The filepath to a tsv file with the behavioral timing.
     beh_col : str
-        The column of the behf tsv that corresponds to the events
+        The column of the behf tsv that corresponds to the events.
     pd_ch_names : list
         Names of the channel(s) containing the photodiode data.
         One channel is to be given for a common reference and
         two for a bipolar reference. If no channels are provided,
         the data will be plotted and the user will provide them.
-    chunk: float
-        The size of the window to chunk the photodiode events by
-        should be larger than 2x the longest photodiode event
-    baseline: float
-        How much relative to the chunk to use to idenify the time before
-        the photodiode event.
-    overlap: float
-        How much to overlap the windows of the photodiode event-finding
-        process.
     exclude_shift: float
         How many seconds different than expected from the behavior events
-        to exclude that event.
+        to exclude that event. Use `find_pd_params` to determine if unsure.
+    chunk: float
+        The size of the window to chunk the photodiode events by
+        should be larger than 2x the longest photodiode event.
+        Use `find_pd_params` to determine if unsure.
     zscore: float
         How large of a z-score difference to use to threshold photodiode
-        events.
+        events. Use `find_pd_params` to determine if unsure.
     min_i: int
         The minimum number of samples the photodiode event must be on for.
+        Use `find_pd_params` to determine if unsure.
     alignment_prop : float
         Proportion of events to use to score the alignment to the first event.
         This number should be low to have an accurate score without the
         photodiode drifting and causing unexpected alignments (and it's
-        faster).
+        faster). e.g. for 300 behavior events and 350 photodiode events
+        if alignment_prop=0.05 it will probably work and will take 15
+        seconds, if alignment_prop=0.1 it will almost always work
+        and take 30 seconds and if alignment_prop=0.2 it will work
+        if it's going to and take 75 seconds.
+    baseline: float
+        How much relative to the chunk to use to idenify the time before
+        the photodiode event. This should not be changed most likely
+        unless there is a specific reason/issue.
+    overlap: float
+        How much to overlap the windows of the photodiode event-finding
+        process. This should not be changed most likely unless there is
+        a specific reason/issue.
     verbose : bool
         Whether to display or supress text output on the progress
         of the function.
@@ -345,6 +571,12 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None, beh_col=None,
         beh_events = beh_df = None
     else:
         beh_events, beh_df = _load_beh_df(behf, beh_col)
+        for beh_event in beh_events:
+            if not np.real(beh_event):
+                raise ValueError(f'Non-numeric value {beh_event} found '
+                                 'in event column used to synchronize '
+                                 'with the photodiode, this is not allowed')
+        beh_events = np.array(beh_events)
     # use keyword argument if given, otherwise get the user to enter pd names
     # and get data
     pd, pd_ch_names = _get_pd_data(raw, pd_ch_names)
@@ -355,11 +587,11 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None, beh_col=None,
         events = {i: pd_event for i, pd_event in enumerate(sorted_pds)}
         _save_pd_data(fname, raw, events, pd_event_name, pd_ch_names)
         return
-    if not np.isnumeric(alignment_prop
-                        ) or alignment_prop < 0 or alignment_prop > 1:
+    if not np.isreal(alignment_prop
+                     ) or alignment_prop < 0 or alignment_prop > 1:
         raise ValueError(f'Cannot align using {alignment_prop} events, '
                          'alignment_prop must be between 0 and 1')
-    first_alignment_n = alignment_prop * beh_events.size
+    first_alignment_n = int(alignment_prop * beh_events.size)
     beh_events *= raw.info['sfreq']
     beh_events -= beh_events[0]
     best_alignment = _find_best_alignment(beh_events, pd_candidates,
@@ -371,33 +603,9 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None, beh_col=None,
     _save_pd_data(fname, raw, events, pd_event_name, pd_ch_names, beh_df)
 
 
-def diagnose_parser_issues(fname, pd_ch_names=None, verbose=True):
-    """ Plots the data so the user can determine the right parameters.
-
-    The user can adjust window size to determine chunk, horizontal
-    line height to determine zscore and seperation length of two
-    vertical lines to determine min_i.
-    Parameters
-    ----------
-    fname: str
-        The filepath to the electrophysiology file (meg/eeg/ieeg).
-    pd_ch_names : list
-        Names of the channel(s) containing the photodiode data.
-        One channel is to be given for a common reference and
-        two for a bipolar reference. If no channels are provided,
-        the data will be plotted and the user will provide them.
-    verbose : bool
-        Whether to display or supress text output on the progress
-        of the function.
-    """
-    # load raw data file with the photodiode data
-    raw = _read_raw(fname, verbose=verbose)
-    pd = _get_pd_data(raw, pd_ch_names)
-
-
-def add_relative_events(fname, behf, relative_event_cols,
-                        relative_event_names=None,
-                        overwrite=False, verbose=True):
+def add_pd_relative_events(fname, behf, relative_event_cols,
+                           relative_event_names=None,
+                           overwrite=False, verbose=True):
     """ Adds events relative to those determined from the photodiode
         to the events.
     Parameters
@@ -431,37 +639,33 @@ def add_relative_events(fname, behf, relative_event_cols,
         raise ValueError('Mismatched length of relative event behavior '
                          f'file column names, {len(relative_event_cols)} and '
                          f'names of the events {len(relative_event_names)}')
-    relative_events = [_load_beh_df(behf, rel_event) for rel_event in
-                       relative_event_cols]
-    relative_events = {name: rel_events for rel_events, name in
-                       zip(relative_events, relative_event_names)}
+    relative_events = {name: _load_beh_df(behf, rel_event)[0]
+                       for name, rel_event in zip(relative_event_names,
+                                                  relative_event_cols)}
     raw = _read_raw(fname, verbose=verbose)
-    basename = op.splitext(op.basename(fname))[0]
-    pd_data_dir = op.join(op.dirname(fname), basename + '_pd_data')
-    annot_fname = op.join(pd_data_dir, basename + '_pd_annot.fif')
-    if not op.isfile(annot_fname):
-        raise ValueError(f'{annot_fname} does not exist, this is either '
-                         'because `parse_pd` hasn\'t been run, or it failed '
-                         f'to find events or {pd_data_dir} was moved '
-                         'or deleted. Rerun `parse_pd` to fix this')
-    annot = mne.read_annotations(annot_fname)
-    events, event_id = mne.events_from_annotations(annot)
+    annot, _, beh_df = _load_pd_data(fname)
     for event_name in relative_event_names:
-        if event_name in event_id and not overwrite:
+        if event_name in annot.description and not overwrite:
             raise ValueError(f'Event name {event_name} already exists in '
                              'saved events and overwrite=False, use '
                              'overwrite=True to overwrite')
-    for name, beh_array in relative_events.items():
-        onsets = \
-            [events[i] + int(np.round(beh_array[i] * raw.info['sfreq']))
-             for i in sorted(events.keys()) if not np.isnan(beh_array[i])]
-        annot += mne.Annotations(onset=raw.times[np.array(onsets)],
-                                 duration=np.repeat(0.1, len(onsets)),
-                                 description=np.repeat(name, len(onsets)))
-    annot.save(annot_fname)
+    events = {i: samp for i, samp in enumerate(beh_df[f'pd_sample'])
+              if samp != 'n/a'}
+    for name, beh_events in relative_events.items():
+        onsets = np.array([events[i] + beh_events[i] * raw.info['sfreq']
+                           for i in sorted(events.keys())
+                           if beh_events[i] != 'n/a']).round().astype(int)
+        annot += mne.Annotations(onset=raw.times[onsets],
+                                 duration=np.repeat(0.1, onsets.size),
+                                 description=np.repeat(name, onsets.size))
+    # save modified data
+    basename = op.splitext(op.basename(fname))[0]
+    pd_data_dir = op.join(op.dirname(fname), basename + '_pd_data')
+    annot.save(op.join(pd_data_dir, basename + '_pd_annot.fif'))
 
 
-def add_events_to_raw(fname, out_fname=None, verbose=True, overwrite=False):
+def add_pd_events_to_raw(fname, out_fname=None, drop_pd_channels=True,
+                         verbose=True, overwrite=False):
     """ Saves out a new raw file with photodiode events.
 
     Note: this function is not recommended, rather just skip it and
@@ -476,6 +680,8 @@ def add_events_to_raw(fname, out_fname=None, verbose=True, overwrite=False):
         The filepath to the electrophysiology file (meg/eeg/ieeg).
     out_fname : str
         The filepath to save the modified raw data to.
+    drop_pd_channels : bool
+        Whether to drop the channel(s) the photodiode data was on.
     verbose : bool
         Whether to display or supress text output on the progress
         of the function.
@@ -493,19 +699,20 @@ def add_events_to_raw(fname, out_fname=None, verbose=True, overwrite=False):
     if op.isfile(out_fname) and not overwrite:
         raise ValueError(f'out_fname {out_fname} exists, and overwrite=False, '
                          'set overwrite=True to overwrite')
-    annot, pd_ch_names = _load_pd_data()
+    annot, pd_ch_names, _ = _load_pd_data(fname)
     raw.set_annotations(annot)
-    raw.drop_channels([ch for ch in pd_ch_names if ch in raw.ch_names])
+    if drop_pd_channels:
+        raw.drop_channels([ch for ch in pd_ch_names if ch in raw.ch_names])
     if op.splitext(out_fname)[-1] != '.fif':
         raise ValueError('Only saving as fif is supported, got '
                          f'{op.splitext(out_fname)}')
     raw.save(out_fname, overwrite=overwrite)
-    return raw
+    return out_fname
 
 
-def save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
-                 data_type=None, eogs=None, ecgs=None, emgs=None,
-                 verbose=True, overwrite=False):
+def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
+                           data_type=None, eogs=None, ecgs=None, emgs=None,
+                           verbose=True, overwrite=False):
     """Convert iEEG data collected at OHSU to BIDS format
     Parameters
     ----------
@@ -533,6 +740,8 @@ def save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
         Whether to overwrite existing data if it exists.
     """
     import mne_bids
+    if not op.isdir(bids_dir):
+        os.makedirs(bids_dir)
     bids_basename = 'sub-%s' % sub
     bids_beh_dir = op.join(bids_dir, 'sub-%s' % sub)
     if ses is not None:
@@ -545,15 +754,20 @@ def save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
     if not op.isdir(bids_beh_dir):
         os.makedirs(bids_beh_dir)
     raw = _read_raw(fname, verbose=verbose)
-    '''    eegf, data_ch_type, list() if eogs is None else eogs,
-                   list() if ecgs is None else ecgs, list() if
-                   emgs is None else emgs)
-    '''
-    annot, pd_channels, behf = _load_pd_data(fname)
+    aux_chs = list()
+    for name, ch_list in zip(['eog', 'ecg', 'emg'], [eogs, ecgs, emgs]):
+        if ch_list is not None:
+            aux_chs += ch_list
+            raw.set_channel_types({ch: name for ch in ch_list})
+    if data_type is not None:
+        raw.set_channel_types({ch: data_type for ch in raw.ch_names if
+                               ch not in aux_chs})
+    annot, pd_channels, beh_df = _load_pd_data(fname)
     raw.set_annotations(annot)
     events, event_id = mne.events_from_annotations(raw)
     raw = raw.drop_channels([ch for ch in pd_channels if ch in raw.ch_names])
     mne_bids.write_raw_bids(raw, bids_basename, bids_dir,
                             events_data=events, event_id=event_id,
                             verbose=verbose, overwrite=overwrite)
-    copyfile(behf, op.join(bids_beh_dir, bids_basename + '_beh.tsv'))
+    if beh_df is not None:
+        _to_tsv(op.join(bids_beh_dir, bids_basename + '_beh.tsv'), beh_df)
