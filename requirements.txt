@@ -1,6 +1,7 @@
 numpy>=1.19.0
 mne>=0.19.1
 argparse
+tqdm
 pytest<5.4
 pytest-cov
 pytest-sugar
