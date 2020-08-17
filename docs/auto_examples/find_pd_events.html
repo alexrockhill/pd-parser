@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>01. Find Photodiode Events &#8212; pd-parser 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          pd-parser</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="index.html">Examples</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../generated/cli.html">CLI</a></li>
+                <li><a href="../whats_new.html">What's new</a></li>
+                <li><a href="https://github.com/alexrockhill/pd-parser">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/auto_examples/find_pd_events.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-find-pd-events-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="find-photodiode-events">
+<span id="sphx-glr-auto-examples-find-pd-events-py"></span><h1>01. Find Photodiode Events<a class="headerlink" href="#find-photodiode-events" title="Permalink to this headline">¶</a></h1>
+<p>In this example, we use pd-parser to find photodiode events and
+align them to behavior. Then, save the data to BIDS format.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Alex Rockhill &lt;aprockhill@mailbox.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: BSD (3-clause)</span>
+</pre></div>
+</div>
+<p>Import data and use it to make a raw object:</p>
+<p>We’ll make an mne.io.Raw object so that we can save out some random
+data with a photodiode event channel in it in fif format (a standard
+electrophysiology format)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">_TempDir</span>
+
+<span class="kn">import</span> <span class="nn">pd_parser</span>
+
+<span class="n">basepath</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pd_parser</span><span class="o">.</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">out_dir</span> <span class="o">=</span> <span class="n">_TempDir</span><span class="p">()</span>
+
+<span class="n">fname</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;pd_data-raw.fif&#39;</span><span class="p">)</span>
+<span class="n">behf</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="s1">&#39;pd_beh.tsv&#39;</span><span class="p">)</span>
+
+<span class="n">raw_tmp</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_raw_fif</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">basepath</span><span class="p">,</span> <span class="s1">&#39;pd_data-raw.fif&#39;</span><span class="p">),</span>
+                              <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">([</span><span class="s1">&#39;ch1&#39;</span><span class="p">,</span> <span class="s1">&#39;ch2&#39;</span><span class="p">,</span> <span class="s1">&#39;ch3&#39;</span><span class="p">],</span> <span class="n">raw_tmp</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span>
+                       <span class="p">[</span><span class="s1">&#39;seeg&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">raw_tmp2</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">RawArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">raw_tmp</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e-6</span><span class="p">,</span>
+                           <span class="n">info</span><span class="p">)</span>
+<span class="n">raw_tmp2</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;lowpass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_tmp</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;lowpass&#39;</span><span class="p">]</span>
+<span class="n">raw_tmp</span><span class="o">.</span><span class="n">add_channels</span><span class="p">([</span><span class="n">raw_tmp2</span><span class="p">])</span>
+<span class="n">raw_tmp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Use the interactive graphical user interface (GUI) to find parameters:</p>
+<p>On the webpage, this is example is not interactive, but if you copy this
+code into a python console, you can see how to interact with the photo-
+diode data to pick reasonable parameters by following the instructions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">find_pd_params</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pd&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Find the photodiode events relative to the behavioral timing of interest:</p>
+<p>This function will use the default parameters or the parameters you
+found from <cite>pd_parser.find_pd_parameters</cite> to find and align the
+photodiode events, excluding events that were off because the commuter
+hung up on computation for instance. That data is save in the same folder
+as the raw file which can be used directly or accessed via
+<cite>pd_parser.pd_parser.pd_parser_save_to_bids</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">parse_pd</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="o">=</span><span class="n">behf</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pd&#39;</span><span class="p">],</span>
+                   <span class="n">alignment_prop</span><span class="o">=</span><span class="mf">0.05</span><span class="p">)</span>  <span class="c1"># reduce alignment_prop -&gt; faster</span>
+</pre></div>
+</div>
+<p>Add events relative to the photodiode events:</p>
+<p>The photodiode is usually sychronized to one event (usually the fixation
+so that if the deflections caused by the photodiode are large enough
+to influence other channels through amplifier interactions it doesn’t
+cause issues with the analysis) so often the events of interest are
+relative to the photodiode event. In the task a timer can be started at the
+photodiode event and pulled for time at each of the following events.
+These events are then passed in tsv file to be added to the events.
+Note: if more than one photodiode event is used, the parser can be
+used for each event separately using the keyword <cite>add_event=True</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">add_pd_relative_events</span><span class="p">(</span>
+    <span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="p">,</span>
+    <span class="n">relative_event_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fix_duration&#39;</span><span class="p">,</span> <span class="s1">&#39;go_time&#39;</span><span class="p">,</span> <span class="s1">&#39;response_time&#39;</span><span class="p">],</span>
+    <span class="n">relative_event_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ISI Onset&#39;</span><span class="p">,</span> <span class="s1">&#39;Go Cue&#39;</span><span class="p">,</span> <span class="s1">&#39;Response&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Save data to BIDS format:</p>
+<p>This saves our data to BIDS format so that it’s ready to be analyzed in a
+reproducible way will all the necessary files. See
+<a class="reference external" href="https://bids.neuroimaging.io/">https://bids.neuroimaging.io/</a> and <a class="reference external" href="https://mne.tools/mne-bids/">https://mne.tools/mne-bids/</a> for more
+information about BIDS.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">pd_parser_save_to_bids</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;bids_dir&#39;</span><span class="p">),</span> <span class="n">fname</span><span class="p">,</span>
+                                 <span class="n">sub</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s1">&#39;mytask&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-find-pd-events-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/1b503bc09a64c0864bda5e972833fb2f/find_pd_events.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">find_pd_events.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/da8d3637390d8a00637cc17edf1ef9db/find_pd_events.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">find_pd_events.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, Alex Rockhill.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

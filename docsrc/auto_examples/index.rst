@@ -16,6 +16,26 @@ Here we show some exemplary use cases for pd-parser.
    :depth: 3
 
 
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="01. Find Photodiode Events">
+
+.. only:: html
+
+ .. figure:: /auto_examples/images/thumb/sphx_glr_find_pd_events_thumb.png
+
+     :ref:`sphx_glr_auto_examples_find_pd_events.py`
+
+.. raw:: html
+
+    </div>
+
+
+.. toctree::
+   :hidden:
+
+   /auto_examples/find_pd_events
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

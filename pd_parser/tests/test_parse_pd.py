@@ -7,39 +7,69 @@ For each supported file format, implement a test.
 #
 # License: BSD (3-clause)
 
+# TO DO: 1) optimize _find_best_alignment
+#        2) implement pd simulation
+#        3) test for more than one photodiode event
+
 import os
 import os.path as op
 import numpy as np
+import platform
 
 import pytest
 
 import mne
-from mne.utils import _TempDir
+from mne.utils import _TempDir, run_subprocess
 
 import pd_parser
 from pd_parser.parse_pd import _load_pd_data, _read_tsv
 
 basepath = op.join(op.dirname(pd_parser.__file__), 'tests', 'data')
-out_dir = _TempDir()
 
-fname = op.join(out_dir, 'pd_data-raw.fif')
-behf = op.join(basepath, 'pd_beh.tsv')
-events = _read_tsv(op.join(basepath, 'pd_events.tsv'))
-events_relative = _read_tsv(op.join(basepath, 'pd_events_relative.tsv'))
 
-raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
-                              preload=True)
-info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
-                       ['seeg'] * 3)
-raw_tmp2 = mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
-                           info)
-raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
-raw_tmp.add_channels([raw_tmp2])
-raw_tmp.save(fname)
+# from mne_bids.tests.test_write._bids_validate
+@pytest.fixture(scope="session")
+def _bids_validate():
+    """Fixture to run BIDS validator."""
+    vadlidator_args = ['--config.error=41']
+    exe = os.getenv('VALIDATOR_EXECUTABLE', 'bids-validator')
+
+    if platform.system() == 'Windows':
+        shell = True
+    else:
+        shell = False
+
+    bids_validator_exe = [exe, *vadlidator_args]
+
+    def _validate(bids_root):
+        cmd = [*bids_validator_exe, bids_root]
+        run_subprocess(cmd, shell=shell)
+
+    return _validate
 
 
 @pytest.mark.filterwarnings('ignore::RuntimeWarning')
-def test_parse_pd():
+@pytest.mark.filterwarnings('ignore::DeprecationWarning')
+def test_parse_pd(_bids_validate):
+    # load in data
+    out_dir = _TempDir()
+    fname = op.join(out_dir, 'pd_data-raw.fif')
+    behf = op.join(basepath, 'pd_beh.tsv')
+    events = _read_tsv(op.join(basepath, 'pd_events.tsv'))
+    events_relative = _read_tsv(op.join(basepath, 'pd_events_relative.tsv'))
+
+    raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
+                                  preload=True)
+    info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
+                           ['seeg'] * 3)
+    raw_tmp2 = \
+        mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
+                        info)
+    raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
+    raw_tmp.add_channels([raw_tmp2])
+    raw_tmp.info['dig'] = None
+    raw_tmp.info['line_freq'] = 60
+    raw_tmp.save(fname)
     # this needs to be tested with user interaction, this
     # just tests that it launches
     pd_parser.find_pd_params(fname, pd_ch_names=['pd'])
@@ -54,7 +84,7 @@ def test_parse_pd():
     assert pd_ch_names == ['pd']
     event_indices = [i for i, s in enumerate(beh_df['pd_sample'])
                      if s != 'n/a']
-    assert all(event_indices == events['trial'])
+    assert event_indices == events['trial']
     assert all([beh_df['pd_sample'][j] == events['pd_sample'][i]
                 for i, j in enumerate(event_indices)])
     # test add_pd_relative_events
@@ -77,13 +107,5 @@ def test_parse_pd():
     assert event_id2 == event_id
     # test pd_parser_save_to_bids
     bids_dir = op.join(out_dir, 'bids_dir')
-    os.makedirs(bids_dir)
-    pd_parser.pd_parser_save_to_bids(bids_dir, '1', 'test')
-
-
-def simulate_pd_data(sfreq=512):
-    """Simulates photodiode data."""
-    info = mne.create_info(['pd'], sfreq, ['stim'])
-    data = np.zeros((1, 1000))
-    raw = mne.RawArray(data, info)
-    return raw
+    pd_parser.pd_parser_save_to_bids(bids_dir, fname, '1', 'test')
+    _bids_validate(bids_dir)

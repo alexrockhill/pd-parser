@@ -61,21 +61,21 @@ def _to_tsv(fname, df):
             fid.write('\t'.join([str(val[i]) for val in df.values()]) + '\n')
 
 
-def _read_raw(fname, verbose=True):
+def _read_raw(fname, preload=True, verbose=True):
     _, ext = op.splitext(fname)
     """Read raw data into an mne.io.Raw object."""
     if verbose:
         print('Reading in {}'.format(fname))
     if ext == '.fif':
-        raw = mne.io.read_raw_fif(fname, preload=True)
+        raw = mne.io.read_raw_fif(fname, preload=preload)
     elif ext == '.edf':
-        raw = mne.io.read_raw_edf(fname, preload=True)
+        raw = mne.io.read_raw_edf(fname, preload=preload)
     elif ext == '.bdf':
-        raw = mne.io.read_raw_bdf(fname, preload=True)
+        raw = mne.io.read_raw_bdf(fname, preload=preload)
     elif ext == '.vhdr':
-        raw = mne.io.read_raw_brainvision(fname, preload=True)
+        raw = mne.io.read_raw_brainvision(fname, preload=preload)
     elif ext == '.set':
-        raw = mne.io.read_raw_eeglab(fname, preload=True)
+        raw = mne.io.read_raw_eeglab(fname, preload=preload)
     else:
         raise ValueError('Extension {} not recognized, options are'
                          'fif, edf, bdf, vhdr (brainvision) and set '
@@ -290,27 +290,33 @@ def _exclude_ambiguous_events(beh_events, pd_candidates, sorted_pds,
     return events
 
 
-def _save_pd_data(fname, raw, events, event_id, pd_ch_names, beh_df=None):
+def _save_pd_data(fname, raw, events, event_id, pd_ch_names, beh_df=None,
+                  add_events=False):
     """Saves the events determined from the photodiode."""
     basename = op.splitext(op.basename(fname))[0]
     pd_data_dir = op.join(op.dirname(fname), basename + '_pd_data')
     if not op.isdir(pd_data_dir):
         os.makedirs(pd_data_dir)
     if beh_df is not None:
-        if 'pd_sample' in beh_df:
+        if 'pd_sample' in beh_df and not add_events:
             raise ValueError(
                 'The column name `pd_sample` is not allowed in the behavior '
                 'tsv file (it\'s reserved for internal use. Please rename '
                 'that column to continue.')
-        beh_df['pd_sample'] = \
-            [events[i] if i in events else 'n/a' for i in
-             range(len(beh_df[list(beh_df.keys())[0]]))]
-        _to_tsv(op.join(pd_data_dir, basename + '_beh_df.tsv'), beh_df)
+        if not add_events:
+            beh_df['pd_sample'] = \
+                [events[i] if i in events else 'n/a' for i in
+                 range(len(beh_df[list(beh_df.keys())[0]]))]
+            _to_tsv(op.join(pd_data_dir, basename + '_beh_df.tsv'), beh_df)
     onsets = np.array([events[i] for i in sorted(events.keys())])
     annot = mne.Annotations(onset=raw.times[onsets],
                             duration=np.repeat(0.1, len(onsets)),
                             description=np.repeat(event_id,
                                                   len(onsets)))
+    if add_events:
+        annot_orig, pd_ch_names_orig, _ = _load_pd_data(fname)[0]
+        annot += annot_orig
+        pd_ch_names += [ch for ch in pd_ch_names if ch not in pd_ch_names]
     annot.save(op.join(pd_data_dir, basename + '_pd_annot.fif'))
     with open(op.join(pd_data_dir, basename + 'pd_ch_names.tsv'), 'w') as fid:
         fid.write('\t'.join(pd_ch_names))
@@ -493,7 +499,8 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
              beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.1,
              chunk=2, zscore=10, min_i=10, alignment_prop=0.1,
-             baseline=0.25, overlap=0.25, overwrite=False, verbose=True):
+             baseline=0.25, overlap=0.25, add_events=False,
+             overwrite=False, verbose=True):
     """Parses photodiode events.
 
     Parses photodiode events from a likely very corrupted channel
@@ -547,6 +554,13 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         How much to overlap the windows of the photodiode event-finding
         process. This should not be changed most likely unless there is
         a specific reason/issue.
+    add_events : bool
+        Whether to add the events found from the current call of `parse_pd`
+        to a events found previously (e.g. first parse with
+        `pd_event_name='Fixation'` and then parse with
+        `pd_event_name='Response'`.
+        Note: `pd_parser.add_pd_relative_events` will be relative to the
+        first event added.
     verbose : bool
         Whether to display or supress text output on the progress
         of the function.
@@ -564,7 +578,7 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     # check if already parsed
     basename = op.splitext(op.basename(fname))[0]
     if op.isdir(op.join(op.dirname(fname), basename + '_pd_data')
-                ) and not overwrite:
+                ) and not overwrite and not add_events:
         raise ValueError('Photodiode data directory already exists and '
                          'overwrite=False, set overwrite=True to overwrite')
     # load raw data file with the photodiode data
@@ -607,7 +621,8 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     events = _exclude_ambiguous_events(beh_events, pd_candidates, sorted_pds,
                                        pd, best_alignment, raw.info['sfreq'],
                                        chunk, exclude_shift, verbose)
-    _save_pd_data(fname, raw, events, pd_event_name, pd_ch_names, beh_df)
+    _save_pd_data(fname, raw, events, pd_event_name, pd_ch_names, beh_df,
+                  add_events)
 
 
 def add_pd_relative_events(fname, behf, relative_event_cols,
@@ -765,7 +780,7 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
         bids_basename += '_run-%s' % run
     if not op.isdir(bids_beh_dir):
         os.makedirs(bids_beh_dir)
-    raw = _read_raw(fname, verbose=verbose)
+    raw = _read_raw(fname, preload=False, verbose=verbose)
     aux_chs = list()
     for name, ch_list in zip(['eog', 'ecg', 'emg'], [eogs, ecgs, emgs]):
         if ch_list is not None:
@@ -777,9 +792,18 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
     annot, pd_channels, beh_df = _load_pd_data(fname)
     raw.set_annotations(annot)
     events, event_id = mne.events_from_annotations(raw)
-    raw = raw.drop_channels([ch for ch in pd_channels if ch in raw.ch_names])
+    raw.set_channel_types({ch: 'stim' for ch in pd_channels
+                           if ch in raw.ch_names})
     mne_bids.write_raw_bids(raw, bids_basename, bids_dir,
                             events_data=events, event_id=event_id,
                             verbose=verbose, overwrite=overwrite)
     if beh_df is not None:
         _to_tsv(op.join(bids_beh_dir, bids_basename + '_beh.tsv'), beh_df)
+
+
+def _simulate_pd_data(sfreq=512):
+    """Simulates photodiode data."""
+    info = mne.create_info(['pd'], sfreq, ['stim'])
+    data = np.zeros((1, 1000))
+    raw = mne.RawArray(data, info)
+    return raw
