@@ -133,6 +133,7 @@ electrophysiology format)</p>
                            <span class="n">info</span><span class="p">)</span>
 <span class="n">raw_tmp2</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;lowpass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw_tmp</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;lowpass&#39;</span><span class="p">]</span>
 <span class="n">raw_tmp</span><span class="o">.</span><span class="n">add_channels</span><span class="p">([</span><span class="n">raw_tmp2</span><span class="p">])</span>
+<span class="n">raw_tmp</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;dig&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="n">raw_tmp</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
 </pre></div>
 </div>

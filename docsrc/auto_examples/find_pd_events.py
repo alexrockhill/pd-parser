@@ -38,6 +38,7 @@ raw_tmp2 = mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
                            info)
 raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
 raw_tmp.add_channels([raw_tmp2])
+raw_tmp.info['dig'] = None
 raw_tmp.save(fname)
 
 ###############################################################################
