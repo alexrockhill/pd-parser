@@ -107,5 +107,6 @@ def test_parse_pd(_bids_validate):
     assert event_id2 == event_id
     # test pd_parser_save_to_bids
     bids_dir = op.join(out_dir, 'bids_dir')
-    pd_parser.pd_parser_save_to_bids(bids_dir, fname, '1', 'test')
+    pd_parser.pd_parser_save_to_bids(bids_dir, fname, '1', 'test',
+                                     verbose=False)
     _bids_validate(bids_dir)
