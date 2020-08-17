@@ -78,6 +78,8 @@ def generate_cli_rst(app=None):
             while '[' not in output_args[-1] and ']' not in output_args[-1]:
                 output_args.insert(2, output_args.pop(-1))
             output[0] = ' '.join(output_args)
+            # format commands
+            output[0] = output[0].replace('usage: ', 'usage: ``') + '``'
             # newline for positionals
             i = output.index('positional arguments:') + 1
             while output[i] != 'optional arguments:':

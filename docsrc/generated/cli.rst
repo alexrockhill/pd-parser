@@ -21,7 +21,7 @@ add_pd_events_to_raw
 
 .. rst-class:: callout
 
-usage: add_pd_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--verbose VERBOSE] [--overwrite OVERWRITE]
+usage: ``add_pd_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------
@@ -56,7 +56,7 @@ add_pd_relative_events
 
 .. rst-class:: callout
 
-usage: add_pd_relative_events fname [-h] [--behf BEHF] [--relative_event_cols LIST_OF_RELATIVE_EVENT_COLS] [--relative_event_names LIST_OF_RELATIVE_EVENT_NAMES] [--verbose VERBOSE] [--overwrite OVERWRITE]
+usage: ``add_pd_relative_events fname [-h] [--behf BEHF] [--relative_event_cols LIST_OF_RELATIVE_EVENT_COLS] [--relative_event_names LIST_OF_RELATIVE_EVENT_NAMES] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------
@@ -97,7 +97,7 @@ find_pd_params
 
 .. rst-class:: callout
 
-usage: find_pd_params fname [-h] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--verbose VERBOSE]
+usage: ``find_pd_params fname [-h] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--verbose VERBOSE]``
 
 positional arguments
 --------------------
@@ -129,7 +129,7 @@ parse_pd
 
 .. rst-class:: callout
 
-usage: parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--alignment_prop ALIGNMENT_PROP] [--baseline BASELINE] [--overlap OVERLAP] [--verbose VERBOSE] [--overwrite OVERWRITE]
+usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--alignment_prop ALIGNMENT_PROP] [--baseline BASELINE] [--overlap OVERLAP] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------
@@ -194,7 +194,7 @@ pd_parser_save_to_bids
 
 .. rst-class:: callout
 
-usage: pd_parser_save_to_bids bids_dir fname sub task [-h] [--ses SES] [--run RUN] [--data_type DATA_TYPE] [--eogs LIST_OF_EOGS] [--ecgs LIST_OF_ECGS] [--emgs LIST_OF_EMGS] [--verbose VERBOSE] [--overwrite OVERWRITE]
+usage: ``pd_parser_save_to_bids bids_dir fname sub task [-h] [--ses SES] [--run RUN] [--data_type DATA_TYPE] [--eogs LIST_OF_EOGS] [--ecgs LIST_OF_ECGS] [--emgs LIST_OF_EMGS] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------

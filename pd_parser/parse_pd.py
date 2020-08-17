@@ -338,11 +338,12 @@ def _load_pd_data(fname):
 
 
 def find_pd_params(fname, pd_ch_names=None, verbose=True):
-    """ Plots the data so the user can determine the right parameters.
+    """Plots the data so the user can determine the right parameters.
 
     The user can adjust window size to determine chunk, horizontal
     line height to determine zscore and seperation length of two
     vertical lines to determine min_i.
+
     Parameters
     ----------
     fname: str
@@ -355,6 +356,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
     verbose : bool
         Whether to display or supress text output on the progress
         of the function.
+
     """
     # load raw data file with the photodiode data
     import matplotlib as mpl
@@ -492,11 +494,14 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
              beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.1,
              chunk=2, zscore=10, min_i=10, alignment_prop=0.1,
              baseline=0.25, overlap=0.25, overwrite=False, verbose=True):
-    """ Parses photodiode events from a likely very corrupted channel
-        using behavioral data to sync events to determine which
-        behavioral events don't have a match and are thus corrupted
-        and should be excluded (while ignoring events that look like
-        photodiode events but don't match behavior)
+    """Parses photodiode events.
+
+    Parses photodiode events from a likely very corrupted channel
+    using behavioral data to sync events to determine which
+    behavioral events don't have a match and are thus corrupted
+    and should be excluded (while ignoring events that look like
+    photodiode events but don't match behavior)
+
     Parameters
     ----------
     fname: str
@@ -547,12 +552,14 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         of the function.
     overwrite : bool
         Whether to overwrite existing data if it exists.
+
     Returns
     -------
     events: DataFrame
         A DataFrame that has a column for to the (zero)
         indexed behavioral events and another column corresponding
         to the time stamp of the eeg file.
+
     """
     # check if already parsed
     basename = op.splitext(op.basename(fname))[0]
@@ -606,8 +613,8 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
 def add_pd_relative_events(fname, behf, relative_event_cols,
                            relative_event_names=None,
                            overwrite=False, verbose=True):
-    """ Adds events relative to those determined from the photodiode
-        to the events.
+    """ Adds events relative to those determined from the photodiode.
+
     Parameters
     ----------
     fname: str
@@ -624,12 +631,14 @@ def add_pd_relative_events(fname, behf, relative_event_cols,
         of the function.
     overwrite : bool
         Whether to overwrite existing data if it exists.
+
     Returns
     -------
     events: DataFrame
         A DataFrame that has a column for to the (zero)
         indexed behavioral events and another column corresponding
         to the time stamp of the eeg file.
+
     """
     if relative_event_names is None:
         if verbose:
@@ -666,7 +675,7 @@ def add_pd_relative_events(fname, behf, relative_event_cols,
 
 def add_pd_events_to_raw(fname, out_fname=None, drop_pd_channels=True,
                          verbose=True, overwrite=False):
-    """ Saves out a new raw file with photodiode events.
+    """Saves out a new raw file with photodiode events.
 
     Note: this function is not recommended, rather just skip it and
     use `save_to_bids` which doesn't modify the underlying raw data
@@ -691,6 +700,7 @@ def add_pd_events_to_raw(fname, out_fname=None, drop_pd_channels=True,
     -------
     out_fname : str
         The filepath to save the modified raw data to.
+
     """
     raw = _read_raw(fname, verbose=verbose)
     if out_fname is None:
@@ -713,7 +723,8 @@ def add_pd_events_to_raw(fname, out_fname=None, drop_pd_channels=True,
 def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
                            data_type=None, eogs=None, ecgs=None, emgs=None,
                            verbose=True, overwrite=False):
-    """Convert iEEG data collected at OHSU to BIDS format
+    """Convert data to BIDS format with events found from the photodiode.
+
     Parameters
     ----------
     bids_dir : str
@@ -738,6 +749,7 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
         of the function.
     overwrite : bool
         Whether to overwrite existing data if it exists.
+
     """
     import mne_bids
     if not op.isdir(bids_dir):

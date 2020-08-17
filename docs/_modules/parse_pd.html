@@ -431,11 +431,12 @@
 
 
 <div class="viewcode-block" id="find_pd_params"><a class="viewcode-back" href="../api.html#parse_pd.find_pd_params">[docs]</a><span class="k">def</span> <span class="nf">find_pd_params</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Plots the data so the user can determine the right parameters.</span>
+    <span class="sd">&quot;&quot;&quot;Plots the data so the user can determine the right parameters.</span>
 
 <span class="sd">    The user can adjust window size to determine chunk, horizontal</span>
 <span class="sd">    line height to determine zscore and seperation length of two</span>
 <span class="sd">    vertical lines to determine min_i.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fname: str</span>
@@ -448,6 +449,7 @@
 <span class="sd">    verbose : bool</span>
 <span class="sd">        Whether to display or supress text output on the progress</span>
 <span class="sd">        of the function.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># load raw data file with the photodiode data</span>
     <span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
@@ -585,11 +587,14 @@
              <span class="n">beh_col</span><span class="o">=</span><span class="s1">&#39;fix_onset_time&#39;</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude_shift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
              <span class="n">chunk</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alignment_prop</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
              <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Parses photodiode events from a likely very corrupted channel</span>
-<span class="sd">        using behavioral data to sync events to determine which</span>
-<span class="sd">        behavioral events don&#39;t have a match and are thus corrupted</span>
-<span class="sd">        and should be excluded (while ignoring events that look like</span>
-<span class="sd">        photodiode events but don&#39;t match behavior)</span>
+    <span class="sd">&quot;&quot;&quot;Parses photodiode events.</span>
+
+<span class="sd">    Parses photodiode events from a likely very corrupted channel</span>
+<span class="sd">    using behavioral data to sync events to determine which</span>
+<span class="sd">    behavioral events don&#39;t have a match and are thus corrupted</span>
+<span class="sd">    and should be excluded (while ignoring events that look like</span>
+<span class="sd">    photodiode events but don&#39;t match behavior)</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fname: str</span>
@@ -640,12 +645,14 @@
 <span class="sd">        of the function.</span>
 <span class="sd">    overwrite : bool</span>
 <span class="sd">        Whether to overwrite existing data if it exists.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    events: DataFrame</span>
 <span class="sd">        A DataFrame that has a column for to the (zero)</span>
 <span class="sd">        indexed behavioral events and another column corresponding</span>
 <span class="sd">        to the time stamp of the eeg file.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># check if already parsed</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
@@ -699,8 +706,8 @@
 <div class="viewcode-block" id="add_pd_relative_events"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_relative_events">[docs]</a><span class="k">def</span> <span class="nf">add_pd_relative_events</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="p">,</span> <span class="n">relative_event_cols</span><span class="p">,</span>
                            <span class="n">relative_event_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Adds events relative to those determined from the photodiode</span>
-<span class="sd">        to the events.</span>
+    <span class="sd">&quot;&quot;&quot; Adds events relative to those determined from the photodiode.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    fname: str</span>
@@ -717,12 +724,14 @@
 <span class="sd">        of the function.</span>
 <span class="sd">    overwrite : bool</span>
 <span class="sd">        Whether to overwrite existing data if it exists.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    events: DataFrame</span>
 <span class="sd">        A DataFrame that has a column for to the (zero)</span>
 <span class="sd">        indexed behavioral events and another column corresponding</span>
 <span class="sd">        to the time stamp of the eeg file.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">relative_event_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
@@ -759,7 +768,7 @@
 
 <div class="viewcode-block" id="add_pd_events_to_raw"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_events_to_raw">[docs]</a><span class="k">def</span> <span class="nf">add_pd_events_to_raw</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">out_fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drop_pd_channels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                          <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Saves out a new raw file with photodiode events.</span>
+    <span class="sd">&quot;&quot;&quot;Saves out a new raw file with photodiode events.</span>
 
 <span class="sd">    Note: this function is not recommended, rather just skip it and</span>
 <span class="sd">    use `save_to_bids` which doesn&#39;t modify the underlying raw data</span>
@@ -784,6 +793,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    out_fname : str</span>
 <span class="sd">        The filepath to save the modified raw data to.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">_read_raw</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">out_fname</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -806,7 +816,8 @@
 <div class="viewcode-block" id="pd_parser_save_to_bids"><a class="viewcode-back" href="../api.html#parse_pd.pd_parser_save_to_bids">[docs]</a><span class="k">def</span> <span class="nf">pd_parser_save_to_bids</span><span class="p">(</span><span class="n">bids_dir</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">sub</span><span class="p">,</span> <span class="n">task</span><span class="p">,</span> <span class="n">ses</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">run</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">data_type</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eogs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ecgs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">emgs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Convert iEEG data collected at OHSU to BIDS format</span>
+    <span class="sd">&quot;&quot;&quot;Convert data to BIDS format with events found from the photodiode.</span>
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    bids_dir : str</span>
@@ -831,6 +842,7 @@
 <span class="sd">        of the function.</span>
 <span class="sd">    overwrite : bool</span>
 <span class="sd">        Whether to overwrite existing data if it exists.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="kn">import</span> <span class="nn">mne_bids</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">op</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">bids_dir</span><span class="p">):</span>
