@@ -102,6 +102,207 @@
 <div class="section" id="pd-parser">
 <h2>pd-parser<a class="headerlink" href="#pd-parser" title="Permalink to this headline">¶</a></h2>
 <p><code class="xref py py-mod docutils literal notranslate"><span class="pre">pd_parser</span></code>:</p>
+<span class="target" id="module-pd_parser.parse_pd"></span><p>Find photodiode events.</p>
+<p>Take a potentially corrupted photodiode channel and find
+the event time samples at which it turned on.</p>
+<dl class="py function">
+<dt id="pd_parser.parse_pd.add_pd_events_to_raw">
+<code class="sig-prename descclassname">pd_parser.parse_pd.</code><code class="sig-name descname">add_pd_events_to_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">out_fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_pd_channels</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pd_parser/parse_pd.html#add_pd_events_to_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pd_parser.parse_pd.add_pd_events_to_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves out a new raw file with photodiode events.</p>
+<p>Note: this function is not recommended, rather just skip it and
+use <cite>save_to_bids</cite> which doesn’t modify the underlying raw data
+especially converting it to fif if it isn’t fif already. In
+<cite>save_to_bids</cite> the raw file itself doens’t contain the event
+information, it’s only stored in the sidecar.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fname: str</strong></dt><dd><p>The filepath to the electrophysiology file (meg/eeg/ieeg).</p>
+</dd>
+<dt><strong>out_fname</strong><span class="classifier">str</span></dt><dd><p>The filepath to save the modified raw data to.</p>
+</dd>
+<dt><strong>drop_pd_channels</strong><span class="classifier">bool</span></dt><dd><p>Whether to drop the channel(s) the photodiode data was on.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+of the function.</p>
+</dd>
+<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+</dd>
+<dt><strong>Returns</strong></dt><dd></dd>
+<dt><strong>——-</strong></dt><dd></dd>
+<dt><strong>out_fname</strong><span class="classifier">str</span></dt><dd><p>The filepath to save the modified raw data to.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pd_parser.parse_pd.add_pd_relative_events">
+<code class="sig-prename descclassname">pd_parser.parse_pd.</code><code class="sig-name descname">add_pd_relative_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">behf</span></em>, <em class="sig-param"><span class="n">relative_event_cols</span></em>, <em class="sig-param"><span class="n">relative_event_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pd_parser/parse_pd.html#add_pd_relative_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pd_parser.parse_pd.add_pd_relative_events" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds events relative to those determined from the photodiode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fname: str</strong></dt><dd><p>The filepath to the electrophysiology file (meg/eeg/ieeg).</p>
+</dd>
+<dt><strong>behf</strong><span class="classifier">str</span></dt><dd><p>The filepath to a tsv file with the behavioral timing</p>
+</dd>
+<dt><strong>relative_event_cols</strong><span class="classifier">list</span></dt><dd><p>The names of the columns where time data is stored
+relative to the photodiode event</p>
+</dd>
+<dt><strong>relative_event_names</strong><span class="classifier">list</span></dt><dd><p>The names of the events in <cite>relative_event_cols</cite>.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+of the function.</p>
+</dd>
+<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>events: DataFrame</dt><dd><p>A DataFrame that has a column for to the (zero)
+indexed behavioral events and another column corresponding
+to the time stamp of the eeg file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pd_parser.parse_pd.find_pd_params">
+<code class="sig-prename descclassname">pd_parser.parse_pd.</code><code class="sig-name descname">find_pd_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pd_parser/parse_pd.html#find_pd_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pd_parser.parse_pd.find_pd_params" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plots the data so the user can determine the right parameters.</p>
+<p>The user can adjust window size to determine chunk, horizontal
+line height to determine zscore and seperation length of two
+vertical lines to determine min_i.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fname: str</strong></dt><dd><p>The filepath to the electrophysiology file (meg/eeg/ieeg).</p>
+</dd>
+<dt><strong>pd_ch_names</strong><span class="classifier">list</span></dt><dd><p>Names of the channel(s) containing the photodiode data.
+One channel is to be given for a common reference and
+two for a bipolar reference. If no channels are provided,
+the data will be plotted and the user will provide them.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+of the function.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pd_parser.parse_pd.parse_pd">
+<code class="sig-prename descclassname">pd_parser.parse_pd.</code><code class="sig-name descname">parse_pd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_event_name</span><span class="o">=</span><span class="default_value">'Fixation'</span></em>, <em class="sig-param"><span class="n">behf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_col</span><span class="o">=</span><span class="default_value">'fix_onset_time'</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">chunk</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">min_i</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">alignment_prop</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">overlap</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pd_parser/parse_pd.html#parse_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pd_parser.parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses photodiode events.</p>
+<p>Parses photodiode events from a likely very corrupted channel
+using behavioral data to sync events to determine which
+behavioral events don’t have a match and are thus corrupted
+and should be excluded (while ignoring events that look like
+photodiode events but don’t match behavior)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fname: str</strong></dt><dd><p>The filepath to the electrophysiology file (meg/eeg/ieeg).</p>
+</dd>
+<dt><strong>pd_event_name: str</strong></dt><dd><p>The name of the event corresponding to the photodiode.</p>
+</dd>
+<dt><strong>behf</strong><span class="classifier">str</span></dt><dd><p>The filepath to a tsv file with the behavioral timing.</p>
+</dd>
+<dt><strong>beh_col</strong><span class="classifier">str</span></dt><dd><p>The column of the behf tsv that corresponds to the events.</p>
+</dd>
+<dt><strong>pd_ch_names</strong><span class="classifier">list</span></dt><dd><p>Names of the channel(s) containing the photodiode data.
+One channel is to be given for a common reference and
+two for a bipolar reference. If no channels are provided,
+the data will be plotted and the user will provide them.</p>
+</dd>
+<dt><strong>exclude_shift: float</strong></dt><dd><p>How many seconds different than expected from the behavior events
+to exclude that event. Use <cite>find_pd_params</cite> to determine if unsure.</p>
+</dd>
+<dt><strong>chunk: float</strong></dt><dd><p>The size of the window to chunk the photodiode events by
+should be larger than 2x the longest photodiode event.
+Use <cite>find_pd_params</cite> to determine if unsure.</p>
+</dd>
+<dt><strong>zscore: float</strong></dt><dd><p>How large of a z-score difference to use to threshold photodiode
+events. Use <cite>find_pd_params</cite> to determine if unsure.</p>
+</dd>
+<dt><strong>min_i: int</strong></dt><dd><p>The minimum number of samples the photodiode event must be on for.
+Use <cite>find_pd_params</cite> to determine if unsure.</p>
+</dd>
+<dt><strong>alignment_prop</strong><span class="classifier">float</span></dt><dd><p>Proportion of events to use to score the alignment to the first event.
+This number should be low to have an accurate score without the
+photodiode drifting and causing unexpected alignments (and it’s
+faster). e.g. for 300 behavior events and 350 photodiode events
+if alignment_prop=0.05 it will probably work and will take 15
+seconds, if alignment_prop=0.1 it will almost always work
+and take 30 seconds and if alignment_prop=0.2 it will work
+if it’s going to and take 75 seconds.</p>
+</dd>
+<dt><strong>baseline: float</strong></dt><dd><p>How much relative to the chunk to use to idenify the time before
+the photodiode event. This should not be changed most likely
+unless there is a specific reason/issue.</p>
+</dd>
+<dt><strong>overlap: float</strong></dt><dd><p>How much to overlap the windows of the photodiode event-finding
+process. This should not be changed most likely unless there is
+a specific reason/issue.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+of the function.</p>
+</dd>
+<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>events: DataFrame</dt><dd><p>A DataFrame that has a column for to the (zero)
+indexed behavioral events and another column corresponding
+to the time stamp of the eeg file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="pd_parser.parse_pd.pd_parser_save_to_bids">
+<code class="sig-prename descclassname">pd_parser.parse_pd.</code><code class="sig-name descname">pd_parser_save_to_bids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bids_dir</span></em>, <em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">sub</span></em>, <em class="sig-param"><span class="n">task</span></em>, <em class="sig-param"><span class="n">ses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">run</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eogs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ecgs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">emgs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pd_parser/parse_pd.html#pd_parser_save_to_bids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pd_parser.parse_pd.pd_parser_save_to_bids" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert data to BIDS format with events found from the photodiode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>bids_dir</strong><span class="classifier">str</span></dt><dd><p>The subject directory in the bids directory where the data
+should be saved.</p>
+</dd>
+<dt><strong>fname</strong><span class="classifier">str</span></dt><dd><p>The filepath to the electrophysiology file (meg/eeg/ieeg).</p>
+</dd>
+<dt><strong>sub</strong><span class="classifier">str</span></dt><dd><p>The name of the subject.</p>
+</dd>
+<dt><strong>task</strong><span class="classifier">str</span></dt><dd><p>The name of the task.</p>
+</dd>
+<dt><strong>data_type: str</strong></dt><dd><p>The type of the channels containing data, i.e. ‘eeg’ or ‘seeg’.</p>
+</dd>
+<dt><strong>eogs: list | None</strong></dt><dd><p>The channels recording eye electrophysiology.</p>
+</dd>
+<dt><strong>ecgs: list | None</strong></dt><dd><p>The channels recording heart electrophysiology.</p>
+</dd>
+<dt><strong>emgs: list | None</strong></dt><dd><p>The channels recording muscle electrophysiology.</p>
+</dd>
+<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+of the function.</p>
+</dd>
+<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 </div>
 
