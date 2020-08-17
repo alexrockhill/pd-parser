@@ -4,10 +4,10 @@ A tool to parse photodiode events from a possibly corrupted channel, compatible 
 
 Corrupted data may look like so:
 
-.. image:: ../../figs/exclude_event.png
+.. image:: ./figs/exclude_event.png
    :width: 800
 
-.. image:: ../../figs/event_diffs.png
+.. image:: ./figs/event_diffs.png
    :width: 400
 
 Alex Rockhill

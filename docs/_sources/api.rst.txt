@@ -18,5 +18,5 @@ pd-parser
 
 :py:mod:`pd_parser`:
 
-.. automodule:: pd_parser.parse_pd
+.. automodule:: parse_pd
    :members:
