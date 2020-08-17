@@ -1,5 +1,6 @@
 numpy>=1.19.0
 mne>=0.19.1
+matplotlib
 argparse
 tqdm
 pytest<5.4
