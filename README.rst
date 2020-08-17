@@ -8,7 +8,7 @@ Corrupted data may look like so:
    :width: 800
 
 .. image:: ../../figs/event_diffs.png
-   :width: 200
+   :width: 400
 
 Alex Rockhill
 Eugene, OR 2020
