@@ -40,17 +40,6 @@ jobs:
         which python
     - name: Install pd-parser
       run: pip install --no-deps .
-    - name: Run pytest
-      run: |
-        python -m pytest . --cov=pd_parser/tests/ --cov-report=xml --cov-config=setup.cfg --verbose
-    - name: Run style & documentation tests
-      if: "matrix.os == 'ubuntu-latest'"
-      run: make pep
-    - name: Upload coverage stats to codecov
-      if: "matrix.os == 'ubuntu-latest'"
-      uses: codecov/codecov-action@v1
-      with:
-        file: ./coverage.xml
     - name: Set up Node.js
       uses: actions/setup-node@v1.4.2
       with:
@@ -68,4 +57,28 @@ jobs:
         git checkout master
         yarn
         echo "::add-path::$(pwd)/bids-validator/bin"
-        cd ../mne-bids
+        cd ../pd_parser
+    - name: Display versions and environment information
+      run: |
+        echo $TZ
+        date
+        echo "npm"; npm --version
+        echo "node"; node --version
+        echo "bids-validator"; bids-validator --version
+        python --version
+        which python
+        mne sys_info
+    - name: Install MNE-BIDS
+      run: pip install --no-deps .
+    - name: Run pytest
+      run: |
+        echo "bids-validator"; bids-validator --version
+        python -m pytest . --cov=pd_parser/tests/ --cov-report=xml --cov-config=setup.cfg --verbose --ignore mne-python
+    - name: Run style & documentation tests
+      if: "matrix.os == 'ubuntu-latest'"
+      run: make pep
+    - name: Upload coverage stats to codecov
+      if: "matrix.os == 'ubuntu-latest'"
+      uses: codecov/codecov-action@v1
+      with:
+        file: ./coverage.xml
