@@ -57,7 +57,7 @@ jobs:
         git checkout master
         yarn
         echo "::add-path::$(pwd)/bids-validator/bin"
-        cd ../pd_parser
+        cd ../pd-parser
     - name: Display versions and environment information
       run: |
         echo $TZ
