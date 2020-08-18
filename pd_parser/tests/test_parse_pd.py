@@ -61,7 +61,7 @@ def test_parse_pd(_bids_validate):
     raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
                                   preload=True)
     info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
-                           ['grad'] * 3)
+                           ['eeg'] * 3)
     raw_tmp2 = \
         mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-10,
                         info)
