@@ -10,6 +10,7 @@ For each supported file format, implement a test.
 # TO DO: 1) optimize _find_best_alignment
 #        2) implement pd simulation
 #        3) test for more than one photodiode event
+#        4) Coverage report
 
 import os
 import os.path as op

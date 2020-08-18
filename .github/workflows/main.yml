@@ -60,7 +60,6 @@ jobs:
         cd ../pd-parser
     - name: Install MNE-BIDS dev
       run: |
-        pip uninstall mne_bids
         git clone --depth 1 https://github.com/mne-tools/mne-bids.git
         pip install --no-deps -e ./mne-bids
     - name: Display versions and environment information
