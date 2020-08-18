@@ -675,7 +675,7 @@ def add_pd_relative_events(fname, behf, relative_event_cols,
             raise ValueError(f'Event name {event_name} already exists in '
                              'saved events and overwrite=False, use '
                              'overwrite=True to overwrite')
-    events = {i: samp for i, samp in enumerate(beh_df[f'pd_sample'])
+    events = {i: samp for i, samp in enumerate(beh_df['pd_sample'])
               if samp != 'n/a'}
     for name, beh_events in relative_events.items():
         onsets = np.array([events[i] + beh_events[i] * raw.info['sfreq']
