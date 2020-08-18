@@ -61,9 +61,9 @@ def test_parse_pd(_bids_validate):
     raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
                                   preload=True)
     info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
-                           ['seeg'] * 3)
+                           ['grad'] * 3)
     raw_tmp2 = \
-        mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
+        mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-10,
                         info)
     raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
     raw_tmp.add_channels([raw_tmp2])
@@ -108,5 +108,5 @@ def test_parse_pd(_bids_validate):
     # test pd_parser_save_to_bids
     bids_dir = op.join(out_dir, 'bids_dir')
     pd_parser.pd_parser_save_to_bids(bids_dir, fname, '1', 'test',
-                                     data_type='seeg', verbose=False)
+                                     data_type='grad', verbose=False)
     _bids_validate(bids_dir)

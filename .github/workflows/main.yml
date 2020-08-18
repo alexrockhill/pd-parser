@@ -68,7 +68,7 @@ jobs:
         python --version
         which python
         mne sys_info
-    - name: Install MNE-BIDS
+    - name: Install pd-parser
       run: pip install --no-deps .
     - name: Run pytest
       run: |
