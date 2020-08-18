@@ -23,7 +23,7 @@ import mne
 from mne.utils import _TempDir, run_subprocess
 
 import pd_parser
-from pd_parser.parse_pd import _load_pd_data, _read_tsv, _to_tsv
+from pd_parser.parse_pd import _load_pd_data, _read_tsv
 
 basepath = op.join(op.dirname(pd_parser.__file__), 'tests', 'data')
 
