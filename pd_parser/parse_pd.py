@@ -804,7 +804,7 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
         _to_tsv(op.join(bids_beh_dir, bids_basename + '_beh.tsv'), beh_df)
 
 
-def _simulate_pd_data(sfreq=512):
+def simulate_pd_data(sfreq=512):
     """Simulate photodiode data."""
     info = mne.create_info(['pd'], sfreq, ['stim'])
     data = np.zeros((1, 1000))

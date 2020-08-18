@@ -9,6 +9,7 @@ see: github.com/mne-tools/mne-python/blob/master/doc/sphinxext/gen_commands.py
 import os
 import os.path as op
 import subprocess
+from shutil import which
 
 import pd_parser as mod
 
@@ -67,7 +68,11 @@ def generate_cli_rst(app=None):
         f.write(header.format('=' * (len(mod.__name__) - 2), mod.__name__,
                               '=' * (len(mod.__name__) - 2), mod.__name__))
         for fname in fnames:
+            if which(fname) is None:  # no command for function
+                break
             output = subprocess.check_output(f'{fname} -h', shell=True)
+            if not output:
+                break
             output = [line2.rstrip().strip() for line in output.splitlines()
                       for line2 in line.decode('ascii').split('   ') if line2]
             # put usage on one line

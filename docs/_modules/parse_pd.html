@@ -897,12 +897,12 @@
         <span class="n">_to_tsv</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bids_beh_dir</span><span class="p">,</span> <span class="n">bids_basename</span> <span class="o">+</span> <span class="s1">&#39;_beh.tsv&#39;</span><span class="p">),</span> <span class="n">beh_df</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_simulate_pd_data</span><span class="p">(</span><span class="n">sfreq</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
+<div class="viewcode-block" id="simulate_pd_data"><a class="viewcode-back" href="../api.html#parse_pd.simulate_pd_data">[docs]</a><span class="k">def</span> <span class="nf">simulate_pd_data</span><span class="p">(</span><span class="n">sfreq</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate photodiode data.&quot;&quot;&quot;</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">([</span><span class="s1">&#39;pd&#39;</span><span class="p">],</span> <span class="n">sfreq</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;stim&#39;</span><span class="p">])</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">RawArray</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">raw</span>
+    <span class="k">return</span> <span class="n">raw</span></div>
 </pre></div>
 
     </div>

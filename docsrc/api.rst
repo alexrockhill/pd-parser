@@ -20,6 +20,7 @@ pd-parser
    add_pd_relative_events
    add_pd_events_to_raw
    pd_parser_save_to_bids
+   simulate_pd_data
 
 :py:mod:`pd_parser`:
 
