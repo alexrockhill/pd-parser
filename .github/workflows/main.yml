@@ -51,3 +51,21 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         file: ./coverage.xml
+    - name: Set up Node.js
+      uses: actions/setup-node@v1.4.2
+      with:
+        node-version: 12
+    - name: Install BIDS validator (stable)
+      if: "matrix.os != 'ubuntu-latest'"
+      run: |
+        npm install -g bids-validator
+    - name: Install BIDS validator (master)
+      if: "matrix.os == 'ubuntu-latest'"
+      run: |
+        cd ..
+        git clone --depth 1 https://github.com/bids-standard/bids-validator
+        cd bids-validator
+        git checkout master
+        yarn
+        echo "::add-path::$(pwd)/bids-validator/bin"
+        cd ../mne-bids
