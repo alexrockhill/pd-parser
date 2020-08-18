@@ -31,7 +31,9 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
+    - name: Windows matplotlib check
       if: "matrix.os == 'windows-latest'"
+      run: |
         python -c "import matplotlib"
     - name: Display versions and environment information
       run: |
