@@ -4,7 +4,15 @@ include *.xml
 include LICENSE
 include Makefile
 recursive-include pd_parser *.DS_Store
+recursive-exclude docs *
+recursive-exclude docsrc *
 include pd_parser/parse_pd.py
 include pd_parser/tests/test_parse_pd.py
 include pd_parser/tests/data/pd_data.tsv
 include pd_parser/tests/data/events.tsv
+include examples/README.txt
+include examples/find_pd_events.py
+include pd_parser/tests/data/pd_beh.tsv
+include pd_parser/tests/data/pd_data-raw.fif
+include pd_parser/tests/data/pd_events.tsv
+include pd_parser/tests/data/pd_events_relative.tsv
