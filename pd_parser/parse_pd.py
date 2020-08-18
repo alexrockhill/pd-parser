@@ -17,6 +17,7 @@ import mne
 
 
 def _read_tsv(fname):
+    """Read tab-separated value file data."""
     if op.splitext(fname)[-1] != '.tsv':
         raise ValueError(f'Unable to read {fname}, tab-separated-value '
                          '(tsv) is required.')
@@ -49,6 +50,7 @@ def _read_tsv(fname):
 
 
 def _to_tsv(fname, df):
+    """Write tab-separated value file data."""
     if op.splitext(fname)[-1] != '.tsv':
         raise ValueError(f'Unable to write to {fname}, tab-separated-value '
                          '(tsv) is required.')
@@ -292,7 +294,7 @@ def _exclude_ambiguous_events(beh_events, pd_candidates, sorted_pds,
 
 def _save_pd_data(fname, raw, events, event_id, pd_ch_names, beh_df=None,
                   add_events=False):
-    """Saves the events determined from the photodiode."""
+    """Save the events determined from the photodiode."""
     basename = op.splitext(op.basename(fname))[0]
     pd_data_dir = op.join(op.dirname(fname), basename + '_pd_data')
     if not op.isdir(pd_data_dir):
@@ -323,7 +325,7 @@ def _save_pd_data(fname, raw, events, event_id, pd_ch_names, beh_df=None,
 
 
 def _load_pd_data(fname):
-    """Loads previously saved photodiode data--annot and pd channel names."""
+    """Load previously saved photodiode data--annot and pd channel names."""
     basename = op.splitext(op.basename(fname))[0]
     pd_data_dir = op.join(op.dirname(fname), basename + '_pd_data')
     annot_fname = op.join(pd_data_dir, basename + '_pd_annot.fif')
@@ -344,7 +346,7 @@ def _load_pd_data(fname):
 
 
 def find_pd_params(fname, pd_ch_names=None, verbose=True):
-    """Plots the data so the user can determine the right parameters.
+    """Plot the data so the user can determine the right parameters.
 
     The user can adjust window size to determine chunk, horizontal
     line height to determine zscore and seperation length of two
@@ -501,7 +503,7 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
              chunk=2, zscore=10, min_i=10, alignment_prop=0.1,
              baseline=0.25, overlap=0.25, add_events=False,
              overwrite=False, verbose=True):
-    """Parses photodiode events.
+    """Parse photodiode events.
 
     Parses photodiode events from a likely very corrupted channel
     using behavioral data to sync events to determine which
@@ -628,7 +630,7 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
 def add_pd_relative_events(fname, behf, relative_event_cols,
                            relative_event_names=None,
                            overwrite=False, verbose=True):
-    """ Adds events relative to those determined from the photodiode.
+    """Add events relative to those determined from the photodiode.
 
     Parameters
     ----------
@@ -690,7 +692,7 @@ def add_pd_relative_events(fname, behf, relative_event_cols,
 
 def add_pd_events_to_raw(fname, out_fname=None, drop_pd_channels=True,
                          verbose=True, overwrite=False):
-    """Saves out a new raw file with photodiode events.
+    """Save out a new raw file with photodiode events.
 
     Note: this function is not recommended, rather just skip it and
     use `save_to_bids` which doesn't modify the underlying raw data
@@ -711,6 +713,7 @@ def add_pd_events_to_raw(fname, out_fname=None, drop_pd_channels=True,
         of the function.
     overwrite : bool
         Whether to overwrite existing data if it exists.
+
     Returns
     -------
     out_fname : str
@@ -802,7 +805,7 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
 
 
 def _simulate_pd_data(sfreq=512):
-    """Simulates photodiode data."""
+    """Simulate photodiode data."""
     info = mne.create_info(['pd'], sfreq, ['stim'])
     data = np.zeros((1, 1000))
     raw = mne.RawArray(data, info)
