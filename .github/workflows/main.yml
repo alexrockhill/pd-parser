@@ -68,6 +68,10 @@ jobs:
         python --version
         which python
         mne sys_info
+    - name: Install MNE-BIDS dev
+      run: |
+        git clone --depth 1 https://github.com/mne-tools/mne-bids.git
+        pip install --no-deps -e ./mne-bids
     - name: Install pd-parser
       run: pip install --no-deps .
     - name: Run pytest
