@@ -58,6 +58,11 @@ jobs:
         yarn
         echo "::add-path::$(pwd)/bids-validator/bin"
         cd ../pd-parser
+    - name: Install MNE-BIDS dev
+      run: |
+        pip uninstall mne_bids
+        git clone --depth 1 https://github.com/mne-tools/mne-bids.git
+        pip install --no-deps -e ./mne-bids
     - name: Display versions and environment information
       run: |
         echo $TZ
@@ -67,11 +72,8 @@ jobs:
         echo "bids-validator"; bids-validator --version
         python --version
         which python
+        python -c "import mne_bids; print(mne_bids.__version__)"
         mne sys_info
-    - name: Install MNE-BIDS dev
-      run: |
-        git clone --depth 1 https://github.com/mne-tools/mne-bids.git
-        pip install --no-deps -e ./mne-bids
     - name: Install pd-parser
       run: pip install --no-deps .
     - name: Run pytest
