@@ -58,10 +58,6 @@ jobs:
         yarn
         echo "::add-path::$(pwd)/bids-validator/bin"
         cd ../pd-parser
-    - name: Install MNE-BIDS dev
-      run: |
-        git clone --depth 1 https://github.com/mne-tools/mne-bids.git
-        pip install --no-deps -e ./mne-bids
     - name: Display versions and environment information
       run: |
         echo $TZ
