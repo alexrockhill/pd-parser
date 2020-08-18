@@ -31,10 +31,6 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-    - name: Windows matplotlib check
-      if: "matrix.os == 'windows-latest'"
-      run: |
-        python -c "import matplotlib"
     - name: Display versions and environment information
       run: |
         echo $TZ
@@ -61,17 +57,6 @@ jobs:
         yarn
         echo "::add-path::$(pwd)/bids-validator/bin"
         cd ../pd-parser
-    - name: Display versions and environment information
-      run: |
-        echo $TZ
-        date
-        echo "npm"; npm --version
-        echo "node"; node --version
-        echo "bids-validator"; bids-validator --version
-        python --version
-        which python
-        python -c "import mne_bids; print(mne_bids.__version__)"
-        mne sys_info
     - name: Install pd-parser
       run: pip install --no-deps .
     - name: Run pytest

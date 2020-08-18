@@ -110,6 +110,7 @@
 
 
 <span class="k">def</span> <span class="nf">_read_tsv</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read tab-separated value file data.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;.tsv&#39;</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to read </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1">, tab-separated-value &#39;</span>
                          <span class="s1">&#39;(tsv) is required.&#39;</span><span class="p">)</span>
@@ -142,6 +143,7 @@
 
 
 <span class="k">def</span> <span class="nf">_to_tsv</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">df</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Write tab-separated value file data.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;.tsv&#39;</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Unable to write to </span><span class="si">{</span><span class="n">fname</span><span class="si">}</span><span class="s1">, tab-separated-value &#39;</span>
                          <span class="s1">&#39;(tsv) is required.&#39;</span><span class="p">)</span>
@@ -385,7 +387,7 @@
 
 <span class="k">def</span> <span class="nf">_save_pd_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">raw</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">event_id</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="p">,</span> <span class="n">beh_df</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">add_events</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Saves the events determined from the photodiode.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Save the events determined from the photodiode.&quot;&quot;&quot;</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">pd_data_dir</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;_pd_data&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">op</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">pd_data_dir</span><span class="p">):</span>
@@ -416,7 +418,7 @@
 
 
 <span class="k">def</span> <span class="nf">_load_pd_data</span><span class="p">(</span><span class="n">fname</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Loads previously saved photodiode data--annot and pd channel names.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Load previously saved photodiode data--annot and pd channel names.&quot;&quot;&quot;</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">pd_data_dir</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;_pd_data&#39;</span><span class="p">)</span>
     <span class="n">annot_fname</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd_data_dir</span><span class="p">,</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;_pd_annot.fif&#39;</span><span class="p">)</span>
@@ -437,7 +439,7 @@
 
 
 <div class="viewcode-block" id="find_pd_params"><a class="viewcode-back" href="../api.html#parse_pd.find_pd_params">[docs]</a><span class="k">def</span> <span class="nf">find_pd_params</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Plots the data so the user can determine the right parameters.</span>
+    <span class="sd">&quot;&quot;&quot;Plot the data so the user can determine the right parameters.</span>
 
 <span class="sd">    The user can adjust window size to determine chunk, horizontal</span>
 <span class="sd">    line height to determine zscore and seperation length of two</span>
@@ -594,7 +596,7 @@
              <span class="n">chunk</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">alignment_prop</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
              <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">overlap</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">add_events</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
              <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Parses photodiode events.</span>
+    <span class="sd">&quot;&quot;&quot;Parse photodiode events.</span>
 
 <span class="sd">    Parses photodiode events from a likely very corrupted channel</span>
 <span class="sd">    using behavioral data to sync events to determine which</span>
@@ -721,7 +723,7 @@
 <div class="viewcode-block" id="add_pd_relative_events"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_relative_events">[docs]</a><span class="k">def</span> <span class="nf">add_pd_relative_events</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="p">,</span> <span class="n">relative_event_cols</span><span class="p">,</span>
                            <span class="n">relative_event_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                            <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Adds events relative to those determined from the photodiode.</span>
+    <span class="sd">&quot;&quot;&quot;Add events relative to those determined from the photodiode.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -766,7 +768,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Event name </span><span class="si">{</span><span class="n">event_name</span><span class="si">}</span><span class="s1"> already exists in &#39;</span>
                              <span class="s1">&#39;saved events and overwrite=False, use &#39;</span>
                              <span class="s1">&#39;overwrite=True to overwrite&#39;</span><span class="p">)</span>
-    <span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">samp</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">samp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">beh_df</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;pd_sample&#39;</span><span class="p">])</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">samp</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">samp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">beh_df</span><span class="p">[</span><span class="s1">&#39;pd_sample&#39;</span><span class="p">])</span>
               <span class="k">if</span> <span class="n">samp</span> <span class="o">!=</span> <span class="s1">&#39;n/a&#39;</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">beh_events</span> <span class="ow">in</span> <span class="n">relative_events</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">beh_events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
@@ -783,7 +785,7 @@
 
 <div class="viewcode-block" id="add_pd_events_to_raw"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_events_to_raw">[docs]</a><span class="k">def</span> <span class="nf">add_pd_events_to_raw</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">out_fname</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drop_pd_channels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                          <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Saves out a new raw file with photodiode events.</span>
+    <span class="sd">&quot;&quot;&quot;Save out a new raw file with photodiode events.</span>
 
 <span class="sd">    Note: this function is not recommended, rather just skip it and</span>
 <span class="sd">    use `save_to_bids` which doesn&#39;t modify the underlying raw data</span>
@@ -804,6 +806,7 @@
 <span class="sd">        of the function.</span>
 <span class="sd">    overwrite : bool</span>
 <span class="sd">        Whether to overwrite existing data if it exists.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    out_fname : str</span>
@@ -895,7 +898,7 @@
 
 
 <span class="k">def</span> <span class="nf">_simulate_pd_data</span><span class="p">(</span><span class="n">sfreq</span><span class="o">=</span><span class="mi">512</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Simulates photodiode data.&quot;&quot;&quot;</span>
+    <span class="sd">&quot;&quot;&quot;Simulate photodiode data.&quot;&quot;&quot;</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">([</span><span class="s1">&#39;pd&#39;</span><span class="p">],</span> <span class="n">sfreq</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;stim&#39;</span><span class="p">])</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">RawArray</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>

@@ -97,10 +97,31 @@
   <div class="section" id="api-documentation">
 <span id="id1"></span><h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
 <p>Here we list the Application-Programming Interface (API) for pd-parser.</p>
-<div class="toctree-wrapper compound">
-</div>
 <div class="section" id="pd-parser">
 <h2>pd-parser<a class="headerlink" href="#pd-parser" title="Permalink to this headline">¶</a></h2>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#parse_pd.find_pd_params" title="parse_pd.find_pd_params"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_pd_params</span></code></a>(fname[, pd_ch_names, verbose])</p></td>
+<td><p>Plot the data so the user can determine the right parameters.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#parse_pd.parse_pd" title="parse_pd.parse_pd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_pd</span></code></a>(fname[, pd_event_name, behf, …])</p></td>
+<td><p>Parse photodiode events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#parse_pd.add_pd_relative_events" title="parse_pd.add_pd_relative_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_pd_relative_events</span></code></a>(fname, behf, …[, …])</p></td>
+<td><p>Add events relative to those determined from the photodiode.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#parse_pd.add_pd_events_to_raw" title="parse_pd.add_pd_events_to_raw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">add_pd_events_to_raw</span></code></a>(fname[, out_fname, …])</p></td>
+<td><p>Save out a new raw file with photodiode events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#parse_pd.pd_parser_save_to_bids" title="parse_pd.pd_parser_save_to_bids"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pd_parser_save_to_bids</span></code></a>(bids_dir, fname, sub, …)</p></td>
+<td><p>Convert data to BIDS format with events found from the photodiode.</p></td>
+</tr>
+</tbody>
+</table>
 <p><code class="xref py py-mod docutils literal notranslate"><span class="pre">pd_parser</span></code>:</p>
 <span class="target" id="module-parse_pd"></span><p>Find photodiode events.</p>
 <p>Take a potentially corrupted photodiode channel and find
@@ -108,7 +129,7 @@ the event time samples at which it turned on.</p>
 <dl class="py function">
 <dt id="parse_pd.add_pd_events_to_raw">
 <code class="sig-name descname">add_pd_events_to_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">out_fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_pd_channels</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_pd_events_to_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_pd_events_to_raw" title="Permalink to this definition">¶</a></dt>
-<dd><p>Saves out a new raw file with photodiode events.</p>
+<dd><p>Save out a new raw file with photodiode events.</p>
 <p>Note: this function is not recommended, rather just skip it and
 use <cite>save_to_bids</cite> which doesn’t modify the underlying raw data
 especially converting it to fif if it isn’t fif already. In
@@ -128,8 +149,10 @@ of the function.</p>
 </dd>
 <dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
 </dd>
-<dt><strong>Returns</strong></dt><dd></dd>
-<dt><strong>——-</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
 <dt><strong>out_fname</strong><span class="classifier">str</span></dt><dd><p>The filepath to save the modified raw data to.</p>
 </dd>
 </dl>
@@ -140,7 +163,7 @@ of the function.</p>
 <dl class="py function">
 <dt id="parse_pd.add_pd_relative_events">
 <code class="sig-name descname">add_pd_relative_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">behf</span></em>, <em class="sig-param"><span class="n">relative_event_cols</span></em>, <em class="sig-param"><span class="n">relative_event_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_pd_relative_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_pd_relative_events" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds events relative to those determined from the photodiode.</p>
+<dd><p>Add events relative to those determined from the photodiode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
@@ -174,7 +197,7 @@ to the time stamp of the eeg file.</p>
 <dl class="py function">
 <dt id="parse_pd.find_pd_params">
 <code class="sig-name descname">find_pd_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#find_pd_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.find_pd_params" title="Permalink to this definition">¶</a></dt>
-<dd><p>Plots the data so the user can determine the right parameters.</p>
+<dd><p>Plot the data so the user can determine the right parameters.</p>
 <p>The user can adjust window size to determine chunk, horizontal
 line height to determine zscore and seperation length of two
 vertical lines to determine min_i.</p>
@@ -199,7 +222,7 @@ of the function.</p>
 <dl class="py function">
 <dt id="parse_pd.parse_pd">
 <code class="sig-name descname">parse_pd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_event_name</span><span class="o">=</span><span class="default_value">'Fixation'</span></em>, <em class="sig-param"><span class="n">behf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_col</span><span class="o">=</span><span class="default_value">'fix_onset_time'</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">chunk</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">min_i</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">alignment_prop</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">overlap</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
-<dd><p>Parses photodiode events.</p>
+<dd><p>Parse photodiode events.</p>
 <p>Parses photodiode events from a likely very corrupted channel
 using behavioral data to sync events to determine which
 behavioral events don’t have a match and are thus corrupted
