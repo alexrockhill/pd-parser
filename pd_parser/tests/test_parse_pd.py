@@ -109,10 +109,4 @@ def test_parse_pd(_bids_validate):
     bids_dir = op.join(out_dir, 'bids_dir')
     pd_parser.pd_parser_save_to_bids(bids_dir, fname, '1', 'test',
                                      verbose=False)
-    # weird validator error
-    df = _read_tsv(op.join(bids_dir, 'sub-1', 'sub-1_scans.tsv'))
-    if df['filename'] == ['ieeg/sub-1_task-test_ieeg.fif']:
-        df['filename'] = ['ieeg/sub-1_task-test_ieeg.vhdr']
-    _to_tsv(op.join(bids_dir, 'sub-1', 'sub-1_scans.tsv'), df)
-
     _bids_validate(bids_dir)
