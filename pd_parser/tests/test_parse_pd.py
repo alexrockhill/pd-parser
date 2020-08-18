@@ -22,7 +22,7 @@ import mne
 from mne.utils import _TempDir, run_subprocess
 
 import pd_parser
-from pd_parser.parse_pd import _load_pd_data, _read_tsv
+from pd_parser.parse_pd import _load_pd_data, _read_tsv, _to_tsv
 
 basepath = op.join(op.dirname(pd_parser.__file__), 'tests', 'data')
 
@@ -61,9 +61,9 @@ def test_parse_pd(_bids_validate):
     raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
                                   preload=True)
     info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
-                           ['eeg'] * 3)
+                           ['ieeg'] * 3)
     raw_tmp2 = \
-        mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-10,
+        mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
                         info)
     raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
     raw_tmp.add_channels([raw_tmp2])
@@ -110,3 +110,8 @@ def test_parse_pd(_bids_validate):
     pd_parser.pd_parser_save_to_bids(bids_dir, fname, '1', 'test',
                                      verbose=False)
     _bids_validate(bids_dir)
+    # weird validator error
+    df = _read_tsv(op.join(bids_dir, 'sub-1', 'sub-1_scans.tsv'))
+    if df['filename'] == ['ieeg/sub-1_task-test_ieeg.fif']:
+        df['filename'] = ['ieeg/sub-1_task-test_ieeg.vhdr']
+    _to_tsv(op.join(bids_dir, 'sub-1', 'sub-1_scans.tsv'), df)
