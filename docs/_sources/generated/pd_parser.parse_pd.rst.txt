@@ -1,0 +1,6 @@
+﻿pd\_parser.parse\_pd
+====================
+
+.. currentmodule:: pd_parser
+
+.. autofunction:: parse_pd

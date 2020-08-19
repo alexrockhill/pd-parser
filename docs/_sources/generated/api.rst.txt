@@ -1,0 +1,82 @@
+:orphan:
+
+.. _python_api:
+
+=================================================
+pd_parser Application Programming Interface (API)
+=================================================
+
+Here we list the pd_parser tools that you can use from the command line.
+
+.. contents:: Contents
+   :local:
+   :depth: 1
+
+.. currentmodule:: pd_parser
+
+
+
+.. _gen_add_pd_events_to_raw:
+
+add_pd_events_to_raw
+====================
+
+
+.. automodule::
+    pd_parser.add_pd_events_to_raw
+
+
+
+.. _gen_add_pd_relative_events:
+
+add_pd_relative_events
+======================
+
+
+.. automodule::
+    pd_parser.add_pd_relative_events
+
+
+
+.. _gen_find_pd_params:
+
+find_pd_params
+==============
+
+
+.. automodule::
+    pd_parser.find_pd_params
+
+
+
+.. _gen_parse_pd:
+
+parse_pd
+========
+
+
+.. automodule::
+    pd_parser.parse_pd
+
+
+
+.. _gen_pd_parser_save_to_bids:
+
+pd_parser_save_to_bids
+======================
+
+
+.. automodule::
+    pd_parser.pd_parser_save_to_bids
+
+
+
+.. _gen_simulate_pd_data:
+
+simulate_pd_data
+================
+
+
+.. automodule::
+    pd_parser.simulate_pd_data
+

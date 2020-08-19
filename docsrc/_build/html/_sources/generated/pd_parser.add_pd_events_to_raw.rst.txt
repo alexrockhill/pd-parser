@@ -1,0 +1,6 @@
+﻿pd\_parser.add\_pd\_events\_to\_raw
+===================================
+
+.. currentmodule:: pd_parser
+
+.. autofunction:: add_pd_events_to_raw

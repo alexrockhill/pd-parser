@@ -1,0 +1,6 @@
+﻿pd\_parser.find\_pd\_params
+===========================
+
+.. currentmodule:: pd_parser
+
+.. autofunction:: find_pd_params

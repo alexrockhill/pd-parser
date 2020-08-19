@@ -1,0 +1,6 @@
+﻿pd\_parser.pd\_parser\_save\_to\_bids
+=====================================
+
+.. currentmodule:: pd_parser
+
+.. autofunction:: pd_parser_save_to_bids
