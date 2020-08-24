@@ -7,9 +7,7 @@ For each supported file format, implement a test.
 #
 # License: BSD (3-clause)
 
-# TO DO: 1) optimize _find_best_alignment
-#        2) implement pd simulation
-#        3) test for more than one photodiode event
+# TO DO: 3) test for more than one photodiode event
 #        4) Coverage report
 
 import os
@@ -19,13 +17,26 @@ import platform
 
 import pytest
 
+import matplotlib.pyplot as plt
 import mne
 from mne.utils import _TempDir, run_subprocess
 
 import pd_parser
-from pd_parser.parse_pd import _load_pd_data, _read_tsv
+from pd_parser.parse_pd import (_load_pd_data, _read_tsv, _to_tsv,
+                                _read_raw, _load_beh_df, _get_pd_data,
+                                _find_pd_candidates, _pd_event_dist,
+                                _find_best_alignment,
+                                _exclude_ambiguous_events,
+                                _save_pd_data, _load_pd_data)
 
 basepath = op.join(op.dirname(pd_parser.__file__), 'tests', 'data')
+
+behf = op.join(basepath, 'pd_beh.tsv')
+events = _read_tsv(op.join(basepath, 'pd_events.tsv'))
+events_relative = _read_tsv(op.join(basepath, 'pd_events_relative.tsv'))
+
+raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
+                              preload=True)
 
 
 # from mne_bids.tests.test_write._bids_validate
@@ -49,18 +60,75 @@ def _bids_validate():
     return _validate
 
 
+def test_internal_functions():
+    out_dir = _TempDir()
+    # test tsv
+    df = dict(test=[1, 2], test2=[2, 1])
+    _to_tsv(op.join(out_dir, 'test.tsv'), df)
+    assert df == _read_tsv(op.join(out_dir, 'test.tsv'))
+    with pytest.raises(ValueError, match='Unable to read'):
+        _read_tsv('test.foo')
+    with pytest.raises(ValueError, match='Error in reading tsv'):
+        with open(op.join(out_dir, 'test.tsv'), 'w') as _:
+            pass
+        _read_tsv(op.join(out_dir, 'test.tsv'))
+    with pytest.raises(ValueError, match='contains no data'):
+        with open(op.join(out_dir, 'test.tsv'), 'w') as f:
+            f.write('test')
+        _read_tsv(op.join(out_dir, 'test.tsv'))
+    with pytest.raises(ValueError, match='different lengths'):
+        with open(op.join(out_dir, 'test.tsv'), 'w') as f:
+            f.write('test\ttest2\n1\t1\n1')
+        _read_tsv(op.join(out_dir, 'test.tsv'))
+    with pytest.raises(ValueError, match='Empty data file, no keys'):
+        _to_tsv(op.join(out_dir, 'test.tsv'), dict())
+    with pytest.raises(ValueError, match='Unable to write'):
+        _to_tsv('foo.bar', dict(test=1))
+    # test read
+    raw, events = pd_parser.simulate_pd_data()
+    raw.save(op.join(out_dir, 'test-raw.fif'), overwrite=True)
+    with pytest.raises(ValueError, match='not recognized'):
+        _read_raw('foo.bar')
+    raw2 = _read_raw(op.join(out_dir, 'test-raw.fif'))
+    np.testing.assert_array_equal(raw._data, raw2._data)
+    # test load beh
+    with pytest.raises(ValueError, match='not in the columns'):
+        _load_beh_df(op.join(basepath, 'pd_events.tsv'), 'foo')
+    # test get pd data
+    raw, events = pd_parser.simulate_pd_data()
+    with pytest.raises(ValueError, match='not in raw channel names'):
+        _get_pd_data(raw, ['foo'])
+    # test find pd candidates
+    pd_candidates = _find_pd_candidates(raw._data[0], raw.info['sfreq'],
+                                        chunk=2, baseline=0.25, overlap=0.25,
+                                        zscore=10, min_i=10)
+    sorted_pds = np.array(sorted(pd_candidates))
+    assert all([event in sorted_pds for event in sorted_pds])
+    # test pd event dist
+    assert _pd_event_dist(len(raw) + 10, pd_candidates, len(raw)) == np.inf
+    assert _pd_event_dist(events[2, 0] + 10, pd_candidates, len(raw)) == 10
+    assert _pd_event_dist(events[2, 0] - 10, pd_candidates, len(raw)) == 10
+    # test find best alignment
+    np.random.seed(11)
+    beh_events = events[2:, 0].astype(float)
+    beh_events += np.random.random(len(beh_events)) * 0.1 * raw.info['sfreq']
+    beh_events -= beh_events[0]
+    best_alignment = \
+        _find_best_alignment(beh_events, pd_candidates, sorted_pds,
+                             first_alignment_n=3, verbose=True)
+    assert best_alignment == 2
+
+
+def test_simulated():
+    raw = pd_parser.simulate_pd_data()
+
+
 @pytest.mark.filterwarnings('ignore::RuntimeWarning')
 @pytest.mark.filterwarnings('ignore::DeprecationWarning')
 def test_parse_pd(_bids_validate):
     # load in data
     out_dir = _TempDir()
     fname = op.join(out_dir, 'pd_data-raw.fif')
-    behf = op.join(basepath, 'pd_beh.tsv')
-    events = _read_tsv(op.join(basepath, 'pd_events.tsv'))
-    events_relative = _read_tsv(op.join(basepath, 'pd_events_relative.tsv'))
-
-    raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
-                                  preload=True)
     info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
                            ['seeg'] * 3)
     raw_tmp2 = \
@@ -74,14 +142,15 @@ def test_parse_pd(_bids_validate):
     # this needs to be tested with user interaction, this
     # just tests that it launches
     pd_parser.find_pd_params(fname, pd_ch_names=['pd'])
+    plt.close('all')
     # test core functionality
-    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'],
-                       alignment_prop=0.05)  # reduce alignment_prop -> faster
+    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
+    plt.close('all')
     raw = mne.io.read_raw_fif(fname)
     annot, pd_ch_names, beh_df = _load_pd_data(fname)
     raw.set_annotations(annot)
     events2, event_id = mne.events_from_annotations(raw)
-    assert all(events2[:, 0] == events['pd_sample'])
+    np.testing.assert_array_equal(events2[:, 0], events['pd_sample'])
     assert pd_ch_names == ['pd']
     event_indices = [i for i, s in enumerate(beh_df['pd_sample'])
                      if s != 'n/a']
@@ -96,10 +165,10 @@ def test_parse_pd(_bids_validate):
     annot, pd_ch_names, beh_df = _load_pd_data(fname)
     raw.set_annotations(annot)
     events2, event_id = mne.events_from_annotations(raw)
-    assert all(events2[:, 0] == events_relative['sample'])
+    np.testing.assert_array_equal(events2[:, 0], events_relative['sample'])
     assert pd_ch_names == ['pd']
-    assert all(events2[:, 2] == [event_id[tt] for tt in
-                                 events_relative['trial_type']])
+    np.testing.assert_array_equal(
+        events2[:, 2], [event_id[tt] for tt in events_relative['trial_type']])
     # test add_pd_events_to_raw
     out_fname = pd_parser.add_pd_events_to_raw(fname, drop_pd_channels=False)
     raw2 = mne.io.read_raw_fif(out_fname)

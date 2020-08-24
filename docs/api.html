@@ -198,7 +198,7 @@ of the function.</p>
 
 <dl class="py function">
 <dt id="parse_pd.parse_pd">
-<code class="sig-name descname">parse_pd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_event_name</span><span class="o">=</span><span class="default_value">'Fixation'</span></em>, <em class="sig-param"><span class="n">behf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_col</span><span class="o">=</span><span class="default_value">'fix_onset_time'</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">chunk</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">min_i</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">alignment_prop</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">overlap</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">parse_pd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_event_name</span><span class="o">=</span><span class="default_value">'Fixation'</span></em>, <em class="sig-param"><span class="n">behf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_col</span><span class="o">=</span><span class="default_value">'fix_onset_time'</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">chunk</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">min_i</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">overlap</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse photodiode events.</p>
 <p>Parses photodiode events from a likely very corrupted channel
 using behavioral data to sync events to determine which
@@ -233,15 +233,6 @@ events. Use <cite>find_pd_params</cite> to determine if unsure.</p>
 </dd>
 <dt><strong>min_i: int</strong></dt><dd><p>The minimum number of samples the photodiode event must be on for.
 Use <cite>find_pd_params</cite> to determine if unsure.</p>
-</dd>
-<dt><strong>alignment_prop</strong><span class="classifier">float</span></dt><dd><p>Proportion of events to use to score the alignment to the first event.
-This number should be low to have an accurate score without the
-photodiode drifting and causing unexpected alignments (and it’s
-faster). e.g. for 300 behavior events and 350 photodiode events
-if alignment_prop=0.05 it will probably work and will take 15
-seconds, if alignment_prop=0.1 it will almost always work
-and take 30 seconds and if alignment_prop=0.2 it will work
-if it’s going to and take 75 seconds.</p>
 </dd>
 <dt><strong>baseline: float</strong></dt><dd><p>How much relative to the chunk to use to idenify the time before
 the photodiode event. This should not be changed most likely
@@ -312,8 +303,43 @@ of the function.</p>
 
 <dl class="py function">
 <dt id="parse_pd.simulate_pd_data">
-<code class="sig-name descname">simulate_pd_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sfreq</span><span class="o">=</span><span class="default_value">512</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#simulate_pd_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.simulate_pd_data" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">simulate_pd_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_events</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">n_sec_on</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">amp</span><span class="o">=</span><span class="default_value">100.0</span></em>, <em class="sig-param"><span class="n">iti</span><span class="o">=</span><span class="default_value">6.0</span></em>, <em class="sig-param"><span class="n">iti_jitter</span><span class="o">=</span><span class="default_value">1.5</span></em>, <em class="sig-param"><span class="n">drift</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">prop_corrupted</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">sfreq</span><span class="o">=</span><span class="default_value">1000.0</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">11</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#simulate_pd_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.simulate_pd_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulate photodiode data.</p>
+<p>Simulate data that is a square wave with a linear change in deflection
+<cite>drift</cite> amount towards zero that then over shoots and drifts back as
+photodiodes tend to do. Some events are also corrupted.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>n_events</strong><span class="classifier">float</span></dt><dd><p>The number of events to simulate.</p>
+</dd>
+<dt><strong>amp</strong><span class="classifier">float</span></dt><dd><p>The amplitude of the photodiode in standard deviations above baseline.</p>
+</dd>
+<dt><strong>iti</strong><span class="classifier">float</span></dt><dd><p>The interval in between events.</p>
+</dd>
+<dt><strong>iti_jitter</strong><span class="classifier">float</span></dt><dd><p>The jitter displacing the events from exactly <cite>iti</cite> distance
+away from each other.</p>
+</dd>
+<dt><strong>drift</strong><span class="classifier">float</span></dt><dd><p>The factor controlling how much the photodiode changes value
+over time with no external simulus (0. == perfect square wave).</p>
+</dd>
+<dt><strong>sfreq</strong><span class="classifier">float</span></dt><dd><p>The sampling frequency of the data.</p>
+</dd>
+<dt><strong>show</strong><span class="classifier">bool</span></dt><dd><p>Whether to plot the data.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt><strong>raw</strong><span class="classifier">mne.io.Raw</span></dt><dd><p>The raw object containing the photodiode data</p>
+</dd>
+<dt><strong>events</strong><span class="classifier">np.array</span></dt><dd><p>The uncorrupted events where the first column is the time stamp,
+the second column is unused (zero) and the third column is the
+event identifier.</p>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

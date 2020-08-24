@@ -129,7 +129,7 @@ parse_pd
 
 .. rst-class:: callout
 
-usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--alignment_prop ALIGNMENT_PROP] [--baseline BASELINE] [--overlap OVERLAP] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--overlap OVERLAP] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------
@@ -165,9 +165,6 @@ optional arguments
 
 
 --min_i MIN_I		The minimum number of samples to qualify as a pd event. Increase for fewer false-positives, decrease if your photodiode is on for fewer samples. Use `find_pd_params` to determine if unsure.
-
-
---alignment_prop ALIGNMENT_PROP		The proportion of events to use to align with the behavior. Increase if event alignment doesn't work, decrease to save computation time.
 
 
 --baseline BASELINE		How much relative to the chunkto use to idenify the time before the photodiode event. Probably don't change but increasing will reduce false-positives and decreasing will reduce false-negatives.

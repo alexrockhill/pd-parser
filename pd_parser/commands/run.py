@@ -73,11 +73,6 @@ def parse_pd():
                         'false-positives, decrease if your photodiode '
                         'is on for fewer samples. Use `find_pd_params` '
                         'to determine if unsure.')
-    parser.add_argument('--alignment_prop', type=float, required=False,
-                        default=0.1, help='The proportion of events to use to '
-                        'align with the behavior. Increase if event '
-                        'alignment doesn\'t work, decrease to save '
-                        'computation time.')
     parser.add_argument('--baseline', type=float, required=False,
                         default=0.25, help='How much relative to the chunk'
                         'to use to idenify the time before the '
@@ -101,8 +96,7 @@ def parse_pd():
         beh_col=args.beh_col, pd_ch_names=args.pd_ch_names, chunk=args.chunk,
         baseline=args.baseline, overlap=args.overlap,
         exclude_shift=args.exclude_shift, zscore=args.zscore, min_i=args.min_i,
-        alignment_prop=args.alignment_prop, verbose=args.verbose,
-        overwrite=args.overwrite)
+        verbose=args.verbose, overwrite=args.overwrite)
 
 
 def add_pd_relative_events():
