@@ -6,7 +6,9 @@ Installation Instructions
 -------------------------
 1) Install the latest version of anaconda (https://www.anaconda.com/products/individual) or python (https://www.python.org/downloads/) and make sure that you add the installed packages to the path.
 
-2) Run ``pip install pd-parser`` in a terminal.
+2) Run ``conda install pip`` in a terminal, and then ensure that when you run ``which pip`` in a terminal it points to the where the anaconda or python you just installed is.
+
+3) Run ``pip install pd-parser`` in a terminal.
 
 Corrupted data may look like so:
 
