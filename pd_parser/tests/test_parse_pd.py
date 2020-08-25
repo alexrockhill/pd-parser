@@ -22,10 +22,10 @@ import mne
 from mne.utils import _TempDir, run_subprocess
 
 import pd_parser
-from pd_parser.parse_pd import (_load_pd_data, _read_tsv, _to_tsv,
+from pd_parser.parse_pd import (_read_tsv, _to_tsv,
                                 _read_raw, _load_beh_df, _get_pd_data,
                                 _find_pd_candidates, _pd_event_dist,
-                                _find_best_alignment,
+                                _check_alignment, _find_best_alignment,
                                 _exclude_ambiguous_events,
                                 _save_pd_data, _load_pd_data)
 
@@ -33,10 +33,19 @@ basepath = op.join(op.dirname(pd_parser.__file__), 'tests', 'data')
 
 behf = op.join(basepath, 'pd_beh.tsv')
 events = _read_tsv(op.join(basepath, 'pd_events.tsv'))
-events_relative = _read_tsv(op.join(basepath, 'pd_events_relative.tsv'))
+events_relative = _read_tsv(op.join(basepath, 'pd_relative_events.tsv'))
 
 raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
                               preload=True)
+
+pd_event_name = 'Fixation'
+beh_col = 'fix_onset_time'
+pd_ch_names = ['pd']
+exclude_shift = 0.1
+chunk = 2
+zscore = 10
+min_i = 10
+baseline = 0.25
 
 
 # from mne_bids.tests.test_write._bids_validate
@@ -60,7 +69,7 @@ def _bids_validate():
     return _validate
 
 
-def test_internal_functions():
+def test_core():
     out_dir = _TempDir()
     # test tsv
     df = dict(test=[1, 2], test2=[2, 1])
@@ -90,7 +99,7 @@ def test_internal_functions():
     with pytest.raises(ValueError, match='not recognized'):
         _read_raw('foo.bar')
     raw2 = _read_raw(op.join(out_dir, 'test-raw.fif'))
-    np.testing.assert_array_equal(raw._data, raw2._data)
+    np.testing.assert_array_almost_equal(raw._data, raw2._data, decimal=5)
     # test load beh
     with pytest.raises(ValueError, match='not in the columns'):
         _load_beh_df(op.join(basepath, 'pd_events.tsv'), 'foo')
@@ -99,28 +108,102 @@ def test_internal_functions():
     with pytest.raises(ValueError, match='not in raw channel names'):
         _get_pd_data(raw, ['foo'])
     # test find pd candidates
-    pd_candidates = _find_pd_candidates(raw._data[0], raw.info['sfreq'],
-                                        chunk=2, baseline=0.25, overlap=0.25,
-                                        zscore=10, min_i=10)
-    sorted_pds = np.array(sorted(pd_candidates))
+    exclude_shift_i = np.round(raw.info['sfreq'] * exclude_shift).astype(int)
+    chunk_i = np.round(raw.info['sfreq'] * chunk).astype(int)
+    baseline_i = np.round(chunk_i * baseline / 2).astype(int)
+    pd_candidates, sorted_pds = _find_pd_candidates(
+        raw._data[0], chunk_i=chunk_i, baseline_i=baseline_i,
+        zscore=zscore, min_i=min_i)
     assert all([event in sorted_pds for event in sorted_pds])
     # test pd event dist
-    assert _pd_event_dist(len(raw) + 10, pd_candidates, len(raw)) == np.inf
-    assert _pd_event_dist(events[2, 0] + 10, pd_candidates, len(raw)) == 10
-    assert _pd_event_dist(events[2, 0] - 10, pd_candidates, len(raw)) == 10
+    assert _pd_event_dist(len(raw) + 10, pd_candidates, len(raw),
+                          exclude_shift_i) == exclude_shift_i
+    assert _pd_event_dist(events[2, 0] + 10, pd_candidates, len(raw),
+                          exclude_shift_i) == 10
+    assert _pd_event_dist(events[2, 0] - 10, pd_candidates, len(raw),
+                          exclude_shift_i) == -10
     # test find best alignment
-    np.random.seed(11)
+    np.random.seed(12)
     beh_events = events[2:, 0].astype(float)
-    beh_events += np.random.random(len(beh_events)) * 0.1 * raw.info['sfreq']
+    offsets = (np.random.random(len(beh_events)) * 0.05 - 0.025
+               ) * raw.info['sfreq']
+    beh_events += offsets
     beh_events -= beh_events[0]
-    best_alignment = \
-        _find_best_alignment(beh_events, pd_candidates, sorted_pds,
-                             first_alignment_n=3, verbose=True)
-    assert best_alignment == 2
+    beh_df = dict(fix_onset_time=beh_events, trial=np.arange(len(beh_events)))
+    errors = _check_alignment(beh_events + sorted_pds[2],
+                              pd_candidates, sorted_pds[-1],
+                              exclude_shift_i)
+    assert all([e < exclude_shift_i for e in errors])
+    best_alignment = _find_best_alignment(beh_events, sorted_pds,
+                                          exclude_shift_i, verbose=True)
+    assert best_alignment == sorted_pds[2]
+    # test exclude ambiguous
+    pd = raw._data[0]
+    pd_events = _exclude_ambiguous_events(
+        beh_events, sorted_pds, best_alignment, pd, exclude_shift_i, chunk_i,
+        verbose=True)
+    np.testing.assert_array_equal(list(pd_events.values()), events[2:, 0])
+    # test i/o
+    fname = op.join(out_dir, 'test-raw.fif')
+    _save_pd_data(fname, raw, events=pd_events,
+                  event_id='Fixation', pd_ch_names=['pd'],
+                  beh_df=beh_df, add_events=False)
+    with pytest.raises(ValueError, match='The column name `pd_sample`'):
+        _save_pd_data(fname, raw, events=pd_events,
+                      event_id='Fixation', pd_ch_names=['pd'],
+                      beh_df=beh_df, add_events=False)
+    annot, pd_ch_names, beh_df = _load_pd_data(fname)
+    with pytest.raises(ValueError, match='Photodiode data not found'):
+        annot, pd_ch_names, beh_df = _load_pd_data('bar/foo.fif')
+    raw.set_annotations(annot)
+    events2, event_id = mne.events_from_annotations(raw)
+    np.testing.assert_array_equal(events2[:, 0], events[2:, 0])
+    assert event_id == {'Fixation': 1}
+    assert pd_ch_names == ['pd']
+    np.testing.assert_array_equal(beh_df['fix_onset_time'], beh_events)
+    assert beh_df['pd_sample'] == list(pd_events.values())
+    # check overwrite
+    behf = op.join(out_dir, 'behf-test.tsv')
+    _to_tsv(behf, beh_df)
+    with pytest.raises(ValueError, match='directory already exists'):
+        pd_parser.parse_pd(fname, behf=behf)
+    pd_parser.parse_pd(fname, behf=None, pd_ch_names=['pd'], overwrite=True)
+    annot, pd_ch_names, beh_df = _load_pd_data(fname)
+    raw.set_annotations(annot)
+    events2, _ = mne.events_from_annotations(raw)
+    assert all([event in events2[:, 0] for event in events[:, 0]])
+    assert pd_ch_names == ['pd']
+    assert beh_df is None
 
 
-def test_simulated():
-    raw = pd_parser.simulate_pd_data()
+def test_two_pd_alignment():
+    """Test spliting photodiode events into two and adding."""
+    out_dir = _TempDir()
+    raw, events = pd_parser.simulate_pd_data(n_events=300)
+    fname = op.join(out_dir, 'test-raw.fif')
+    raw.save(fname)
+    events2 = events[::2]
+    events3 = events[1:][::2]
+    # make behavior data
+    np.random.seed(12)
+    beh_events2 = events2[:, 0].astype(float) / raw.info['sfreq']
+    offsets2 = np.random.random(len(beh_events2)) * 0.05 - 0.025
+    beh_events2 += offsets2
+    # make next one
+    beh_events3 = events3[:, 0].astype(float) / raw.info['sfreq']
+    offsets3 = np.random.random(len(beh_events3)) * 0.05 - 0.025
+    beh_events3 += offsets3
+    n_na = abs(len(beh_events2) - len(beh_events3))
+    if len(beh_events2) > len(beh_events3):
+        beh_events3 = list(beh_events3) + ['n/a'] * n_na
+    elif len(beh_events3) > len(beh_events2):
+        beh_events2 = list(beh_events2) + ['n/a'] * n_na
+    beh_df = dict(trial=np.arange(len(beh_events2)),
+                  fix_onset_time=beh_events2,
+                  response_onset_time=beh_events3)
+    behf = op.join(out_dir, 'behf-test.tsv')
+    _to_tsv(behf, beh_df)
+    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
 
 
 @pytest.mark.filterwarnings('ignore::RuntimeWarning')

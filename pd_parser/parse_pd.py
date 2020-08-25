@@ -132,8 +132,7 @@ def _get_pd_data(raw, pd_ch_names):
     return pd, pd_ch_names
 
 
-def _find_pd_candidates(pd, chunk_i, baseline_i, zscore, min_i, overlap,
-                        verbose=True):
+def _find_pd_candidates(pd, chunk_i, baseline_i, zscore, min_i, verbose=True):
     """Find all points in the signal that look like a square wave."""
     if verbose:
         print('Finding photodiode events')
@@ -145,7 +144,7 @@ def _find_pd_candidates(pd, chunk_i, baseline_i, zscore, min_i, overlap,
         and if a pd event gets cut off, you'll find it the next chunk'''
     pd_candidates = set()
     for i in tqdm(range(baseline_i, len(pd) - chunk_i - baseline_i,
-                        int(chunk_i * overlap))):
+                        baseline_i // 2)):
         b = pd[i - baseline_i:i]
         s = (pd[i:i + chunk_i] - np.median(b)) / np.std(b)
         for binary_s in [s > zscore, s < -zscore]:
@@ -168,12 +167,13 @@ def _find_pd_candidates(pd, chunk_i, baseline_i, zscore, min_i, overlap,
 def _pd_event_dist(b_event, pd_candidates, max_index, exclude_shift_i):
     """Find the shortest distance from the behavioral event to a pd event."""
     j = 0
+    max_index += 2 * exclude_shift_i
     b_event = np.round(b_event).astype(int)
     while b_event + j < max_index and b_event - j > 0 and j < exclude_shift_i:
         if b_event - j in pd_candidates:
-            return -j
-        if b_event + j in pd_candidates:
             return j
+        if b_event + j in pd_candidates:
+            return -j
         j += 1
     return exclude_shift_i
 
@@ -184,7 +184,7 @@ def _check_alignment(beh_events, pd_candidates, max_index, exclude_shift_i):
     for i, b_event in enumerate(beh_events):
         j = _pd_event_dist(b_event, pd_candidates, max_index, exclude_shift_i)
         if abs(j) < exclude_shift_i:
-            beh_events += j
+            beh_events -= j
             errors[i] = j
         else:
             errors[i] = exclude_shift_i
@@ -242,8 +242,8 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment,
         j = _pd_event_dist(b_event, pd_candidates, max_index,
                            exclude_shift_i=np.inf)
         if abs(j) < exclude_shift_i:
-            beh_events += j
-            events[i] = np.round(b_event + j).astype(int)
+            beh_events -= j
+            events[i] = np.round(b_event - j).astype(int)
             errors[i] = j
             pd_events = np.logical_and(sorted_pds < (events[i] + chunk_i),
                                        sorted_pds > (events[i] - chunk_i))
@@ -265,11 +265,14 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment,
         if n_events_ex:  # only plot if some events were excluded
             nrows = int(n_events_ex**0.5)
             ncols = int(np.ceil(n_events_ex / nrows))
-            fig, axes = plt.subplots(nrows, ncols, figsize=(nrows * 5,
-                                                            ncols * 3))
+            fig, axes = plt.subplots(nrows, ncols, figsize=(nrows * 10,
+                                                            ncols * 5))
             fig.suptitle('Excluded Events')
             fig.subplots_adjust(hspace=0.75, wspace=0.5)
-            axes = axes.flatten()
+            if nrows == 1 and ncols == 1:
+                axes = [axes]
+            else:
+                axes = axes.flatten()
             for ax in axes[n_events_ex:]:
                 ax.axis('off')  # turn off all unused axes
             for b_event, title, ax in zip(pd_section_data['b_event'],
@@ -293,14 +296,18 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment,
 
 
 def _save_pd_data(fname, raw, events, event_id, pd_ch_names, beh_df=None,
-                  add_events=False):
+                  add_events=False, overwrite=False):
     """Save the events determined from the photodiode."""
     basename = op.splitext(op.basename(fname))[0]
     pd_data_dir = op.join(op.dirname(fname), basename + '_pd_data')
     if not op.isdir(pd_data_dir):
         os.makedirs(pd_data_dir)
-    if beh_df is not None:
-        if 'pd_sample' in beh_df and not add_events:
+    behf = op.join(pd_data_dir, basename + '_beh_df.tsv')
+    if beh_df is None:
+        if op.isfile(behf) and overwrite:
+            os.remove(behf)
+    else:
+        if 'pd_sample' in beh_df and not add_events and not overwrite:
             raise ValueError(
                 'The column name `pd_sample` is not allowed in the behavior '
                 'tsv file (it\'s reserved for internal use. Please rename '
@@ -309,7 +316,7 @@ def _save_pd_data(fname, raw, events, event_id, pd_ch_names, beh_df=None,
             beh_df['pd_sample'] = \
                 [events[i] if i in events else 'n/a' for i in
                  range(len(beh_df[list(beh_df.keys())[0]]))]
-            _to_tsv(op.join(pd_data_dir, basename + '_beh_df.tsv'), beh_df)
+            _to_tsv(behf, beh_df)
     onsets = np.array([events[i] for i in sorted(events.keys())])
     annot = mne.Annotations(onset=raw.times[onsets],
                             duration=np.repeat(0.1, len(onsets)),
@@ -500,7 +507,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
              beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.1,
-             chunk=2, zscore=10, min_i=10, baseline=0.25, overlap=0.25,
+             chunk=2, zscore=10, min_i=10, baseline=0.25,
              add_events=False, overwrite=False, verbose=True):
     """Parse photodiode events.
 
@@ -542,10 +549,6 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         How much relative to the chunk to use to idenify the time before
         the photodiode event. This should not be changed most likely
         unless there is a specific reason/issue.
-    overlap: float
-        How much to overlap the windows of the photodiode event-finding
-        process. This should not be changed most likely unless there is
-        a specific reason/issue.
     add_events : bool
         Whether to add the events found from the current call of `parse_pd`
         to a events found previously (e.g. first parse with
@@ -577,14 +580,14 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     raw = _read_raw(fname, verbose=verbose)
     # transform behavior events to sample time
     chunk_i = np.round(raw.info['sfreq'] * chunk).astype(int)
-    baseline_i = np.round(chunk_i * baseline / 2).astype(int)
     exclude_shift_i = np.round(raw.info['sfreq'] * exclude_shift).astype(int)
+    baseline_i = np.round(chunk_i * baseline).astype(int)
     # use keyword argument if given, otherwise get the user to enter pd names
     # and get data
     pd, pd_ch_names = _get_pd_data(raw, pd_ch_names)
     pd_candidates, sorted_pds = _find_pd_candidates(
         pd=pd, chunk_i=chunk_i, baseline_i=baseline_i, zscore=zscore,
-        min_i=min_i, overlap=overlap, verbose=verbose)
+        min_i=min_i, verbose=verbose)
     # load behavioral data with which to validate event timing
     if behf is None:
         if verbose:
@@ -592,8 +595,8 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
                   'events will be returned without validation by task '
                   'timing')
         events = {i: pd_event for i, pd_event in enumerate(sorted_pds)}
-        _save_pd_data(fname=fname, raw=raw, events=events,
-                      pd_event_name=pd_event_name, pd_ch_names=pd_ch_names)
+        _save_pd_data(fname, raw=raw, events=events, event_id=pd_event_name,
+                      pd_ch_names=pd_ch_names, overwrite=overwrite)
         return
     # if behavior is given use it to synchronize and exclude events
     beh_events, beh_df = _load_beh_df(behf=behf, beh_col=beh_col)
@@ -610,9 +613,9 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         beh_events=beh_events, sorted_pds=sorted_pds,
         best_alignment=best_alignment, pd=pd, exclude_shift_i=exclude_shift_i,
         chunk_i=chunk_i, verbose=verbose)
-    _save_pd_data(fname=fname, raw=raw, events=events,
-                  event_id=pd_event_name, pd_ch_names=pd_ch_names,
-                  beh_df=beh_df, add_events=add_events)
+    _save_pd_data(fname, raw=raw, events=events, event_id=pd_event_name,
+                  pd_ch_names=pd_ch_names, beh_df=beh_df,
+                  add_events=add_events, overwrite=overwrite)
 
 
 def add_pd_relative_events(fname, behf, relative_event_cols,
@@ -660,10 +663,14 @@ def add_pd_relative_events(fname, behf, relative_event_cols,
          for name, rel_event in zip(relative_event_names, relative_event_cols)}
     annot, _, beh_df = _load_pd_data(fname)
     for event_name in relative_event_names:
-        if event_name in annot.description and not overwrite:
-            raise ValueError(f'Event name {event_name} already exists in '
-                             'saved events and `overwrite=False`, use '
-                             '`overwrite=True` to overwrite')
+        if event_name in annot.description:
+            if overwrite:
+                annot.delete([i for i, desc in enumerate(annot.description)
+                              if desc == event_name])
+            else:
+                raise ValueError(f'Event name {event_name} already exists in '
+                                 'saved events and `overwrite=False`, use '
+                                 '`overwrite=True` to overwrite')
     events = {i: samp for i, samp in enumerate(beh_df['pd_sample'])
               if samp != 'n/a'}
     for name, beh_events in relative_events.items():

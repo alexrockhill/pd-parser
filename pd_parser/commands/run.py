@@ -79,12 +79,6 @@ def parse_pd():
                         'photodiode event. Probably don\'t change but '
                         'increasing will reduce false-positives and '
                         'decreasing will reduce false-negatives.')
-    parser.add_argument('--overlap', type=float, required=False,
-                        default=0.25, help='How much to overlap the '
-                        'windows of the photodiode event-finding '
-                        'process. Probably don\'t change but increasing '
-                        'will reduce false-negatives '
-                        'but longer computation time.')
     parser.add_argument('--verbose', default=True, type=bool,
                         required=False,
                         help='Set verbose output to True or False.')

@@ -70,4 +70,13 @@ if __name__ == "__main__":
                   'https://github.com/alexrockhill/pd-parser/issues',
               'Source': 'https://github.com/alexrockhill/pd-parser',
           },
+          install_requires=[
+              'numpy>=1.19.0',
+              'mne>=0.19.1',
+              'mne-bids',
+              'pybv',
+              'matplotlib',
+              'argparse',
+              'tqdm'
+          ]
           )
