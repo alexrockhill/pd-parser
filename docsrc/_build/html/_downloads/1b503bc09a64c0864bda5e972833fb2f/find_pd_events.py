@@ -23,23 +23,49 @@ import mne
 from mne.utils import _TempDir
 
 import pd_parser
+from pd_parser.parse_pd import _to_tsv
 
-basepath = op.join(op.dirname(pd_parser.__file__), 'tests', 'data')
 out_dir = _TempDir()
 
-fname = op.join(out_dir, 'pd_data-raw.fif')
-behf = op.join(basepath, 'pd_beh.tsv')
+# simulate photodiode data
+raw, events = pd_parser.simulate_pd_data(n_events=320)
+# make some errent photodiode signals
+raw2 = pd_parser.simulate_pd_data(n_events=10, iti=31.,
+                                  iti_jitter=15.,
+                                  n_sec_on=2.5)[0]
+raw._data[0, :raw2._data.size] += raw2._data[0]
+# take only the last 300 events to test alignment
+events = events[20:]
 
-raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
-                              preload=True)
-info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
+# make fake electrophysiology data
+info = mne.create_info(['ch1', 'ch2', 'ch3'], raw.info['sfreq'],
                        ['seeg'] * 3)
-raw_tmp2 = mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
-                           info)
-raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
-raw_tmp.add_channels([raw_tmp2])
-raw_tmp.info['dig'] = None
-raw_tmp.save(fname)
+raw3 = mne.io.RawArray(np.random.random((3, raw.times.size)) * 1e-6, info)
+raw3.info['lowpass'] = raw.info['lowpass']  # these must match to combine
+raw.add_channels([raw3])
+# bids needs these data fields
+raw.info['dig'] = None
+raw.info['line_freq'] = 60
+
+
+fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
+raw.save(fname)
+
+# make behavior data
+np.random.seed(12)
+beh_events = events[:, 0].astype(float) / raw.info['sfreq']
+offsets = np.random.random(len(beh_events)) * 0.05 - 0.025
+beh_events += offsets
+fix_duration = np.repeat(0.7, beh_events.size)
+go_time = np.random.random(beh_events.size) + 2
+response_time = go_time + np.random.random(beh_events.size) + 1.5
+# put in dictionary to be converted to tsv file
+beh_df = dict(trial=np.arange(beh_events.size),
+              fix_onset_time=beh_events, fix_duration=fix_duration,
+              go_time=go_time, response_time=response_time)
+behf = op.join(out_dir, 'sub-1_task-mytask_beh.tsv')
+# save behavior file out
+_to_tsv(behf, beh_df)
 
 ###############################################################################
 # Use the interactive graphical user interface (GUI) to find parameters:
@@ -60,8 +86,7 @@ pd_parser.find_pd_params(fname, pd_ch_names=['pd'])
 # as the raw file which can be used directly or accessed via
 # `pd_parser.pd_parser.pd_parser_save_to_bids`.
 
-pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'],
-                   alignment_prop=0.05)  # reduce alignment_prop -> faster
+pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
 
 ###############################################################################
 # Add events relative to the photodiode events:
@@ -89,7 +114,6 @@ pd_parser.add_pd_relative_events(
 # reproducible way will all the necessary files. See
 # https://bids.neuroimaging.io/ and https://mne.tools/mne-bids/ for more
 # information about BIDS.
-
 
 pd_parser.pd_parser_save_to_bids(op.join(out_dir, 'bids_dir'), fname,
                                  sub='1', task='mytask')
