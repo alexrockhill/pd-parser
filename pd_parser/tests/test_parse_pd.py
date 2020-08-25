@@ -7,9 +7,6 @@ For each supported file format, implement a test.
 #
 # License: BSD (3-clause)
 
-# TO DO: 3) test for more than one photodiode event
-#        4) Coverage report
-
 import os
 import os.path as op
 import numpy as np
@@ -43,7 +40,7 @@ beh_col = 'fix_onset_time'
 pd_ch_names = ['pd']
 exclude_shift = 0.1
 chunk = 2
-zscore = 10
+zscore = 20
 min_i = 10
 baseline = 0.25
 
@@ -128,13 +125,16 @@ def test_core():
     offsets = (np.random.random(len(beh_events)) * 0.05 - 0.025
                ) * raw.info['sfreq']
     beh_events += offsets
-    beh_events -= beh_events[0]
-    beh_df = dict(fix_onset_time=beh_events, trial=np.arange(len(beh_events)))
-    errors = _check_alignment(beh_events + sorted_pds[2],
+    beh_events = {i: beh_ev - beh_events[0] for i, beh_ev in
+                  enumerate(beh_events)}
+    beh_events_sorted = np.array(sorted(beh_events.values()))
+    beh_df = dict(fix_onset_time=beh_events_sorted,
+                  trial=np.arange(len(beh_events_sorted)))
+    errors = _check_alignment(beh_events_sorted + sorted_pds[2],
                               pd_candidates, sorted_pds[-1],
                               exclude_shift_i)
     assert all([e < exclude_shift_i for e in errors])
-    best_alignment = _find_best_alignment(beh_events, sorted_pds,
+    best_alignment = _find_best_alignment(beh_events_sorted, sorted_pds,
                                           exclude_shift_i, verbose=True)
     assert best_alignment == sorted_pds[2]
     # test exclude ambiguous
@@ -160,7 +160,7 @@ def test_core():
     np.testing.assert_array_equal(events2[:, 0], events[2:, 0])
     assert event_id == {'Fixation': 1}
     assert pd_ch_names == ['pd']
-    np.testing.assert_array_equal(beh_df['fix_onset_time'], beh_events)
+    np.testing.assert_array_equal(beh_df['fix_onset_time'], beh_events_sorted)
     assert beh_df['pd_sample'] == list(pd_events.values())
     # check overwrite
     behf = op.join(out_dir, 'behf-test.tsv')
@@ -179,7 +179,7 @@ def test_core():
 def test_two_pd_alignment():
     """Test spliting photodiode events into two and adding."""
     out_dir = _TempDir()
-    raw, events = pd_parser.simulate_pd_data(n_events=300)
+    raw, events = pd_parser.simulate_pd_data()
     fname = op.join(out_dir, 'test-raw.fif')
     raw.save(fname)
     events2 = events[::2]
@@ -203,7 +203,21 @@ def test_two_pd_alignment():
                   response_onset_time=beh_events3)
     behf = op.join(out_dir, 'behf-test.tsv')
     _to_tsv(behf, beh_df)
-    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
+    pd_parser.parse_pd(fname, pd_event_name='Fixation', behf=behf,
+                       pd_ch_names=['pd'], beh_col='fix_onset_time',
+                       zscore=20)
+    pd_parser.parse_pd(fname, pd_event_name='Response', behf=behf,
+                       pd_ch_names=['pd'], beh_col='response_onset_time',
+                       zscore=20, add_events=True)
+    annot, pd_ch_names, beh_df2 = _load_pd_data(fname)
+    raw.set_annotations(annot)
+    events4, event_id = mne.events_from_annotations(raw)
+    np.testing.assert_array_equal(events4[events4[:, 2] == 1, 0],
+                                  events2[:, 0])
+    np.testing.assert_array_equal(events4[events4[:, 2] == 2, 0],
+                                  events3[:, 0])
+    assert pd_ch_names == ['pd']
+    np.testing.assert_array_equal(beh_df2['pd_sample'], events2[:, 0])
 
 
 @pytest.mark.filterwarnings('ignore::RuntimeWarning')
@@ -227,7 +241,8 @@ def test_parse_pd(_bids_validate):
     pd_parser.find_pd_params(fname, pd_ch_names=['pd'])
     plt.close('all')
     # test core functionality
-    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
+    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'],
+                       zscore=5, min_i=10)
     plt.close('all')
     raw = mne.io.read_raw_fif(fname)
     annot, pd_ch_names, beh_df = _load_pd_data(fname)

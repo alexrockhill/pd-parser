@@ -62,7 +62,7 @@ def parse_pd():
                         'away from each other. Use `find_pd_params` to '
                         'determine if unsure.')
     parser.add_argument('--zscore', type=float, required=False,
-                        default=10, help='How many standard deviations '
+                        default=20, help='How many standard deviations '
                         'larger than the baseline the photodiode event is. '
                         'Decrease if too many events are being found '
                         'and increase if too few. Use `find_pd_params` '

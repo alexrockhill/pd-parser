@@ -192,7 +192,7 @@ def _check_alignment(beh_events, pd_candidates, max_index, exclude_shift_i):
 
 
 def _find_best_alignment(beh_events, sorted_pds, exclude_shift_i,
-                         plot=False, verbose=True):
+                         verbose=True):
     """Find the beh event that causes the best alignment when used to start."""
     beh_diffs = beh_events[1:] - beh_events[:-1]
     pd_candidates = set(sorted_pds)
@@ -206,7 +206,7 @@ def _find_best_alignment(beh_events, sorted_pds, exclude_shift_i,
     if verbose:
         print('Checking best behavior-photodiode difference alignments')
     for i, beh_diff in enumerate(tqdm(beh_diffs)):
-        best_offset = np.argmin(np.min(abs(pd_dists - beh_diff), axis=0))
+        best_offset = np.argmin(np.min(abs(pd_dists - beh_diff), axis=1))
         bevs = beh_events.copy() - beh_events[i] + sorted_pds[best_offset]
         beh_errors = _check_alignment(bevs, pd_candidates,
                                       sorted_pds[-1], exclude_shift_i)
@@ -216,10 +216,10 @@ def _find_best_alignment(beh_events, sorted_pds, exclude_shift_i,
             min_error = error_metric
             best_errors = beh_errors
     if verbose:
-        print('Best alignment with the photodiode shifted {:.0f} samples; '
-              'errors: min {:.0f}, q1 {:.0f}, med {:.0f}, q3 {:.0f}, '
-              'max {:.0f}'.format(
-                  abs(best_alignment), min(best_errors),
+        print('Best alignment with the photodiode shifted {:.0f} samples '
+              'relative to the first behavior event errors: min {:.0f}, '
+              'q1 {:.0f}, med {:.0f}, q3 {:.0f}, max {:.0f}'.format(
+                  beh_events[0] + best_alignment, min(best_errors),
                   np.quantile(best_errors, 0.25), np.median(best_errors),
                   np.quantile(best_errors, 0.75), max(best_errors)))
     return best_alignment
@@ -237,12 +237,12 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment,
     errors = dict()
     pd_candidates = set(sorted_pds)
     max_index = max(sorted_pds)
-    beh_events = beh_events.copy() + best_alignment
-    for i, b_event in enumerate(beh_events):
+    for i in sorted(beh_events.keys()):
+        b_event = beh_events[i] + best_alignment
         j = _pd_event_dist(b_event, pd_candidates, max_index,
                            exclude_shift_i=np.inf)
         if abs(j) < exclude_shift_i:
-            beh_events -= j
+            best_alignment -= j
             events[i] = np.round(b_event - j).astype(int)
             errors[i] = j
             pd_events = np.logical_and(sorted_pds < (events[i] + chunk_i),
@@ -323,7 +323,7 @@ def _save_pd_data(fname, raw, events, event_id, pd_ch_names, beh_df=None,
                             description=np.repeat(event_id,
                                                   len(onsets)))
     if add_events:
-        annot_orig, pd_ch_names_orig, _ = _load_pd_data(fname)[0]
+        annot_orig, pd_ch_names_orig, _ = _load_pd_data(fname)
         annot += annot_orig
         pd_ch_names += [ch for ch in pd_ch_names if ch not in pd_ch_names]
     annot.save(op.join(pd_data_dir, basename + '_pd_annot.fif'))
@@ -507,7 +507,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
              beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.1,
-             chunk=2, zscore=10, min_i=10, baseline=0.25,
+             chunk=2, zscore=20, min_i=10, baseline=0.25,
              add_events=False, overwrite=False, verbose=True):
     """Parse photodiode events.
 
@@ -600,14 +600,11 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         return
     # if behavior is given use it to synchronize and exclude events
     beh_events, beh_df = _load_beh_df(behf=behf, beh_col=beh_col)
-    for beh_event in beh_events:
-        if not np.isreal(beh_event):
-            raise ValueError(f'Non-numeric value {beh_event} found '
-                             'in event column used to synchronize '
-                             'with the photodiode, this is not allowed')
-    beh_events = (np.array(beh_events) - beh_events[0]) * raw.info['sfreq']
+    beh_events = {i: beh_ev * raw.info['sfreq'] for i, beh_ev in
+                  enumerate(beh_events) if beh_ev != 'n/a'}
+    beh_events_sorted = np.array(list(beh_events.values()))
     best_alignment = _find_best_alignment(
-        beh_events=beh_events, sorted_pds=sorted_pds,
+        beh_events=beh_events_sorted, sorted_pds=sorted_pds,
         exclude_shift_i=exclude_shift_i, verbose=verbose)
     events = _exclude_ambiguous_events(
         beh_events=beh_events, sorted_pds=sorted_pds,

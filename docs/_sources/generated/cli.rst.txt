@@ -129,7 +129,7 @@ parse_pd
 
 .. rst-class:: callout
 
-usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--overlap OVERLAP] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------
@@ -168,9 +168,6 @@ optional arguments
 
 
 --baseline BASELINE		How much relative to the chunkto use to idenify the time before the photodiode event. Probably don't change but increasing will reduce false-positives and decreasing will reduce false-negatives.
-
-
---overlap OVERLAP		How much to overlap the windows of the photodiode event-finding process. Probably don't change but increasing will reduce false-negatives but longer computation time.
 
 
 --verbose VERBOSE		Set verbose output to True or False.

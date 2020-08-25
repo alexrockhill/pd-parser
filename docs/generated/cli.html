@@ -196,7 +196,7 @@
 </div>
 <div class="section" id="parse-pd">
 <span id="gen-parse-pd"></span><h2><a class="toc-backref" href="#id12">parse_pd</a><a class="headerlink" href="#parse-pd" title="Permalink to this headline">¶</a></h2>
-<p class="callout">usage: <code class="docutils literal notranslate"><span class="pre">parse_pd</span> <span class="pre">fname</span> <span class="pre">[-h]</span> <span class="pre">[--pd_event_name</span> <span class="pre">PD_EVENT_NAME]</span> <span class="pre">[--behf</span> <span class="pre">BEHF]</span> <span class="pre">[--beh_col</span> <span class="pre">BEH_COL]</span> <span class="pre">[--pd_ch_names</span> <span class="pre">LIST_OF_PD_CH_NAMES]</span> <span class="pre">[--exclude_shift</span> <span class="pre">EXCLUDE_SHIFT]</span> <span class="pre">[--chunk</span> <span class="pre">CHUNK]</span> <span class="pre">[--zscore</span> <span class="pre">ZSCORE]</span> <span class="pre">[--min_i</span> <span class="pre">MIN_I]</span> <span class="pre">[--baseline</span> <span class="pre">BASELINE]</span> <span class="pre">[--overlap</span> <span class="pre">OVERLAP]</span> <span class="pre">[--verbose</span> <span class="pre">VERBOSE]</span> <span class="pre">[--overwrite</span> <span class="pre">OVERWRITE]</span></code></p>
+<p class="callout">usage: <code class="docutils literal notranslate"><span class="pre">parse_pd</span> <span class="pre">fname</span> <span class="pre">[-h]</span> <span class="pre">[--pd_event_name</span> <span class="pre">PD_EVENT_NAME]</span> <span class="pre">[--behf</span> <span class="pre">BEHF]</span> <span class="pre">[--beh_col</span> <span class="pre">BEH_COL]</span> <span class="pre">[--pd_ch_names</span> <span class="pre">LIST_OF_PD_CH_NAMES]</span> <span class="pre">[--exclude_shift</span> <span class="pre">EXCLUDE_SHIFT]</span> <span class="pre">[--chunk</span> <span class="pre">CHUNK]</span> <span class="pre">[--zscore</span> <span class="pre">ZSCORE]</span> <span class="pre">[--min_i</span> <span class="pre">MIN_I]</span> <span class="pre">[--baseline</span> <span class="pre">BASELINE]</span> <span class="pre">[--verbose</span> <span class="pre">VERBOSE]</span> <span class="pre">[--overwrite</span> <span class="pre">OVERWRITE]</span></code></p>
 <div class="section" id="id5">
 <h3>positional arguments<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
@@ -236,9 +236,6 @@
 </dd>
 <dt><kbd><span class="option">--baseline <var>BASELINE</var></span></kbd></dt>
 <dd><p>How much relative to the chunkto use to idenify the time before the photodiode event. Probably don’t change but increasing will reduce false-positives and decreasing will reduce false-negatives.</p>
-</dd>
-<dt><kbd><span class="option">--overlap <var>OVERLAP</var></span></kbd></dt>
-<dd><p>How much to overlap the windows of the photodiode event-finding process. Probably don’t change but increasing will reduce false-negatives but longer computation time.</p>
 </dd>
 <dt><kbd><span class="option">--verbose <var>VERBOSE</var></span></kbd></dt>
 <dd><p>Set verbose output to True or False.</p>
