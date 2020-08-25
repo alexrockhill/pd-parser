@@ -96,7 +96,12 @@
       
   <div class="section" id="pd-parser">
 <h1>pd-parser<a class="headerlink" href="#pd-parser" title="Permalink to this headline">¶</a></h1>
-<p>A tool to parse photodiode events from a possibly corrupted channel, compatible with BIDS formatting</p>
+<p>A tool to parse photodiode events from a possibly corrupted channel, compatible with BIDS formatting.</p>
+<p>Corrupted data may look like so:</p>
+<a class="reference internal image-reference" href="_images/exclude_event.png"><img alt="_images/exclude_event.png" src="_images/exclude_event.png" style="width: 800px;" /></a>
+<p>Which may lead to some excluded events and differences between the events and the expected timing based on the behavior that look like so:</p>
+<a class="reference internal image-reference" href="_images/event_diffs.png"><img alt="_images/event_diffs.png" src="_images/event_diffs.png" style="width: 400px;" /></a>
+<p><em>pd-parser</em> takes an electrophysiology data file with one (common reference) or two (bipolar reference) channels that recorded photodiode events and matches that with time-stamped behavior stored in a tab-separated value (tsv) file. Candidate photodiode events are found based on having a square-wave shape, then these events are aligned to the behavior events (accounting for the timing of the photodiode drifting away from the behavior), and then events are excluded where the monitor hung up or the photodiode was different compared to the behavior for any reason. Events that are timed relative to the photodiode can then be added (this method might be a good idea as the large signal from the photodiode has been observed to affect neighboring channels on the amplifier). Finally, the data can be saved to BIDS format, copying over the raw data as is and unconverted (unless it’s an unsupported file type by BIDS) and supplying the necessary support files to determine behavior, events and all the other necessary information to analyze the data.</p>
 </div>
 <div class="section" id="installation-instructions">
 <h1>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
@@ -121,9 +126,32 @@
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">pip</span></code> in a terminal, and then ensure that when you run <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">pip</span></code> in a terminal it points to the where the anaconda or python you just installed is.</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pd-parser</span></code> in a terminal.</p></li>
 </ol>
-<p>Corrupted data may look like so:</p>
-<a class="reference internal image-reference" href="_images/exclude_event.png"><img alt="_images/exclude_event.png" src="_images/exclude_event.png" style="width: 800px;" /></a>
-<a class="reference internal image-reference" href="_images/event_diffs.png"><img alt="_images/event_diffs.png" src="_images/event_diffs.png" style="width: 400px;" /></a>
+</div>
+<div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt>Plot the examples in a Jupyter notebook</dt><dd><ul class="simple">
+<li><p>In the ‘Examples’ page, click on ‘Download all examples in Jupyter notebooks’</p></li>
+<li><p>Unzip the downloaded file</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">jupyter</span></code></p></li>
+<li><p>Point the terminal to the folder where the files you downloaded are by running <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/path/to/downloads/</span></code></p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code> in the terminal, this will pop up a webpage in your default browser.</p></li>
+<li><p>Don’t run the first cell or change <code class="docutils literal notranslate"><span class="pre">%matplotlib</span> <span class="pre">inline</span></code> to just <code class="docutils literal notranslate"><span class="pre">%matplotlib</span></code> to pop the plots out interactively instead of below the cell in the notebook.</p></li>
+<li><p>Run each cell, change the parameters and explore the example.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Try pd-parser on your photodiode data. You will likely need to modify your behavior tsv files so that they have</dt><dd><ul class="simple">
+<li><p>One column corresponding to the expected event in seconds, called by default <code class="docutils literal notranslate"><span class="pre">fix_onset_time</span></code></p></li>
+<li><p><em>Optionally</em> Other columns with relative event times in seconds.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ol>
 <p>Alex Rockhill
 Eugene, OR 2020</p>
 </div>

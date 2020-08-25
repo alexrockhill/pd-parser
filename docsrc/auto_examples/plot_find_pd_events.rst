@@ -109,8 +109,8 @@ electrophysiology format)
     Creating RawArray with float64 data, n_channels=3, n_times=2178734
         Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
     Ready.
-    Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
-    Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif [done]
+    Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif
+    Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif [done]
 
 
 
@@ -140,8 +140,8 @@ diode data to pick reasonable parameters by following the instructions.
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
     Ready.
@@ -190,17 +190,17 @@ as the raw file which can be used directly or accessed via
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
     Ready.
     Reading 0 ... 2178733  =      0.000 ...  2178.733 secs...
     Finding photodiode events
-      0%|          | 0/8703 [00:00<?, ?it/s]      9%|8         | 770/8703 [00:00<00:01, 7699.46it/s]     18%|#7        | 1544/8703 [00:00<00:00, 7710.91it/s]     27%|##6       | 2311/8703 [00:00<00:00, 7698.29it/s]     35%|###5      | 3070/8703 [00:00<00:00, 7665.45it/s]     44%|####4     | 3851/8703 [00:00<00:00, 7705.83it/s]     53%|#####3    | 4624/8703 [00:00<00:00, 7712.74it/s]     62%|######2   | 5406/8703 [00:00<00:00, 7741.58it/s]     71%|#######   | 6156/8703 [00:00<00:00, 7652.04it/s]     79%|#######9  | 6878/8703 [00:00<00:00, 7456.24it/s]     88%|########7 | 7646/8703 [00:01<00:00, 7521.30it/s]     97%|#########6| 8402/8703 [00:01<00:00, 7520.71it/s]    100%|##########| 8703/8703 [00:01<00:00, 7595.96it/s]
+      0%|          | 0/8703 [00:00<?, ?it/s]      9%|9         | 806/8703 [00:00<00:00, 8054.84it/s]     18%|#8        | 1587/8703 [00:00<00:00, 7977.64it/s]     27%|##7       | 2391/8703 [00:00<00:00, 7994.07it/s]     37%|###6      | 3187/8703 [00:00<00:00, 7983.63it/s]     46%|####5     | 4002/8703 [00:00<00:00, 8031.40it/s]     55%|#####5    | 4801/8703 [00:00<00:00, 8017.53it/s]     64%|######4   | 5605/8703 [00:00<00:00, 8022.03it/s]     74%|#######3  | 6415/8703 [00:00<00:00, 8043.41it/s]     83%|########2 | 7209/8703 [00:00<00:00, 8011.14it/s]     92%|#########1| 7996/8703 [00:01<00:00, 7967.10it/s]    100%|##########| 8703/8703 [00:01<00:00, 7991.61it/s]
     298 photodiode candidate events found
     Checking best behavior-photodiode difference alignments
-      0%|          | 0/267 [00:00<?, ?it/s]      2%|2         | 6/267 [00:00<00:04, 59.72it/s]      5%|4         | 13/267 [00:00<00:04, 61.33it/s]      7%|7         | 19/267 [00:00<00:04, 60.56it/s]     10%|9         | 26/267 [00:00<00:03, 62.92it/s]     12%|#1        | 32/267 [00:00<00:03, 61.17it/s]     14%|#4        | 38/267 [00:00<00:03, 58.71it/s]     16%|#6        | 44/267 [00:00<00:03, 56.75it/s]     19%|#9        | 52/267 [00:00<00:03, 60.57it/s]     22%|##1       | 58/267 [00:00<00:03, 57.96it/s]     24%|##3       | 64/267 [00:01<00:03, 54.02it/s]     27%|##6       | 71/267 [00:01<00:03, 51.74it/s]     29%|##8       | 77/267 [00:01<00:03, 49.92it/s]     31%|###       | 82/267 [00:01<00:04, 46.13it/s]     33%|###2      | 87/267 [00:01<00:03, 45.57it/s]     34%|###4      | 92/267 [00:01<00:03, 45.90it/s]     37%|###6      | 98/267 [00:01<00:03, 48.78it/s]     39%|###8      | 104/267 [00:01<00:03, 51.09it/s]     41%|####1     | 110/267 [00:02<00:02, 53.46it/s]     43%|####3     | 116/267 [00:02<00:02, 52.38it/s]     46%|####5     | 122/267 [00:02<00:02, 52.76it/s]     48%|####7     | 128/267 [00:02<00:02, 50.70it/s]     50%|#####     | 134/267 [00:02<00:02, 50.07it/s]     52%|#####2    | 140/267 [00:02<00:02, 49.65it/s]     55%|#####4    | 146/267 [00:02<00:02, 49.31it/s]     57%|#####6    | 151/267 [00:02<00:02, 48.31it/s]     59%|#####8    | 157/267 [00:02<00:02, 50.83it/s]     61%|######1   | 163/267 [00:03<00:01, 53.22it/s]     63%|######3   | 169/267 [00:03<00:01, 52.24it/s]     66%|######5   | 175/267 [00:03<00:01, 49.88it/s]     68%|######7   | 181/267 [00:03<00:01, 50.52it/s]     70%|#######   | 187/267 [00:03<00:01, 48.92it/s]     72%|#######1  | 192/267 [00:03<00:01, 47.24it/s]     74%|#######4  | 198/267 [00:03<00:01, 49.36it/s]     76%|#######6  | 203/267 [00:03<00:01, 47.67it/s]     78%|#######8  | 209/267 [00:04<00:01, 48.86it/s]     81%|########  | 215/267 [00:04<00:01, 51.14it/s]     83%|########2 | 221/267 [00:04<00:01, 28.88it/s]     85%|########4 | 226/267 [00:04<00:01, 30.06it/s]     87%|########6 | 231/267 [00:04<00:01, 34.14it/s]     88%|########8 | 236/267 [00:04<00:00, 33.72it/s]     91%|#########1| 243/267 [00:05<00:00, 39.07it/s]     93%|#########2| 248/267 [00:05<00:00, 41.39it/s]     95%|#########4| 253/267 [00:05<00:00, 41.49it/s]     97%|#########7| 259/267 [00:05<00:00, 45.65it/s]     99%|#########8| 264/267 [00:05<00:00, 43.58it/s]    100%|##########| 267/267 [00:05<00:00, 48.10it/s]
+      0%|          | 0/267 [00:00<?, ?it/s]      2%|2         | 6/267 [00:00<00:04, 59.74it/s]      5%|4         | 13/267 [00:00<00:04, 61.39it/s]      7%|7         | 19/267 [00:00<00:04, 58.83it/s]     10%|9         | 26/267 [00:00<00:03, 61.38it/s]     12%|#1        | 32/267 [00:00<00:03, 60.07it/s]     14%|#4        | 38/267 [00:00<00:03, 58.35it/s]     16%|#6        | 44/267 [00:00<00:03, 56.10it/s]     19%|#9        | 51/267 [00:00<00:03, 59.06it/s]     21%|##1       | 57/267 [00:00<00:03, 58.57it/s]     24%|##3       | 63/267 [00:01<00:03, 53.48it/s]     26%|##6       | 70/267 [00:01<00:03, 56.05it/s]     28%|##8       | 76/267 [00:01<00:03, 55.62it/s]     31%|###       | 82/267 [00:01<00:03, 51.65it/s]     33%|###2      | 88/267 [00:01<00:03, 46.65it/s]     35%|###4      | 93/267 [00:01<00:03, 47.44it/s]     37%|###6      | 98/267 [00:01<00:03, 48.07it/s]     39%|###8      | 104/267 [00:01<00:03, 49.49it/s]     41%|####1     | 110/267 [00:02<00:03, 52.04it/s]     43%|####3     | 116/267 [00:02<00:02, 53.07it/s]     46%|####5     | 122/267 [00:02<00:02, 53.23it/s]     48%|####7     | 128/267 [00:02<00:02, 50.85it/s]     50%|#####     | 134/267 [00:02<00:02, 50.09it/s]     52%|#####2    | 140/267 [00:02<00:02, 48.96it/s]     54%|#####4    | 145/267 [00:02<00:02, 48.78it/s]     56%|#####6    | 150/267 [00:02<00:02, 45.25it/s]     58%|#####8    | 156/267 [00:02<00:02, 48.67it/s]     61%|######    | 162/267 [00:03<00:02, 51.19it/s]     63%|######2   | 168/267 [00:03<00:01, 51.43it/s]     65%|######5   | 174/267 [00:03<00:01, 48.18it/s]     67%|######7   | 180/267 [00:03<00:01, 50.66it/s]     70%|######9   | 186/267 [00:03<00:01, 51.07it/s]     72%|#######1  | 192/267 [00:03<00:01, 48.45it/s]     74%|#######4  | 198/267 [00:03<00:01, 50.17it/s]     76%|#######6  | 204/267 [00:03<00:01, 48.39it/s]     79%|#######9  | 211/267 [00:04<00:01, 52.33it/s]     81%|########1 | 217/267 [00:04<00:00, 50.95it/s]     84%|########3 | 224/267 [00:04<00:00, 54.02it/s]     87%|########6 | 231/267 [00:04<00:00, 57.14it/s]     89%|########8 | 237/267 [00:04<00:00, 51.88it/s]     92%|#########1| 245/267 [00:04<00:00, 57.92it/s]     94%|#########4| 252/267 [00:04<00:00, 56.03it/s]     97%|#########7| 259/267 [00:04<00:00, 59.39it/s]    100%|#########9| 266/267 [00:04<00:00, 58.69it/s]    100%|##########| 267/267 [00:04<00:00, 53.61it/s]
     Best alignment with the photodiode shifted 159753 samples relative to the first behavior event errors: min -45, q1 -13, med 0, q3 16, max 50
     Excluding events that have zero close events or more than one photodiode event within `chunk` time
     Excluding event 3, off by 6139 samples
@@ -251,8 +251,8 @@ used for each event separately using the keyword `add_event=True`.
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
     Ready.
@@ -284,21 +284,21 @@ information about BIDS.
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
     Ready.
     Used Annotations descriptions: ['Fixation', 'Go Cue', 'ISI Onset', 'Response']
     /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:798: RuntimeWarning: The unit for channel(s) pd has changed from V to NA.
       raw.set_channel_types({ch: 'stim' for ch in pd_channels
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
     Ready.
-    Creating folder: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/ieeg
+    Creating folder: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/sub-1/ieeg
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/README'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/README'...
 
     References
     ----------
@@ -307,12 +307,12 @@ information about BIDS.
     Holdgraf, C., Appelhoff, S., Bickel, S., Bouchard, K., D'Ambrosio, S., David, O., … Hermes, D. (2019). iEEG-BIDS, extending the Brain Imaging Data Structure specification to human intracranial electrophysiology. Scientific Data, 6, 102. https://doi.org/10.1038/s41597-019-0105-7
 
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/participants.tsv'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/participants.tsv'...
 
     participant_id  age     sex     hand
     sub-1   n/a     n/a     n/a
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/participants.json'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/participants.json'...
 
     {
         "participant_id": {
@@ -339,7 +339,7 @@ information about BIDS.
         }
     }
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/ieeg/sub-1_task-mytask_events.tsv'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/sub-1/ieeg/sub-1_task-mytask_events.tsv'...
 
     onset   duration        trial_type      value   sample
     159.76  0.0     Fixation        1       159760
@@ -348,7 +348,7 @@ information about BIDS.
     163.58  0.0     Response        4       163580
     166.238 0.0     Fixation        1       166238
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/dataset_description.json'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/dataset_description.json'...
 
     {
         "Name": " ",
@@ -359,7 +359,7 @@ information about BIDS.
         ]
     }
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/ieeg/sub-1_task-mytask_ieeg.json'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/sub-1/ieeg/sub-1_task-mytask_ieeg.json'...
 
     {
         "TaskName": "mytask",
@@ -380,7 +380,7 @@ information about BIDS.
         "TriggerChannelCount": 1
     }
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/ieeg/sub-1_task-mytask_channels.tsv'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/sub-1/ieeg/sub-1_task-mytask_channels.tsv'...
 
     name    type    units   low_cutoff      high_cutoff     description     sampling_frequency      status  status_description
     pd      TRIG    n/a     0.0     500.0   Trigger 1000.0  good    n/a
@@ -390,11 +390,11 @@ information about BIDS.
     /Users/alexrockhill/software/mne-bids/mne_bids/write.py:1126: RuntimeWarning: Converting data files to BrainVision format
       warn('Converting data files to BrainVision format')
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/sub-1_scans.tsv'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/sub-1/sub-1_scans.tsv'...
 
     filename        acq_time
     ieeg/sub-1_task-mytask_ieeg.vhdr        n/a
-    Wrote /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/sub-1_scans.tsv entry with ieeg/sub-1_task-mytask_ieeg.vhdr.
+    Wrote /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_fwqze5ki/bids_dir/sub-1/sub-1_scans.tsv entry with ieeg/sub-1_task-mytask_ieeg.vhdr.
 
 
 
@@ -402,7 +402,7 @@ information about BIDS.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  13.142 seconds)
+   **Total running time of the script:** ( 0 minutes  12.432 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_find_pd_events.py:

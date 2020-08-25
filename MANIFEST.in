@@ -3,6 +3,8 @@ include *.txt
 include *.xml
 include LICENSE
 include Makefile
+include paper.md
+include paper.bib
 recursive-include pd_parser *.DS_Store
 recursive-exclude docs *
 recursive-exclude docsrc *
