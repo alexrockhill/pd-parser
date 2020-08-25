@@ -15,4 +15,4 @@ include examples/find_pd_events.py
 include pd_parser/tests/data/pd_beh.tsv
 include pd_parser/tests/data/pd_data-raw.fif
 include pd_parser/tests/data/pd_events.tsv
-include pd_parser/tests/data/pd_events_relative.tsv
+include pd_parser/tests/data/pd_relative_events.tsv

@@ -38,7 +38,7 @@ raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
 pd_event_name = 'Fixation'
 beh_col = 'fix_onset_time'
 pd_ch_names = ['pd']
-exclude_shift = 0.1
+exclude_shift = 0.05
 chunk = 2
 zscore = 20
 min_i = 10
@@ -242,7 +242,7 @@ def test_parse_pd(_bids_validate):
     plt.close('all')
     # test core functionality
     pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'],
-                       zscore=5, min_i=10)
+                       overwrite=True)
     plt.close('all')
     raw = mne.io.read_raw_fif(fname)
     annot, pd_ch_names, beh_df = _load_pd_data(fname)

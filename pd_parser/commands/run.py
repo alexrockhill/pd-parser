@@ -47,7 +47,7 @@ def parse_pd():
                         'a bipolar recording. If not provided, the data '
                         'will be plotted for the user to pick')
     parser.add_argument('--exclude_shift', type=float, required=False,
-                        default=0.1, help='How many seconds off to exclude a '
+                        default=0.05, help='How many seconds off to exclude a '
                         'photodiode-behavioral event difference')
     parser.add_argument('--chunk', type=float, required=False,
                         default=2, help='How large to window the '

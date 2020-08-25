@@ -142,22 +142,27 @@ def _find_pd_candidates(pd, chunk_i, baseline_i, zscore, min_i, verbose=True):
         The event onset must have a minimum length `min_i` and
         `overlap` should be set such that no events will be missed
         and if a pd event gets cut off, you'll find it the next chunk'''
-    pd_candidates = set()
+    pd_candidates = dict(up=set(), down=set())
     for i in tqdm(range(baseline_i, len(pd) - chunk_i - baseline_i,
                         baseline_i // 2)):
         b = pd[i - baseline_i:i]
         s = (pd[i:i + chunk_i] - np.median(b)) / np.std(b)
-        for binary_s in [s > zscore, s < -zscore]:
+        for name, binary_s in {'up': s > zscore, 'down': s < -zscore}.items():
             if not binary_s[0]:  # must start off
                 onset = np.where(binary_s)[0]
                 if onset.size > min_i:
                     e = onset[0]
-                    offset = np.where(1 - binary_s[e:])[0]
                     # must have an offset and no more events
+                    offset = np.where(1 - binary_s[e:])[0]
+                    # no rounding errors
                     if offset.size > 0 and not any(binary_s[e + offset[0]:]):
-                        if not any([i + e + j in pd_candidates for j in
-                                    range(-1, 2)]):  # off by one error
-                            pd_candidates.add(i + e)
+                        if not any([i + e + j in this_pd_c for j in
+                                    range(-min_i, min_i + 1) for this_pd_c in
+                                    pd_candidates.values()]):
+                            pd_candidates[name].add(i + e)
+    pd_candidates = (pd_candidates['down'] if
+                     len(pd_candidates['down']) > len(pd_candidates['up']) else
+                     pd_candidates['up'])
     if verbose:
         print(f'{len(pd_candidates)} photodiode candidate events found')
     sorted_pds = np.array(sorted(pd_candidates))
@@ -251,12 +256,14 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment,
                 events.pop(i)
                 errors.pop(i)
                 if verbose:
+                    print(f'Excluding event {i}, {sum(pd_events)} events')
                     pd_section_data['b_event'].append(b_event)
                     pd_section_data['title'].append(
                         f'{sum(pd_events)} events found '
                         f'for\nbeh event {i}, excluding')
         else:
             if verbose:
+                print(f'Excluding event {i}, off by {j} samples')
                 pd_section_data['b_event'].append(b_event)
                 pd_section_data['title'].append(
                     f'Excluding event {i}\noff by {j} samples')
@@ -506,7 +513,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 
 
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
-             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.1,
+             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.05,
              chunk=2, zscore=20, min_i=10, baseline=0.25,
              add_events=False, overwrite=False, verbose=True):
     """Parse photodiode events.
