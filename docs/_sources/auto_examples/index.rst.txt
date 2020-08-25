@@ -23,9 +23,9 @@ Here we show some exemplary use cases for pd-parser.
 
 .. only:: html
 
- .. figure:: /auto_examples/images/thumb/sphx_glr_find_pd_events_thumb.png
+ .. figure:: /auto_examples/images/thumb/sphx_glr_plot_find_pd_events_thumb.png
 
-     :ref:`sphx_glr_auto_examples_find_pd_events.py`
+     :ref:`sphx_glr_auto_examples_plot_find_pd_events.py`
 
 .. raw:: html
 
@@ -35,7 +35,7 @@ Here we show some exemplary use cases for pd-parser.
 .. toctree::
    :hidden:
 
-   /auto_examples/find_pd_events
+   /auto_examples/plot_find_pd_events
 .. raw:: html
 
     <div class="sphx-glr-clear"></div>

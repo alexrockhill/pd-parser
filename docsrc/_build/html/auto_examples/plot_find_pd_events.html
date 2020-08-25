@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>01. Find Photodiode Events &#8212; pd-parser 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          pd-parser</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="index.html">Examples</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../generated/cli.html">CLI</a></li>
+                <li><a href="../whats_new.html">What's new</a></li>
+                <li><a href="https://github.com/alexrockhill/pd-parser">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/auto_examples/plot_find_pd_events.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-find-pd-events-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="find-photodiode-events">
+<span id="sphx-glr-auto-examples-plot-find-pd-events-py"></span><h1>01. Find Photodiode Events<a class="headerlink" href="#find-photodiode-events" title="Permalink to this headline">¶</a></h1>
+<p>In this example, we use pd-parser to find photodiode events and
+align them to behavior. Then, save the data to BIDS format.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Alex Rockhill &lt;aprockhill@mailbox.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: BSD (3-clause)</span>
+</pre></div>
+</div>
+<p>Import data and use it to make a raw object:</p>
+<p>We’ll make an mne.io.Raw object so that we can save out some random
+data with a photodiode event channel in it in fif format (a standard
+electrophysiology format)</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">_TempDir</span>
+
+<span class="kn">import</span> <span class="nn">pd_parser</span>
+<span class="kn">from</span> <span class="nn">pd_parser.parse_pd</span> <span class="kn">import</span> <span class="n">_to_tsv</span>
+
+<span class="n">out_dir</span> <span class="o">=</span> <span class="n">_TempDir</span><span class="p">()</span>
+
+<span class="c1"># simulate photodiode data</span>
+<span class="n">raw</span><span class="p">,</span> <span class="n">events</span> <span class="o">=</span> <span class="n">pd_parser</span><span class="o">.</span><span class="n">simulate_pd_data</span><span class="p">(</span><span class="n">n_events</span><span class="o">=</span><span class="mi">320</span><span class="p">)</span>
+<span class="c1"># make some errent photodiode signals</span>
+<span class="n">raw2</span> <span class="o">=</span> <span class="n">pd_parser</span><span class="o">.</span><span class="n">simulate_pd_data</span><span class="p">(</span><span class="n">n_events</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">iti</span><span class="o">=</span><span class="mf">31.</span><span class="p">,</span>
+                                  <span class="n">iti_jitter</span><span class="o">=</span><span class="mf">15.</span><span class="p">,</span>
+                                  <span class="n">n_sec_on</span><span class="o">=</span><span class="mf">2.5</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:</span><span class="n">raw2</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">size</span><span class="p">]</span> <span class="o">+=</span> <span class="n">raw2</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="c1"># take only the last 300 events to test alignment</span>
+<span class="n">events</span> <span class="o">=</span> <span class="n">events</span><span class="p">[</span><span class="mi">20</span><span class="p">:]</span>
+
+<span class="c1"># make fake electrophysiology data</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">([</span><span class="s1">&#39;ch1&#39;</span><span class="p">,</span> <span class="s1">&#39;ch2&#39;</span><span class="p">,</span> <span class="s1">&#39;ch3&#39;</span><span class="p">],</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span>
+                       <span class="p">[</span><span class="s1">&#39;seeg&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">raw3</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">RawArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+<span class="n">raw3</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;lowpass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;lowpass&#39;</span><span class="p">]</span>  <span class="c1"># these must match to combine</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">add_channels</span><span class="p">([</span><span class="n">raw3</span><span class="p">])</span>
+<span class="c1"># bids needs these data fields</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;dig&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;line_freq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">60</span>
+
+
+<span class="n">fname</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;sub-1_task-mytask_raw.fif&#39;</span><span class="p">)</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+
+<span class="c1"># make behavior data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">beh_events</span> <span class="o">=</span> <span class="n">events</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span>
+<span class="n">offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">beh_events</span><span class="p">))</span> <span class="o">*</span> <span class="mf">0.05</span> <span class="o">-</span> <span class="mf">0.025</span>
+<span class="n">beh_events</span> <span class="o">+=</span> <span class="n">offsets</span>
+<span class="n">fix_duration</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">beh_events</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="n">go_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">beh_events</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="mi">2</span>
+<span class="n">response_time</span> <span class="o">=</span> <span class="n">go_time</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">beh_events</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.5</span>
+<span class="c1"># put in dictionary to be converted to tsv file</span>
+<span class="n">beh_df</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">trial</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">beh_events</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
+              <span class="n">fix_onset_time</span><span class="o">=</span><span class="n">beh_events</span><span class="p">,</span> <span class="n">fix_duration</span><span class="o">=</span><span class="n">fix_duration</span><span class="p">,</span>
+              <span class="n">go_time</span><span class="o">=</span><span class="n">go_time</span><span class="p">,</span> <span class="n">response_time</span><span class="o">=</span><span class="n">response_time</span><span class="p">)</span>
+<span class="n">behf</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;sub-1_task-mytask_beh.tsv&#39;</span><span class="p">)</span>
+<span class="c1"># save behavior file out</span>
+<span class="n">_to_tsv</span><span class="p">(</span><span class="n">behf</span><span class="p">,</span> <span class="n">beh_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=1, n_times=2178734
+    Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
+Ready.
+Creating RawArray with float64 data, n_channels=1, n_times=471792
+    Range : 0 ... 471791 =      0.000 ...   471.791 secs
+Ready.
+Creating RawArray with float64 data, n_channels=3, n_times=2178734
+    Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
+Ready.
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif [done]
+</pre></div>
+</div>
+<p>Use the interactive graphical user interface (GUI) to find parameters:</p>
+<p>On the webpage, this is example is not interactive, but if you copy this
+code into a python console, you can see how to interact with the photo-
+diode data to pick reasonable parameters by following the instructions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">find_pd_params</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pd&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_plot_find_pd_events_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_find_pd_events_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+Isotrak not found
+    Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
+Ready.
+Reading 0 ... 2178733  =      0.000 ...  2178.733 secs...
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:512: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+</pre></div>
+</div>
+<p>Find the photodiode events relative to the behavioral timing of interest:</p>
+<p>This function will use the default parameters or the parameters you
+found from <cite>pd_parser.find_pd_parameters</cite> to find and align the
+photodiode events, excluding events that were off because the commuter
+hung up on computation for instance. That data is save in the same folder
+as the raw file which can be used directly or accessed via
+<cite>pd_parser.pd_parser.pd_parser_save_to_bids</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">parse_pd</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="o">=</span><span class="n">behf</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pd&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_plot_find_pd_events_002.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_find_pd_events_002.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_find_pd_events_003.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_find_pd_events_003.png" />
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+Isotrak not found
+    Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
+Ready.
+Reading 0 ... 2178733  =      0.000 ...  2178.733 secs...
+Finding photodiode events
+
+  0%|          | 0/8703 [00:00&lt;?, ?it/s]
+  9%|8         | 770/8703 [00:00&lt;00:01, 7699.46it/s]
+ 18%|#7        | 1544/8703 [00:00&lt;00:00, 7710.91it/s]
+ 27%|##6       | 2311/8703 [00:00&lt;00:00, 7698.29it/s]
+ 35%|###5      | 3070/8703 [00:00&lt;00:00, 7665.45it/s]
+ 44%|####4     | 3851/8703 [00:00&lt;00:00, 7705.83it/s]
+ 53%|#####3    | 4624/8703 [00:00&lt;00:00, 7712.74it/s]
+ 62%|######2   | 5406/8703 [00:00&lt;00:00, 7741.58it/s]
+ 71%|#######   | 6156/8703 [00:00&lt;00:00, 7652.04it/s]
+ 79%|#######9  | 6878/8703 [00:00&lt;00:00, 7456.24it/s]
+ 88%|########7 | 7646/8703 [00:01&lt;00:00, 7521.30it/s]
+ 97%|#########6| 8402/8703 [00:01&lt;00:00, 7520.71it/s]
+100%|##########| 8703/8703 [00:01&lt;00:00, 7595.96it/s]
+298 photodiode candidate events found
+Checking best behavior-photodiode difference alignments
+
+  0%|          | 0/267 [00:00&lt;?, ?it/s]
+  2%|2         | 6/267 [00:00&lt;00:04, 59.72it/s]
+  5%|4         | 13/267 [00:00&lt;00:04, 61.33it/s]
+  7%|7         | 19/267 [00:00&lt;00:04, 60.56it/s]
+ 10%|9         | 26/267 [00:00&lt;00:03, 62.92it/s]
+ 12%|#1        | 32/267 [00:00&lt;00:03, 61.17it/s]
+ 14%|#4        | 38/267 [00:00&lt;00:03, 58.71it/s]
+ 16%|#6        | 44/267 [00:00&lt;00:03, 56.75it/s]
+ 19%|#9        | 52/267 [00:00&lt;00:03, 60.57it/s]
+ 22%|##1       | 58/267 [00:00&lt;00:03, 57.96it/s]
+ 24%|##3       | 64/267 [00:01&lt;00:03, 54.02it/s]
+ 27%|##6       | 71/267 [00:01&lt;00:03, 51.74it/s]
+ 29%|##8       | 77/267 [00:01&lt;00:03, 49.92it/s]
+ 31%|###       | 82/267 [00:01&lt;00:04, 46.13it/s]
+ 33%|###2      | 87/267 [00:01&lt;00:03, 45.57it/s]
+ 34%|###4      | 92/267 [00:01&lt;00:03, 45.90it/s]
+ 37%|###6      | 98/267 [00:01&lt;00:03, 48.78it/s]
+ 39%|###8      | 104/267 [00:01&lt;00:03, 51.09it/s]
+ 41%|####1     | 110/267 [00:02&lt;00:02, 53.46it/s]
+ 43%|####3     | 116/267 [00:02&lt;00:02, 52.38it/s]
+ 46%|####5     | 122/267 [00:02&lt;00:02, 52.76it/s]
+ 48%|####7     | 128/267 [00:02&lt;00:02, 50.70it/s]
+ 50%|#####     | 134/267 [00:02&lt;00:02, 50.07it/s]
+ 52%|#####2    | 140/267 [00:02&lt;00:02, 49.65it/s]
+ 55%|#####4    | 146/267 [00:02&lt;00:02, 49.31it/s]
+ 57%|#####6    | 151/267 [00:02&lt;00:02, 48.31it/s]
+ 59%|#####8    | 157/267 [00:02&lt;00:02, 50.83it/s]
+ 61%|######1   | 163/267 [00:03&lt;00:01, 53.22it/s]
+ 63%|######3   | 169/267 [00:03&lt;00:01, 52.24it/s]
+ 66%|######5   | 175/267 [00:03&lt;00:01, 49.88it/s]
+ 68%|######7   | 181/267 [00:03&lt;00:01, 50.52it/s]
+ 70%|#######   | 187/267 [00:03&lt;00:01, 48.92it/s]
+ 72%|#######1  | 192/267 [00:03&lt;00:01, 47.24it/s]
+ 74%|#######4  | 198/267 [00:03&lt;00:01, 49.36it/s]
+ 76%|#######6  | 203/267 [00:03&lt;00:01, 47.67it/s]
+ 78%|#######8  | 209/267 [00:04&lt;00:01, 48.86it/s]
+ 81%|########  | 215/267 [00:04&lt;00:01, 51.14it/s]
+ 83%|########2 | 221/267 [00:04&lt;00:01, 28.88it/s]
+ 85%|########4 | 226/267 [00:04&lt;00:01, 30.06it/s]
+ 87%|########6 | 231/267 [00:04&lt;00:01, 34.14it/s]
+ 88%|########8 | 236/267 [00:04&lt;00:00, 33.72it/s]
+ 91%|#########1| 243/267 [00:05&lt;00:00, 39.07it/s]
+ 93%|#########2| 248/267 [00:05&lt;00:00, 41.39it/s]
+ 95%|#########4| 253/267 [00:05&lt;00:00, 41.49it/s]
+ 97%|#########7| 259/267 [00:05&lt;00:00, 45.65it/s]
+ 99%|#########8| 264/267 [00:05&lt;00:00, 43.58it/s]
+100%|##########| 267/267 [00:05&lt;00:00, 48.10it/s]
+Best alignment with the photodiode shifted 159753 samples relative to the first behavior event errors: min -45, q1 -13, med 0, q3 16, max 50
+Excluding events that have zero close events or more than one photodiode event within `chunk` time
+Excluding event 3, off by 6139 samples
+Excluding event 16, off by 6361 samples
+Excluding event 17, off by 13553 samples
+Excluding event 18, off by 19663 samples
+Excluding event 19, off by -18708 samples
+Excluding event 20, off by -12573 samples
+Excluding event 21, off by -6131 samples
+Excluding event 24, off by 7195 samples
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:294: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:301: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+</pre></div>
+</div>
+<p>Add events relative to the photodiode events:</p>
+<p>The photodiode is usually sychronized to one event (usually the fixation
+so that if the deflections caused by the photodiode are large enough
+to influence other channels through amplifier interactions it doesn’t
+cause issues with the analysis) so often the events of interest are
+relative to the photodiode event. In the task a timer can be started at the
+photodiode event and pulled for time at each of the following events.
+These events are then passed in tsv file to be added to the events.
+Note: if more than one photodiode event is used, the parser can be
+used for each event separately using the keyword <cite>add_event=True</cite>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">add_pd_relative_events</span><span class="p">(</span>
+    <span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="p">,</span>
+    <span class="n">relative_event_cols</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;fix_duration&#39;</span><span class="p">,</span> <span class="s1">&#39;go_time&#39;</span><span class="p">,</span> <span class="s1">&#39;response_time&#39;</span><span class="p">],</span>
+    <span class="n">relative_event_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;ISI Onset&#39;</span><span class="p">,</span> <span class="s1">&#39;Go Cue&#39;</span><span class="p">,</span> <span class="s1">&#39;Response&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+Isotrak not found
+    Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
+Ready.
+Reading 0 ... 2178733  =      0.000 ...  2178.733 secs...
+</pre></div>
+</div>
+<p>Save data to BIDS format:</p>
+<p>This saves our data to BIDS format so that it’s ready to be analyzed in a
+reproducible way will all the necessary files. See
+<a class="reference external" href="https://bids.neuroimaging.io/">https://bids.neuroimaging.io/</a> and <a class="reference external" href="https://mne.tools/mne-bids/">https://mne.tools/mne-bids/</a> for more
+information about BIDS.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">pd_parser_save_to_bids</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;bids_dir&#39;</span><span class="p">),</span> <span class="n">fname</span><span class="p">,</span>
+                                 <span class="n">sub</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="n">task</span><span class="o">=</span><span class="s1">&#39;mytask&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+Isotrak not found
+    Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
+Ready.
+Used Annotations descriptions: [&#39;Fixation&#39;, &#39;Go Cue&#39;, &#39;ISI Onset&#39;, &#39;Response&#39;]
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:798: RuntimeWarning: The unit for channel(s) pd has changed from V to NA.
+  raw.set_channel_types({ch: &#39;stim&#39; for ch in pd_channels
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/sub-1_task-mytask_raw.fif...
+Isotrak not found
+    Range : 0 ... 2178733 =      0.000 ...  2178.733 secs
+Ready.
+Creating folder: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/ieeg
+
+Writing &#39;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/README&#39;...
+
+References
+----------
+Appelhoff, S., Sanderson, M., Brooks, T., Vliet, M., Quentin, R., Holdgraf, C., Chaumon, M., Mikulan, E., Tavabi, K., Höchenberger, R., Welke, D., Brunner, C., Rockhill, A., Larson, E., Gramfort, A. and Jas, M. (2019). MNE-BIDS: Organizing electrophysiological data into the BIDS format and facilitating their analysis. Journal of Open Source Software 4: (1896). https://doi.org/10.21105/joss.01896
+
+Holdgraf, C., Appelhoff, S., Bickel, S., Bouchard, K., D&#39;Ambrosio, S., David, O., … Hermes, D. (2019). iEEG-BIDS, extending the Brain Imaging Data Structure specification to human intracranial electrophysiology. Scientific Data, 6, 102. https://doi.org/10.1038/s41597-019-0105-7
+
+
+Writing &#39;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/participants.tsv&#39;...
+
+participant_id  age     sex     hand
+sub-1   n/a     n/a     n/a
+
+Writing &#39;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/participants.json&#39;...
+
+{
+    &quot;participant_id&quot;: {
+        &quot;Description&quot;: &quot;Unique participant identifier&quot;
+    },
+    &quot;age&quot;: {
+        &quot;Description&quot;: &quot;Age of the participant at time of testing&quot;,
+        &quot;Units&quot;: &quot;years&quot;
+    },
+    &quot;sex&quot;: {
+        &quot;Description&quot;: &quot;Biological sex of the participant&quot;,
+        &quot;Levels&quot;: {
+            &quot;F&quot;: &quot;female&quot;,
+            &quot;M&quot;: &quot;male&quot;
+        }
+    },
+    &quot;hand&quot;: {
+        &quot;Description&quot;: &quot;Handedness of the participant&quot;,
+        &quot;Levels&quot;: {
+            &quot;R&quot;: &quot;right&quot;,
+            &quot;L&quot;: &quot;left&quot;,
+            &quot;A&quot;: &quot;ambidextrous&quot;
+        }
+    }
+}
+
+Writing &#39;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/ieeg/sub-1_task-mytask_events.tsv&#39;...
+
+onset   duration        trial_type      value   sample
+159.76  0.0     Fixation        1       159760
+160.46  0.0     ISI Onset       3       160460
+161.999 0.0     Go Cue  2       161999
+163.58  0.0     Response        4       163580
+166.238 0.0     Fixation        1       166238
+
+Writing &#39;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/dataset_description.json&#39;...
+
+{
+    &quot;Name&quot;: &quot; &quot;,
+    &quot;BIDSVersion&quot;: &quot;1.4.0&quot;,
+    &quot;DatasetType&quot;: &quot;raw&quot;,
+    &quot;Authors&quot;: [
+        &quot;Please cite MNE-BIDS in your publication before removing this (citations in README)&quot;
+    ]
+}
+
+Writing &#39;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/ieeg/sub-1_task-mytask_ieeg.json&#39;...
+
+{
+    &quot;TaskName&quot;: &quot;mytask&quot;,
+    &quot;Manufacturer&quot;: &quot;Elekta&quot;,
+    &quot;PowerLineFrequency&quot;: 60.0,
+    &quot;SamplingFrequency&quot;: 1000.0,
+    &quot;SoftwareFilters&quot;: &quot;n/a&quot;,
+    &quot;RecordingDuration&quot;: 2178.733,
+    &quot;RecordingType&quot;: &quot;continuous&quot;,
+    &quot;iEEGReference&quot;: &quot;n/a&quot;,
+    &quot;ECOGChannelCount&quot;: 0,
+    &quot;SEEGChannelCount&quot;: 3,
+    &quot;EEGChannelCount&quot;: 0,
+    &quot;EOGChannelCount&quot;: 0,
+    &quot;ECGChannelCount&quot;: 0,
+    &quot;EMGChannelCount&quot;: 0,
+    &quot;MiscChannelCount&quot;: 0,
+    &quot;TriggerChannelCount&quot;: 1
+}
+
+Writing &#39;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/ieeg/sub-1_task-mytask_channels.tsv&#39;...
+
+name    type    units   low_cutoff      high_cutoff     description     sampling_frequency      status  status_description
+pd      TRIG    n/a     0.0     500.0   Trigger 1000.0  good    n/a
+ch1     SEEG    V       0.0     500.0   StereoEEG       1000.0  good    n/a
+ch2     SEEG    V       0.0     500.0   StereoEEG       1000.0  good    n/a
+ch3     SEEG    V       0.0     500.0   StereoEEG       1000.0  good    n/a
+/Users/alexrockhill/software/mne-bids/mne_bids/write.py:1126: RuntimeWarning: Converting data files to BrainVision format
+  warn(&#39;Converting data files to BrainVision format&#39;)
+
+Writing &#39;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/sub-1_scans.tsv&#39;...
+
+filename        acq_time
+ieeg/sub-1_task-mytask_ieeg.vhdr        n/a
+Wrote /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_qu0c1v_q/bids_dir/sub-1/sub-1_scans.tsv entry with ieeg/sub-1_task-mytask_ieeg.vhdr.
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  13.142 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-find-pd-events-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/332eafcd55124069bc52ae95a623ffe2/plot_find_pd_events.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_find_pd_events.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/48a5e5aeddd3e241d0dc38ccbd94a450/plot_find_pd_events.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_find_pd_events.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, Alex Rockhill.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>
