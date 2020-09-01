@@ -772,17 +772,6 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
     import mne_bids
     if not op.isdir(bids_dir):
         os.makedirs(bids_dir)
-    bids_basename = 'sub-%s' % sub
-    bids_beh_dir = op.join(bids_dir, 'sub-%s' % sub)
-    if ses is not None:
-        bids_basename += '_ses-%s' % ses
-        bids_beh_dir = op.join(bids_beh_dir, 'ses-%s' % ses)
-    bids_basename += '_task-%s' % task
-    bids_beh_dir = op.join(bids_beh_dir, 'beh')
-    if run is not None:
-        bids_basename += '_run-%s' % run
-    if not op.isdir(bids_beh_dir):
-        os.makedirs(bids_beh_dir)
     raw = _read_raw(fname, preload=False, verbose=verbose)
     aux_chs = list()
     for name, ch_list in zip(['eog', 'ecg', 'emg'], [eogs, ecgs, emgs]):
@@ -797,11 +786,17 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
     events, event_id = mne.events_from_annotations(raw)
     raw.set_channel_types({ch: 'stim' for ch in pd_channels
                            if ch in raw.ch_names})
-    mne_bids.write_raw_bids(raw, bids_basename, bids_dir,
-                            events_data=events, event_id=event_id,
-                            verbose=verbose, overwrite=overwrite)
+    bids_path = mne_bids.BIDSPath(subject=sub, session=ses, task=task,
+                                  run=run, root=bids_dir)
+    mne_bids.write_raw_bids(raw, bids_path, events_data=events,
+                            event_id=event_id, verbose=verbose,
+                            overwrite=overwrite)
+    bids_beh_dir = \
+        op.join(bids_dir, f'sub-{sub}', f'ses-{ses}' if ses else '', 'beh')
+    if not op.isdir(bids_beh_dir):
+        os.makedirs(bids_beh_dir)
     if beh_df is not None:
-        _to_tsv(op.join(bids_beh_dir, bids_basename + '_beh.tsv'), beh_df)
+        _to_tsv(op.join(bids_beh_dir, bids_path.basename + '_beh.tsv'), beh_df)
 
 
 def simulate_pd_data(n_events=10, n_sec_on=1.0, amp=100., iti=6.,
