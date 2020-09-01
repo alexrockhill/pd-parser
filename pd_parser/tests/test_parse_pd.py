@@ -241,8 +241,7 @@ def test_parse_pd(_bids_validate):
     pd_parser.find_pd_params(fname, pd_ch_names=['pd'])
     plt.close('all')
     # test core functionality
-    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'],
-                       overwrite=True)
+    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
     plt.close('all')
     raw = mne.io.read_raw_fif(fname)
     annot, pd_ch_names, beh_df = _load_pd_data(fname)
