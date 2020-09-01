@@ -791,7 +791,13 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
     mne_bids.write_raw_bids(raw, bids_path, events_data=events,
                             event_id=event_id, verbose=verbose,
                             overwrite=overwrite)
-    # beh_path = bids_path.copy().update(datatype='beh', extension='tsv')
+    '''
+    beh_path = bids_path.copy().update(datatype='beh', extension='tsv')
+    if not op.isdir(op.dirname(beh_path.fpath)):
+        os.makedirs(op.dirname(beh_path.fpath))
+    if beh_df is not None:
+        _to_tsv(beh_path.fpath, beh_df)
+    '''
     bids_beh_dir = \
         op.join(bids_dir, f'sub-{sub}', f'ses-{ses}' if ses else '', 'beh')
     if not op.isdir(bids_beh_dir):
