@@ -5,6 +5,7 @@ include LICENSE
 include Makefile
 include paper.md
 include paper.bib
+include paper.pdf
 recursive-include pd_parser *.DS_Store
 recursive-exclude docs *
 recursive-exclude docsrc *
