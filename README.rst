@@ -1,5 +1,11 @@
-pd-parser
----------
+.. pd-parser's documentation
+
+|icon| pd-parser
+================
+
+.. |icon| image:: ./favicon.png
+  :width: 50
+
 A tool to parse photodiode events from a possibly corrupted channel, compatible with BIDS formatting.
 
 Corrupted data may look like so:
