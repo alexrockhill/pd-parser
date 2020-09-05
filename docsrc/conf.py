@@ -74,6 +74,7 @@ html_theme_options = {
         ("What's new", "whats_new"),
         ("GitHub", f"https://github.com/alexrockhill/{project}", True),
     ]}
+html_favicon = 'favicon.png'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
