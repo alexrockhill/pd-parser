@@ -17,7 +17,7 @@ authors:
     orcid: 0000-0003-2463-5134
     affiliation: 1
 affiliations:
- - name: University of Oregon, Department of Human Physiology
+ - name: University of Oregon, Department of Human Physiology, Eugene, Oregon.
    index: 1
  - name: Department of Neurological Surgery, Oregon Health & Science University, Portland, Oregon.
    index: 2
