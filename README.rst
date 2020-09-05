@@ -4,7 +4,7 @@ A tool to parse photodiode events from a possibly corrupted channel, compatible 
 
 Corrupted data may look like so:
 
-.. image:: ./figs/exclude_event.png
+.. image:: ./figs/excluded_events.png
    :width: 800
 
 Which may lead to some excluded events and differences between the events and the expected timing based on the behavior that look like so:

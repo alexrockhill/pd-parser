@@ -183,20 +183,20 @@ def _pd_event_dist(b_event, pd_candidates, max_index, exclude_shift_i):
     return exclude_shift_i
 
 
-def _check_alignment(beh_events, pd_candidates, max_index, exclude_shift_i):
+def _check_alignment(beh_events, pd_candidates, max_index, max_i):
     """Check the alignment, account for misalignment accumulation."""
     errors = np.zeros(beh_events.size)
     for i, b_event in enumerate(beh_events):
-        j = _pd_event_dist(b_event, pd_candidates, max_index, exclude_shift_i)
-        if abs(j) < exclude_shift_i:
+        j = _pd_event_dist(b_event, pd_candidates, max_index, max_i)
+        if abs(j) < max_i:
             beh_events -= j
             errors[i] = j
         else:
-            errors[i] = exclude_shift_i
+            errors[i] = max_i
     return errors
 
 
-def _find_best_alignment(beh_events, sorted_pds, exclude_shift_i,
+def _find_best_alignment(beh_events, sorted_pds, max_i, sfreq,
                          verbose=True):
     """Find the beh event that causes the best alignment when used to start."""
     beh_diffs = beh_events[1:] - beh_events[:-1]
@@ -214,24 +214,24 @@ def _find_best_alignment(beh_events, sorted_pds, exclude_shift_i,
         best_offset = np.argmin(np.min(abs(pd_dists - beh_diff), axis=1))
         bevs = beh_events.copy() - beh_events[i] + sorted_pds[best_offset]
         beh_errors = _check_alignment(bevs, pd_candidates,
-                                      sorted_pds[-1], exclude_shift_i)
+                                      sorted_pds[-1], max_i)
         error_metric = np.median(abs(beh_errors))
         if min_error is None or error_metric < min_error:
             best_alignment = sorted_pds[best_offset] - beh_events[i]
             min_error = error_metric
             best_errors = beh_errors
     if verbose:
-        print('Best alignment with the photodiode shifted {:.0f} samples '
+        print('Best alignment with the photodiode shifted {:.0f} ms '
               'relative to the first behavior event errors: min {:.0f}, '
               'q1 {:.0f}, med {:.0f}, q3 {:.0f}, max {:.0f}'.format(
-                  beh_events[0] + best_alignment, min(best_errors),
+                  (beh_events[0] + best_alignment) / sfreq, min(best_errors),
                   np.quantile(best_errors, 0.25), np.median(best_errors),
                   np.quantile(best_errors, 0.75), max(best_errors)))
     return best_alignment
 
 
-def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment,
-                              pd, exclude_shift_i, chunk_i, verbose=True):
+def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
+                              exclude_shift_i, chunk_i, sfreq, verbose=True):
     """Exclude all events that are outside the given shift compared to beh."""
     if verbose:
         import matplotlib.pyplot as plt
@@ -263,10 +263,18 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment,
                         f'for\nbeh event {i}, excluding')
         else:
             if verbose:
-                print(f'Excluding event {i}, off by {j} samples')
+                # if off by nearly exclude_shift_i, still use for adjusting
+                if abs(j) < 2 * exclude_shift_i:
+                    best_alignment -= j
+                # if off by a less than a chunk, report samples
+                if abs(j) < chunk_i:
+                    j_ms = np.round(j / sfreq * 1000, 2)
+                    text = f'Excluding event {i},\noff by {j_ms} ms'
+                else:  # if off by more than a chunk, just say missing
+                    text = f'Excluding event {i},\nno event found'
+                print(text.replace('\n', ' '))
                 pd_section_data['b_event'].append(b_event)
-                pd_section_data['title'].append(
-                    f'Excluding event {i}\noff by {j} samples')
+                pd_section_data['title'].append(text)
     if verbose:
         n_events_ex = len(pd_section_data['b_event'])
         if n_events_ex:  # only plot if some events were excluded
@@ -285,17 +293,22 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment,
             for b_event, title, ax in zip(pd_section_data['b_event'],
                                           pd_section_data['title'],
                                           axes[:n_events_ex]):
-                pd_section = pd[int(b_event - 5 * chunk_i):
-                                int(b_event + 5 * chunk_i)]
-                ax.plot(np.linspace(-5, 5, pd_section.size), pd_section)
+                pd_section = pd[int(b_event - chunk_i):
+                                int(b_event + chunk_i)]
+                ax.plot(np.linspace(-1, 1, pd_section.size), pd_section)
+                ax.plot([0, 0], [pd_section.min(), pd_section.max()],
+                        color='r')
                 ax.set_title(title, fontsize=12)
                 ax.set_ylabel('voltage')
-                ax.set_xlabel('time (chunks)')
+                ax.set_xticks(np.linspace(-1, 1, 5))
+                ax.set_xticklabels(np.round(np.linspace(
+                    -chunk_i / sfreq, chunk_i / sfreq, 5), 2))
+                ax.set_xlabel('time (s)')
             fig.show()
         trials = sorted(errors.keys())
         fig, ax = plt.subplots()
-        ax.plot(trials, [errors[t] for t in trials])
-        ax.set_ylabel('Difference (samples)')
+        ax.plot(trials, [errors[t] / sfreq * 1000 for t in trials])
+        ax.set_ylabel('Difference (ms)')
         ax.set_xlabel('Trial')
         ax.set_title('Photodiode Events Compared to Behavior Events')
         fig.show()
@@ -513,7 +526,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 
 
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
-             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.05,
+             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.03,
              chunk=2, zscore=20, min_i=10, baseline=0.25,
              add_events=False, overwrite=False, verbose=True):
     """Parse photodiode events.
@@ -612,11 +625,11 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     beh_events_sorted = np.array(list(beh_events.values()))
     best_alignment = _find_best_alignment(
         beh_events=beh_events_sorted, sorted_pds=sorted_pds,
-        exclude_shift_i=exclude_shift_i, verbose=verbose)
+        max_i=exclude_shift_i * 2, sfreq=raw.info['sfreq'], verbose=verbose)
     events = _exclude_ambiguous_events(
         beh_events=beh_events, sorted_pds=sorted_pds,
         best_alignment=best_alignment, pd=pd, exclude_shift_i=exclude_shift_i,
-        chunk_i=chunk_i, verbose=verbose)
+        chunk_i=chunk_i, sfreq=raw.info['sfreq'], verbose=verbose)
     _save_pd_data(fname, raw=raw, events=events, event_id=pd_event_name,
                   pd_ch_names=pd_ch_names, beh_df=beh_df,
                   add_events=add_events, overwrite=overwrite)

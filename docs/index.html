@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pd-parser &#8212; pd-parser 0.1 documentation</title>
+    <title>pd-parser &#8212; pd-parser 0.2.dev0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
@@ -98,10 +98,10 @@
 <h1>pd-parser<a class="headerlink" href="#pd-parser" title="Permalink to this headline">¶</a></h1>
 <p>A tool to parse photodiode events from a possibly corrupted channel, compatible with BIDS formatting.</p>
 <p>Corrupted data may look like so:</p>
-<a class="reference internal image-reference" href="_images/exclude_event.png"><img alt="_images/exclude_event.png" src="_images/exclude_event.png" style="width: 800px;" /></a>
+<a class="reference internal image-reference" href="_images/excluded_events.png"><img alt="_images/excluded_events.png" src="_images/excluded_events.png" style="width: 800px;" /></a>
 <p>Which may lead to some excluded events and differences between the events and the expected timing based on the behavior that look like so:</p>
 <a class="reference internal image-reference" href="_images/event_diffs.png"><img alt="_images/event_diffs.png" src="_images/event_diffs.png" style="width: 400px;" /></a>
-<p><em>pd-parser</em> takes an electrophysiology data file with one (common reference) or two (bipolar reference) channels that recorded photodiode events and matches that with time-stamped behavior stored in a tab-separated value (tsv) file. Candidate photodiode events are found based on having a square-wave shape, then these events are aligned to the behavior events (accounting for the timing of the photodiode drifting away from the behavior), and then events are excluded where the monitor hung up or the photodiode was different compared to the behavior for any reason. Events that are timed relative to the photodiode can then be added (this method might be a good idea as the large signal from the photodiode has been observed to affect neighboring channels on the amplifier). Finally, the data can be saved to BIDS format, copying over the raw data as is and unconverted (unless it’s an unsupported file type by BIDS) and supplying the necessary support files to determine behavior, events and all the other necessary information to analyze the data.</p>
+<p><cite>pd-parser</cite> takes an electrophysiology data file with one (common reference) or two (bipolar reference) channels that recorded photodiode events and matches that with time-stamped behavior stored in a tab-separated value (tsv) file. Candidate photodiode events are found based on having a square-wave shape, then these events are aligned to the behavior events (accounting for the timing of the photodiode drifting away from the behavior), and then events are excluded where the monitor hung up or the photodiode was different compared to the behavior for any reason. Events that are timed relative to the photodiode can then be added (this method might be a good idea as the large signal from the photodiode has been observed to affect neighboring channels on the amplifier). Finally, the data can be saved to BIDS format, copying over the raw data as is and unconverted (unless it’s an unsupported file type by BIDS) and supplying the necessary support files to determine behavior, events and all the other necessary information to analyze the data.</p>
 </div>
 <div class="section" id="installation-instructions">
 <h1>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h1>
