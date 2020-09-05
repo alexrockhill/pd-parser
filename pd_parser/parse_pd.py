@@ -526,7 +526,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 
 
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
-             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.03,
+             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.05,
              chunk=2, zscore=20, min_i=10, baseline=0.25,
              add_events=False, overwrite=False, verbose=True):
     """Parse photodiode events.

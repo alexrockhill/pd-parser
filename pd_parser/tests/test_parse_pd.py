@@ -135,13 +135,14 @@ def test_core():
                               exclude_shift_i)
     assert all([e < exclude_shift_i for e in errors])
     best_alignment = _find_best_alignment(beh_events_sorted, sorted_pds,
-                                          exclude_shift_i, verbose=True)
+                                          exclude_shift_i, raw.info['sfreq'],
+                                          verbose=True)
     assert best_alignment == sorted_pds[2]
     # test exclude ambiguous
     pd = raw._data[0]
     pd_events = _exclude_ambiguous_events(
         beh_events, sorted_pds, best_alignment, pd, exclude_shift_i, chunk_i,
-        verbose=True)
+        raw.info['sfreq'], verbose=True)
     np.testing.assert_array_equal(list(pd_events.values()), events[2:, 0])
     # test i/o
     fname = op.join(out_dir, 'test-raw.fif')
@@ -241,8 +242,7 @@ def test_parse_pd(_bids_validate):
     pd_parser.find_pd_params(fname, pd_ch_names=['pd'])
     plt.close('all')
     # test core functionality
-    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'],
-                       exclude_shift=0.05)
+    pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
     plt.close('all')
     raw = mne.io.read_raw_fif(fname)
     annot, pd_ch_names, beh_df = _load_pd_data(fname)
