@@ -129,7 +129,7 @@ parse_pd
 
 .. rst-class:: callout
 
-usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--resync RESYNC] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------
@@ -168,6 +168,9 @@ optional arguments
 
 
 --baseline BASELINE		How much relative to the chunkto use to idenify the time before the photodiode event. Probably don't change but increasing will reduce false-positives and decreasing will reduce false-negatives.
+
+
+--resync RESYNC		How large of a difference to use to resynchronize events. This is for when events are off but not by much and so they should be excluded but are still needed to fit an alignment.Increase if the alignment is failing because too many events are being excluded, decrease to speed up execution.
 
 
 --verbose VERBOSE		Set verbose output to True or False.

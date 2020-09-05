@@ -199,7 +199,7 @@ of the function.</p>
 
 <dl class="py function">
 <dt id="parse_pd.parse_pd">
-<code class="sig-name descname">parse_pd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_event_name</span><span class="o">=</span><span class="default_value">'Fixation'</span></em>, <em class="sig-param"><span class="n">behf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_col</span><span class="o">=</span><span class="default_value">'fix_onset_time'</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.05</span></em>, <em class="sig-param"><span class="n">chunk</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">min_i</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">parse_pd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_event_name</span><span class="o">=</span><span class="default_value">'Fixation'</span></em>, <em class="sig-param"><span class="n">behf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_col</span><span class="o">=</span><span class="default_value">'fix_onset_time'</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.03</span></em>, <em class="sig-param"><span class="n">chunk</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">min_i</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">resync</span><span class="o">=</span><span class="default_value">0.075</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse photodiode events.</p>
 <p>Parses photodiode events from a likely very corrupted channel
 using behavioral data to sync events to determine which
@@ -238,6 +238,18 @@ Use <cite>find_pd_params</cite> to determine if unsure.</p>
 <dt><strong>baseline: float</strong></dt><dd><p>How much relative to the chunk to use to idenify the time before
 the photodiode event. This should not be changed most likely
 unless there is a specific reason/issue.</p>
+</dd>
+<dt><strong>resync</strong><span class="classifier">float</span></dt><dd><p>The number of seconds to difference allowed to still use a photodiode
+event to resynchronize with time-stamped events. Events with
+differences between <cite>resync</cite> and <cite>exclude_shift</cite> will still be
+used for alignment but will be excluded from the events. When
+<cite>exclude_shift</cite> is smaller than <cite>resync</cite>, this parameter allows
+event differences less than <cite>exclude_shift</cite> to be removed without
+losing an alignment which depends on resynchronizing to these events
+between <cite>exclude_shift</cite> and <cite>resync</cite>. This is most likely to happen
+when the drift between behavior events and the photodiode is large,
+so many events are to be excluded for being off by a small amount
+but still correctly correspond to a behavior event.</p>
 </dd>
 <dt><strong>add_events</strong><span class="classifier">bool</span></dt><dd><p>Whether to add the events found from the current call of <cite>parse_pd</cite>
 to a events found previously (e.g. first parse with

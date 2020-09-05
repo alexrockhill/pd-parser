@@ -231,7 +231,8 @@ def _find_best_alignment(beh_events, sorted_pds, max_i, sfreq,
 
 
 def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
-                              exclude_shift_i, chunk_i, sfreq, verbose=True):
+                              exclude_shift_i, chunk_i, resync_i, sfreq,
+                              verbose=True):
     """Exclude all events that are outside the given shift compared to beh."""
     if verbose:
         import matplotlib.pyplot as plt
@@ -264,7 +265,7 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
         else:
             if verbose:
                 # if off by nearly exclude_shift_i, still use for adjusting
-                if abs(j) < 2 * exclude_shift_i:
+                if abs(j) < resync_i:
                     best_alignment -= j
                 # if off by a less than a chunk, report samples
                 if abs(j) < chunk_i:
@@ -526,8 +527,8 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 
 
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
-             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.05,
-             chunk=2, zscore=20, min_i=10, baseline=0.25,
+             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.03,
+             chunk=2, zscore=20, min_i=10, baseline=0.25, resync=0.075,
              add_events=False, overwrite=False, verbose=True):
     """Parse photodiode events.
 
@@ -569,6 +570,18 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         How much relative to the chunk to use to idenify the time before
         the photodiode event. This should not be changed most likely
         unless there is a specific reason/issue.
+    resync : float
+        The number of seconds to difference allowed to still use a photodiode
+        event to resynchronize with time-stamped events. Events with
+        differences between `resync` and `exclude_shift` will still be
+        used for alignment but will be excluded from the events. When
+        `exclude_shift` is smaller than `resync`, this parameter allows
+        event differences less than `exclude_shift` to be removed without
+        losing an alignment which depends on resynchronizing to these events
+        between `exclude_shift` and `resync`. This is most likely to happen
+        when the drift between behavior events and the photodiode is large,
+        so many events are to be excluded for being off by a small amount
+        but still correctly correspond to a behavior event.
     add_events : bool
         Whether to add the events found from the current call of `parse_pd`
         to a events found previously (e.g. first parse with
@@ -590,6 +603,9 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         to the time stamp of the eeg file.
 
     """
+    if resync < exclude_shift:
+        raise ValueError(f'`exclude_shift` ({exclude_shift}) cannot be longer '
+                         f'than `resync` ({resync})')
     # check if already parsed
     basename = op.splitext(op.basename(fname))[0]
     if op.isdir(op.join(op.dirname(fname), basename + '_pd_data')
@@ -602,6 +618,7 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     chunk_i = np.round(raw.info['sfreq'] * chunk).astype(int)
     exclude_shift_i = np.round(raw.info['sfreq'] * exclude_shift).astype(int)
     baseline_i = np.round(chunk_i * baseline).astype(int)
+    resync_i = np.round(raw.info['sfreq'] * resync).astype(int)
     # use keyword argument if given, otherwise get the user to enter pd names
     # and get data
     pd, pd_ch_names = _get_pd_data(raw, pd_ch_names)
@@ -625,11 +642,12 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     beh_events_sorted = np.array(list(beh_events.values()))
     best_alignment = _find_best_alignment(
         beh_events=beh_events_sorted, sorted_pds=sorted_pds,
-        max_i=exclude_shift_i * 2, sfreq=raw.info['sfreq'], verbose=verbose)
+        max_i=resync_i, sfreq=raw.info['sfreq'], verbose=verbose)
     events = _exclude_ambiguous_events(
         beh_events=beh_events, sorted_pds=sorted_pds,
         best_alignment=best_alignment, pd=pd, exclude_shift_i=exclude_shift_i,
-        chunk_i=chunk_i, sfreq=raw.info['sfreq'], verbose=verbose)
+        chunk_i=chunk_i, resync_i=resync_i, sfreq=raw.info['sfreq'],
+        verbose=verbose)
     _save_pd_data(fname, raw=raw, events=events, event_id=pd_event_name,
                   pd_ch_names=pd_ch_names, beh_df=beh_df,
                   add_events=add_events, overwrite=overwrite)

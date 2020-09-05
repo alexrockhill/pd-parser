@@ -79,6 +79,14 @@ def parse_pd():
                         'photodiode event. Probably don\'t change but '
                         'increasing will reduce false-positives and '
                         'decreasing will reduce false-negatives.')
+    parser.add_argument('--resync', type=float, required=False,
+                        default=0.075, help='How large of a difference '
+                        'to use to resynchronize events. This is for when '
+                        'events are off but not by much and so they should '
+                        'be excluded but are still needed to fit an alignment.'
+                        'Increase if the alignment is failing because too '
+                        'many events are being excluded, decrease to speed up '
+                        'execution.')
     parser.add_argument('--verbose', default=True, type=bool,
                         required=False,
                         help='Set verbose output to True or False.')
