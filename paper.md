@@ -37,6 +37,6 @@ To our knowledge, there are no software packages that extract photodiode events 
 
 # Acknowledgements
 
-We acknowledge support from the Renée James Seed grant to Accelerate Scientific Research from University of Oregon.
+We acknowledge support from the Renée James Seed grant to Accelerate Scientific Research from University of Oregon and NIH/NIMH R21: 1RF1MH117155-01 (Site PI, subcontract) 9/1/19 – 8/31/22 "From ion channel dynamics to human EEG and MEG: multiscale neuronal models validated by human data".
 
 # References
