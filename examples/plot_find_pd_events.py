@@ -54,7 +54,7 @@ raw.save(fname)
 # make behavior data
 np.random.seed(12)
 beh_events = events[:, 0].astype(float) / raw.info['sfreq']
-offsets = np.random.random(len(beh_events)) * 0.05 - 0.025
+offsets = np.random.random(len(beh_events)) * 0.035 - 0.0125
 beh_events += offsets
 fix_duration = np.repeat(0.7, beh_events.size)
 go_time = np.random.random(beh_events.size) + 2
@@ -80,11 +80,11 @@ pd_parser.find_pd_params(fname, pd_ch_names=['pd'])
 # Find the photodiode events relative to the behavioral timing of interest:
 #
 # This function will use the default parameters or the parameters you
-# found from `pd_parser.find_pd_parameters` to find and align the
+# found from :func:`pd_parser.find_pd_parameters` to find and align the
 # photodiode events, excluding events that were off because the commuter
 # hung up on computation for instance. That data is save in the same folder
 # as the raw file which can be used directly or accessed via
-# `pd_parser.pd_parser.pd_parser_save_to_bids`.
+# :func:`pd_parser.pd_parser_save_to_bids`.
 
 pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
 
