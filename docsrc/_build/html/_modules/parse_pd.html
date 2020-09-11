@@ -754,10 +754,10 @@
                   <span class="n">add_events</span><span class="o">=</span><span class="n">add_events</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="add_pd_off_event"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_off_event">[docs]</a><span class="k">def</span> <span class="nf">add_pd_off_event</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">off_event_name</span><span class="o">=</span><span class="s1">&#39;Stim Off&#39;</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
-                     <span class="n">zscore</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
-                     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Add an event for when the photodiode deflection returns to baseline.</span>
+<div class="viewcode-block" id="add_pd_off_events"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_off_events">[docs]</a><span class="k">def</span> <span class="nf">add_pd_off_events</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">off_event_name</span><span class="o">=</span><span class="s1">&#39;Stim Off&#39;</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                      <span class="n">zscore</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+                      <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add events for when the photodiode deflection returns to baseline.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

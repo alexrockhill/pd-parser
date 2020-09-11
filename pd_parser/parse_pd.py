@@ -660,10 +660,10 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
                   add_events=add_events, overwrite=overwrite)
 
 
-def add_pd_off_event(fname, off_event_name='Stim Off', max_len=1.,
-                     zscore=100, min_i=10, baseline=0.25,
-                     verbose=True, overwrite=False):
-    """Add an event for when the photodiode deflection returns to baseline.
+def add_pd_off_events(fname, off_event_name='Stim Off', max_len=1.,
+                      zscore=100, min_i=10, baseline=0.25,
+                      verbose=True, overwrite=False):
+    """Add events for when the photodiode deflection returns to baseline.
 
     Parameters
     ----------

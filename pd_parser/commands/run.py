@@ -125,7 +125,7 @@ def add_pd_off_events():
     parser.add_argument('--overwrite', default=False, type=bool,
                         required=False, help='Whether to overwrite')
     args = parser.parse_args()
-    pd_parser.add_pd_off_event(
+    pd_parser.add_pd_off_events(
         args.fname, off_event_name=args.off_event_name,
         max_len=args.max_len, zscore=args.zscore, min_i=args.min_i,
         baseline=args.baseline, verbose=args.verbose, overwrite=args.overwrite)

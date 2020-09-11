@@ -306,8 +306,8 @@ def test_parse_pd(_bids_validate):
         events2[:, 0], [e for e in events['pd_sample'] if e != 'n/a'])
     assert pd_ch_names == ['pd']
     assert beh_df['pd_sample'] == events['pd_sample']
-    # test add_pd_off_event
-    pd_parser.add_pd_off_event(fname, off_event_name=off_event_name)
+    # test add_pd_off_events
+    pd_parser.add_pd_off_events(fname, off_event_name=off_event_name)
     annot, pd_ch_names, beh_df = _load_pd_data(fname)
     raw.set_annotations(annot)
     assert off_event_name in annot.description
