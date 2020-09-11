@@ -36,6 +36,16 @@ events_relative = _read_tsv(op.join(basepath, 'pd_relative_events.tsv'))
 raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
                               preload=True)
 
+info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
+                       ['seeg'] * 3)
+raw_tmp2 = \
+    mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
+                    info)
+raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
+raw_tmp.add_channels([raw_tmp2])
+raw_tmp.info['dig'] = None
+raw_tmp.info['line_freq'] = 60
+
 pd_event_name = 'Fixation'
 beh_col = 'fix_onset_time'
 pd_ch_names = ['pd']
@@ -255,15 +265,6 @@ def test_parse_pd(_bids_validate):
     # load in data
     out_dir = _TempDir()
     fname = op.join(out_dir, 'pd_data-raw.fif')
-    info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
-                           ['seeg'] * 3)
-    raw_tmp2 = \
-        mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
-                        info)
-    raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
-    raw_tmp.add_channels([raw_tmp2])
-    raw_tmp.info['dig'] = None
-    raw_tmp.info['line_freq'] = 60
     raw_tmp.save(fname)
     # this needs to be tested with user interaction, this
     # just tests that it launches
@@ -312,15 +313,6 @@ def test_parse_pd(_bids_validate):
 def test_cli():
     out_dir = _TempDir()
     fname = op.join(out_dir, 'pd_data-raw.fif')
-    info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
-                           ['seeg'] * 3)
-    raw_tmp2 = \
-        mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
-                        info)
-    raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
-    raw_tmp.add_channels([raw_tmp2])
-    raw_tmp.info['dig'] = None
-    raw_tmp.info['line_freq'] = 60
     raw_tmp.save(fname)
     # can't test with a live plot, but if this should be called by hand
     # call([f'find_pd_params {fname} --pd_ch_names pd'], shell=True,
