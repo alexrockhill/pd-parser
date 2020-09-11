@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="0" hostname="Alexs-MacBook-Pro.local" name="pytest" skipped="0" tests="4" time="60.498" timestamp="2020-09-11T15:34:39.689147"><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="83" name="test_core" time="1.895"><system-out>Creating RawArray with float64 data, n_channels=1, n_times=84876
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="0" hostname="Alexs-MacBook-Pro.local" name="pytest" skipped="0" tests="4" time="55.862" timestamp="2020-09-11T15:53:50.051405"><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="83" name="test_core" time="2.218"><system-out>Creating RawArray with float64 data, n_channels=1, n_times=84876
     Range : 0 ... 84875 =      0.000 ...    84.875 secs
 Ready.
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ifzro0n0/test-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ifzro0n0/test-raw.fif [done]
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zm7t6egk/test-raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zm7t6egk/test-raw.fif [done]
 Reading in foo.bar
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ifzro0n0/test-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ifzro0n0/test-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zm7t6egk/test-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zm7t6egk/test-raw.fif...
 Isotrak not found
     Range : 0 ... 84875 =      0.000 ...    84.875 secs
 Ready.
@@ -18,8 +18,8 @@ errors: min -27, q1 -15, med 4, q3 20, max 75
 Excluding events that have zero close events or more than one photodiode event within `max_len` time
 Excluding event 6, no event found
 Used Annotations descriptions: [&apos;Fixation&apos;]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ifzro0n0/test-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ifzro0n0/test-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zm7t6egk/test-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zm7t6egk/test-raw.fif...
 Isotrak not found
     Range : 0 ... 84875 =      0.000 ...    84.875 secs
 Ready.
@@ -40,18 +40,18 @@ Excluding events that have zero close events or more than one photodiode event w
 Excluding event 1, off by 42 ms
 Excluding event 6, no event found
 Excluding event 7, off by -34 ms
-</system-out><system-err>  0%|          | 0/1349 [00:00&lt;?, ?it/s] 39%|███▉      | 529/1349 [00:00&lt;00:00, 5285.09it/s] 79%|███████▉  | 1067/1349 [00:00&lt;00:00, 5312.15it/s]100%|██████████| 1349/1349 [00:00&lt;00:00, 5356.49it/s]
-  0%|          | 0/7 [00:00&lt;?, ?it/s]100%|██████████| 7/7 [00:00&lt;00:00, 1584.81it/s]
-  0%|          | 0/668 [00:00&lt;?, ?it/s] 43%|████▎     | 290/668 [00:00&lt;00:00, 2892.67it/s]100%|██████████| 668/668 [00:00&lt;00:00, 3548.87it/s]
-  0%|          | 0/1349 [00:00&lt;?, ?it/s] 24%|██▎       | 319/1349 [00:00&lt;00:00, 3178.43it/s] 50%|█████     | 676/1349 [00:00&lt;00:00, 3285.94it/s] 89%|████████▉ | 1206/1349 [00:00&lt;00:00, 3707.61it/s]100%|██████████| 1349/1349 [00:00&lt;00:00, 4116.01it/s]
-  0%|          | 0/7 [00:00&lt;?, ?it/s]100%|██████████| 7/7 [00:00&lt;00:00, 863.13it/s]
-</system-err></testcase><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="242" name="test_two_pd_alignment" time="0.446"><system-out>Creating RawArray with float64 data, n_channels=1, n_times=84876
+</system-out><system-err>  0%|          | 0/1349 [00:00&lt;?, ?it/s] 20%|██        | 276/1349 [00:00&lt;00:00, 2726.25it/s] 51%|█████     | 685/1349 [00:00&lt;00:00, 3026.94it/s] 72%|███████▏  | 977/1349 [00:00&lt;00:00, 2536.48it/s] 86%|████████▌ | 1158/1349 [00:00&lt;00:00, 1776.17it/s] 98%|█████████▊| 1316/1349 [00:00&lt;00:00, 1645.12it/s]100%|██████████| 1349/1349 [00:00&lt;00:00, 2052.07it/s]
+  0%|          | 0/7 [00:00&lt;?, ?it/s]100%|██████████| 7/7 [00:00&lt;00:00, 1016.10it/s]
+  0%|          | 0/668 [00:00&lt;?, ?it/s] 61%|██████    | 406/668 [00:00&lt;00:00, 4057.16it/s]100%|██████████| 668/668 [00:00&lt;00:00, 4318.53it/s]
+  0%|          | 0/1349 [00:00&lt;?, ?it/s] 34%|███▎      | 452/1349 [00:00&lt;00:00, 4515.12it/s] 75%|███████▍  | 1006/1349 [00:00&lt;00:00, 4779.88it/s]100%|██████████| 1349/1349 [00:00&lt;00:00, 5101.07it/s]
+  0%|          | 0/7 [00:00&lt;?, ?it/s]100%|██████████| 7/7 [00:00&lt;00:00, 1371.01it/s]
+</system-err></testcase><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="242" name="test_two_pd_alignment" time="0.533"><system-out>Creating RawArray with float64 data, n_channels=1, n_times=84876
     Range : 0 ... 84875 =      0.000 ...    84.875 secs
 Ready.
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ph549265/test-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ph549265/test-raw.fif [done]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ph549265/test-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ph549265/test-raw.fif...
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_lc_n03pv/test-raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_lc_n03pv/test-raw.fif [done]
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_lc_n03pv/test-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_lc_n03pv/test-raw.fif...
 Isotrak not found
     Range : 0 ... 84875 =      0.000 ...    84.875 secs
 Ready.
@@ -62,8 +62,8 @@ Checking best behavior-photodiode difference alignments
 Best alignment with the photodiode shifted 12 ms relative to the first behavior event
 errors: min -26, q1 -24, med -19, q3 14, max 29
 Excluding events that have zero close events or more than one photodiode event within `max_len` time
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ph549265/test-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ph549265/test-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_lc_n03pv/test-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_lc_n03pv/test-raw.fif...
 Isotrak not found
     Range : 0 ... 84875 =      0.000 ...    84.875 secs
 Ready.
@@ -75,20 +75,20 @@ Best alignment with the photodiode shifted 18 ms relative to the first behavior 
 errors: min -43, q1 -41, med -1, q3 0, max 46
 Excluding events that have zero close events or more than one photodiode event within `max_len` time
 Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Response&apos;]
-</system-out><system-err>  0%|          | 0/668 [00:00&lt;?, ?it/s] 78%|███████▊  | 518/668 [00:00&lt;00:00, 5172.70it/s]100%|██████████| 668/668 [00:00&lt;00:00, 5124.11it/s]
-  0%|          | 0/4 [00:00&lt;?, ?it/s]100%|██████████| 4/4 [00:00&lt;00:00, 2136.68it/s]
-  0%|          | 0/668 [00:00&lt;?, ?it/s] 79%|███████▊  | 526/668 [00:00&lt;00:00, 5257.94it/s]100%|██████████| 668/668 [00:00&lt;00:00, 5258.68it/s]
-  0%|          | 0/4 [00:00&lt;?, ?it/s]100%|██████████| 4/4 [00:00&lt;00:00, 2136.68it/s]
-</system-err></testcase><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="286" name="test_parse_pd" time="26.624"><system-out>Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif [done]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif...
+</system-out><system-err>  0%|          | 0/668 [00:00&lt;?, ?it/s] 77%|███████▋  | 514/668 [00:00&lt;00:00, 5132.00it/s]100%|██████████| 668/668 [00:00&lt;00:00, 4221.12it/s]
+  0%|          | 0/4 [00:00&lt;?, ?it/s]100%|██████████| 4/4 [00:00&lt;00:00, 704.13it/s]
+  0%|          | 0/668 [00:00&lt;?, ?it/s] 71%|███████   | 472/668 [00:00&lt;00:00, 4712.61it/s]100%|██████████| 668/668 [00:00&lt;00:00, 4858.01it/s]
+  0%|          | 0/4 [00:00&lt;?, ?it/s]100%|██████████| 4/4 [00:00&lt;00:00, 2100.83it/s]
+</system-err></testcase><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="286" name="test_parse_pd" time="23.501"><system-out>Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif [done]
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
@@ -110,48 +110,48 @@ Excluding event 226, off by 37 ms
 Excluding event 231, no event found
 Excluding event 256, no event found
 Excluding event 294, no event found
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif...
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Used Annotations descriptions: [&apos;Fixation&apos;]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
 Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Stim Off&apos;]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
 Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Go Cue&apos;, &apos;ISI Onset&apos;, &apos;Response&apos;, &apos;Stim Off&apos;]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-rawpd_raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-rawpd_raw.fif [done]
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-rawpd_raw.fif...
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-rawpd_raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-rawpd_raw.fif [done]
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-rawpd_raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Go Cue&apos;, &apos;ISI Onset&apos;, &apos;Response&apos;, &apos;Stim Off&apos;]
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif...
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Go Cue&apos;, &apos;ISI Onset&apos;, &apos;Response&apos;, &apos;Stim Off&apos;]
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/pd_data-raw.fif...
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
-Running subprocess: bids-validator --config.error=41 /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_irjr6_m5/bids_dir
+Running subprocess: bids-validator --config.error=41 /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_rd0ulfhz/bids_dir
 bids-validator@1.5.2
 
 
@@ -196,16 +196,16 @@ bids-validator@1.5.2
 
 
 
-</system-out><system-err>  0%|          | 0/22534 [00:00&lt;?, ?it/s]  2%|▏         | 443/22534 [00:00&lt;00:04, 4425.96it/s]  4%|▍         | 870/22534 [00:00&lt;00:04, 4377.59it/s]  6%|▌         | 1281/22534 [00:00&lt;00:04, 4292.47it/s]  8%|▊         | 1728/22534 [00:00&lt;00:04, 4343.06it/s]  9%|▉         | 2120/22534 [00:00&lt;00:04, 4206.76it/s] 11%|█▏        | 2548/22534 [00:00&lt;00:04, 4226.91it/s] 13%|█▎        | 2920/22534 [00:00&lt;00:04, 4051.64it/s] 15%|█▍        | 3378/22534 [00:00&lt;00:04, 4196.35it/s] 17%|█▋        | 3867/22534 [00:00&lt;00:04, 4382.26it/s] 19%|█▉        | 4292/22534 [00:01&lt;00:04, 4137.09it/s] 21%|██        | 4699/22534 [00:01&lt;00:05, 3389.90it/s] 22%|██▏       | 5056/22534 [00:01&lt;00:05, 3380.00it/s] 24%|██▍       | 5407/22534 [00:01&lt;00:05, 3342.01it/s] 26%|██▌       | 5750/22534 [00:01&lt;00:05, 3172.18it/s] 27%|██▋       | 6076/22534 [00:01&lt;00:05, 3154.13it/s] 29%|██▉       | 6507/22534 [00:01&lt;00:04, 3428.56it/s] 31%|███       | 6895/22534 [00:01&lt;00:04, 3552.02it/s] 32%|███▏      | 7259/22534 [00:01&lt;00:05, 2958.13it/s] 34%|███▎      | 7578/22534 [00:02&lt;00:05, 2966.30it/s] 35%|███▌      | 7891/22534 [00:02&lt;00:05, 2805.14it/s] 36%|███▋      | 8185/22534 [00:02&lt;00:05, 2666.43it/s] 38%|███▊      | 8463/22534 [00:02&lt;00:05, 2618.47it/s] 39%|███▉      | 8733/22534 [00:02&lt;00:05, 2303.68it/s] 40%|███▉      | 8976/22534 [00:02&lt;00:06, 2149.58it/s] 41%|████      | 9202/22534 [00:02&lt;00:06, 2135.29it/s] 42%|████▏     | 9423/22534 [00:02&lt;00:06, 2134.65it/s] 43%|████▎     | 9789/22534 [00:03&lt;00:05, 2437.58it/s] 45%|████▌     | 10239/22534 [00:03&lt;00:04, 2824.65it/s] 47%|████▋     | 10649/22534 [00:03&lt;00:03, 3114.65it/s] 49%|████▉     | 11083/22534 [00:03&lt;00:03, 3402.17it/s] 51%|█████     | 11496/22534 [00:03&lt;00:03, 3591.45it/s] 53%|█████▎    | 11949/22534 [00:03&lt;00:02, 3827.69it/s] 55%|█████▌    | 12399/22534 [00:03&lt;00:02, 4005.23it/s] 57%|█████▋    | 12817/22534 [00:03&lt;00:02, 4053.74it/s] 59%|█████▉    | 13240/22534 [00:03&lt;00:02, 4104.86it/s] 61%|██████    | 13660/22534 [00:03&lt;00:02, 3888.04it/s] 62%|██████▏   | 14058/22534 [00:04&lt;00:02, 3848.40it/s] 64%|██████▍   | 14480/22534 [00:04&lt;00:02, 3952.64it/s] 66%|██████▌   | 14882/22534 [00:04&lt;00:01, 3970.97it/s] 68%|██████▊   | 15283/22534 [00:04&lt;00:01, 3769.69it/s] 70%|██████▉   | 15665/22534 [00:04&lt;00:01, 3661.00it/s] 71%|███████   | 16047/22534 [00:04&lt;00:01, 3704.61it/s] 73%|███████▎  | 16421/22534 [00:04&lt;00:02, 2938.59it/s] 74%|███████▍  | 16742/22534 [00:04&lt;00:02, 2760.49it/s] 76%|███████▌  | 17040/22534 [00:05&lt;00:01, 2820.37it/s] 77%|███████▋  | 17338/22534 [00:05&lt;00:01, 2821.11it/s] 78%|███████▊  | 17671/22534 [00:05&lt;00:01, 2956.29it/s] 80%|███████▉  | 17976/22534 [00:05&lt;00:01, 2950.75it/s] 81%|████████  | 18278/22534 [00:05&lt;00:01, 2952.48it/s] 82%|████████▏ | 18578/22534 [00:05&lt;00:01, 2797.50it/s] 84%|████████▍ | 18888/22534 [00:05&lt;00:01, 2880.28it/s] 86%|████████▌ | 19338/22534 [00:05&lt;00:00, 3226.50it/s] 88%|████████▊ | 19759/22534 [00:05&lt;00:00, 3469.37it/s] 90%|█████████ | 20282/22534 [00:05&lt;00:00, 3858.83it/s] 92%|█████████▏| 20788/22534 [00:06&lt;00:00, 4153.75it/s] 94%|█████████▍| 21228/22534 [00:06&lt;00:00, 4152.62it/s] 96%|█████████▌| 21661/22534 [00:06&lt;00:00, 4171.75it/s] 98%|█████████▊| 22121/22534 [00:06&lt;00:00, 4289.09it/s]100%|██████████| 22534/22534 [00:06&lt;00:00, 3486.53it/s]
-  0%|          | 0/299 [00:00&lt;?, ?it/s]  2%|▏         | 6/299 [00:00&lt;00:05, 50.98it/s]  3%|▎         | 9/299 [00:00&lt;00:07, 36.26it/s]  4%|▍         | 12/299 [00:00&lt;00:08, 32.28it/s]  5%|▌         | 15/299 [00:00&lt;00:09, 29.87it/s]  6%|▋         | 19/299 [00:00&lt;00:09, 30.86it/s]  8%|▊         | 23/299 [00:00&lt;00:08, 32.49it/s]  9%|▊         | 26/299 [00:00&lt;00:09, 28.12it/s] 10%|█         | 30/299 [00:01&lt;00:09, 28.06it/s] 11%|█         | 33/299 [00:01&lt;00:09, 26.89it/s] 13%|█▎        | 38/299 [00:01&lt;00:08, 30.57it/s] 14%|█▍        | 42/299 [00:01&lt;00:09, 28.20it/s] 15%|█▌        | 45/299 [00:01&lt;00:09, 26.47it/s] 16%|█▌        | 48/299 [00:01&lt;00:09, 25.68it/s] 17%|█▋        | 52/299 [00:01&lt;00:08, 28.37it/s] 19%|█▊        | 56/299 [00:01&lt;00:08, 27.84it/s] 20%|█▉        | 59/299 [00:02&lt;00:09, 24.89it/s] 21%|██        | 62/299 [00:02&lt;00:09, 24.70it/s] 22%|██▏       | 65/299 [00:02&lt;00:08, 26.08it/s] 23%|██▎       | 68/299 [00:02&lt;00:08, 26.62it/s] 24%|██▎       | 71/299 [00:02&lt;00:08, 27.38it/s] 25%|██▍       | 74/299 [00:02&lt;00:08, 25.74it/s] 26%|██▌       | 77/299 [00:02&lt;00:08, 25.37it/s] 27%|██▋       | 80/299 [00:02&lt;00:08, 24.48it/s] 28%|██▊       | 83/299 [00:03&lt;00:08, 24.32it/s] 29%|██▉       | 86/299 [00:03&lt;00:08, 25.12it/s] 30%|██▉       | 89/299 [00:03&lt;00:08, 24.97it/s] 31%|███       | 92/299 [00:03&lt;00:08, 24.40it/s] 32%|███▏      | 95/299 [00:03&lt;00:07, 25.56it/s] 33%|███▎      | 98/299 [00:03&lt;00:07, 25.63it/s] 34%|███▍      | 101/299 [00:03&lt;00:07, 26.39it/s] 35%|███▍      | 104/299 [00:03&lt;00:07, 26.98it/s] 36%|███▌      | 107/299 [00:03&lt;00:07, 24.22it/s] 37%|███▋      | 110/299 [00:04&lt;00:07, 25.31it/s] 38%|███▊      | 113/299 [00:04&lt;00:07, 26.46it/s] 39%|███▉      | 116/299 [00:04&lt;00:06, 27.25it/s] 40%|███▉      | 119/299 [00:04&lt;00:06, 27.04it/s] 41%|████      | 123/299 [00:04&lt;00:06, 27.69it/s] 42%|████▏     | 127/299 [00:04&lt;00:06, 27.53it/s] 44%|████▍     | 131/299 [00:04&lt;00:05, 28.79it/s] 45%|████▌     | 135/299 [00:04&lt;00:05, 29.38it/s] 46%|████▌     | 138/299 [00:05&lt;00:05, 28.34it/s] 47%|████▋     | 141/299 [00:05&lt;00:05, 28.19it/s] 48%|████▊     | 144/299 [00:05&lt;00:05, 27.78it/s] 49%|████▉     | 148/299 [00:05&lt;00:05, 29.18it/s] 51%|█████     | 151/299 [00:05&lt;00:05, 26.40it/s] 52%|█████▏    | 154/299 [00:05&lt;00:06, 22.14it/s] 53%|█████▎    | 158/299 [00:05&lt;00:05, 25.02it/s] 54%|█████▍    | 162/299 [00:05&lt;00:05, 26.99it/s] 56%|█████▌    | 166/299 [00:06&lt;00:04, 27.67it/s] 57%|█████▋    | 171/299 [00:06&lt;00:04, 30.82it/s] 59%|█████▊    | 175/299 [00:06&lt;00:03, 32.98it/s] 60%|█████▉    | 179/299 [00:06&lt;00:03, 33.32it/s] 61%|██████    | 183/299 [00:06&lt;00:03, 33.51it/s] 63%|██████▎   | 187/299 [00:06&lt;00:03, 32.01it/s] 64%|██████▍   | 191/299 [00:06&lt;00:03, 31.72it/s] 65%|██████▌   | 195/299 [00:06&lt;00:03, 26.94it/s] 67%|██████▋   | 200/299 [00:07&lt;00:03, 30.66it/s] 69%|██████▊   | 205/299 [00:07&lt;00:02, 33.24it/s] 70%|██████▉   | 209/299 [00:07&lt;00:02, 34.74it/s] 71%|███████   | 213/299 [00:07&lt;00:02, 35.66it/s] 73%|███████▎  | 217/299 [00:07&lt;00:02, 34.58it/s] 74%|███████▍  | 221/299 [00:07&lt;00:02, 34.44it/s] 75%|███████▌  | 225/299 [00:07&lt;00:02, 32.62it/s] 77%|███████▋  | 229/299 [00:07&lt;00:02, 32.99it/s] 78%|███████▊  | 234/299 [00:08&lt;00:01, 35.48it/s] 80%|███████▉  | 239/299 [00:08&lt;00:01, 38.18it/s] 81%|████████▏ | 243/299 [00:08&lt;00:01, 37.81it/s] 83%|████████▎ | 247/299 [00:08&lt;00:01, 38.10it/s] 84%|████████▍ | 251/299 [00:08&lt;00:01, 35.12it/s] 85%|████████▌ | 255/299 [00:08&lt;00:01, 34.72it/s] 87%|████████▋ | 259/299 [00:08&lt;00:01, 34.32it/s] 89%|████████▉ | 266/299 [00:08&lt;00:00, 39.32it/s] 91%|█████████ | 272/299 [00:08&lt;00:00, 42.35it/s] 93%|█████████▎| 278/299 [00:09&lt;00:00, 45.45it/s] 96%|█████████▌| 286/299 [00:09&lt;00:00, 50.73it/s] 98%|█████████▊| 292/299 [00:09&lt;00:00, 47.99it/s]100%|█████████▉| 298/299 [00:09&lt;00:00, 45.03it/s]100%|██████████| 299/299 [00:09&lt;00:00, 31.43it/s]
+</system-out><system-err>  0%|          | 0/22534 [00:00&lt;?, ?it/s]  2%|▏         | 449/22534 [00:00&lt;00:04, 4419.08it/s]  3%|▎         | 679/22534 [00:00&lt;00:06, 3458.72it/s]  4%|▍         | 932/22534 [00:00&lt;00:06, 3112.11it/s]  5%|▌         | 1215/22534 [00:00&lt;00:07, 3020.28it/s]  7%|▋         | 1660/22534 [00:00&lt;00:06, 3341.68it/s]  9%|▉         | 2013/22534 [00:00&lt;00:06, 3394.87it/s] 10%|█         | 2319/22534 [00:00&lt;00:06, 3211.12it/s] 12%|█▏        | 2619/22534 [00:00&lt;00:06, 3126.95it/s] 14%|█▎        | 3079/22534 [00:00&lt;00:05, 3458.30it/s] 16%|█▌        | 3557/22534 [00:01&lt;00:05, 3761.38it/s] 17%|█▋        | 3942/22534 [00:01&lt;00:05, 3678.49it/s] 19%|█▉        | 4348/22534 [00:01&lt;00:04, 3784.41it/s] 21%|██▏       | 4797/22534 [00:01&lt;00:04, 3969.99it/s] 23%|██▎       | 5200/22534 [00:01&lt;00:04, 3953.30it/s] 25%|██▍       | 5600/22534 [00:01&lt;00:04, 3420.97it/s] 27%|██▋       | 6015/22534 [00:01&lt;00:04, 3610.78it/s] 29%|██▊       | 6459/22534 [00:01&lt;00:04, 3823.65it/s] 30%|███       | 6866/22534 [00:01&lt;00:04, 3894.10it/s] 32%|███▏      | 7281/22534 [00:01&lt;00:03, 3966.31it/s] 34%|███▍      | 7712/22534 [00:02&lt;00:03, 4063.15it/s] 36%|███▌      | 8164/22534 [00:02&lt;00:03, 4184.83it/s] 39%|███▊      | 8707/22534 [00:02&lt;00:03, 4493.48it/s] 41%|████      | 9241/22534 [00:02&lt;00:02, 4716.93it/s] 43%|████▎     | 9754/22534 [00:02&lt;00:02, 4832.56it/s] 45%|████▌     | 10245/22534 [00:02&lt;00:02, 4793.08it/s] 48%|████▊     | 10730/22534 [00:02&lt;00:02, 4736.98it/s] 50%|████▉     | 11217/22534 [00:02&lt;00:02, 4773.70it/s] 52%|█████▏    | 11716/22534 [00:02&lt;00:02, 4835.63it/s] 54%|█████▍    | 12208/22534 [00:02&lt;00:02, 4857.65it/s] 56%|█████▋    | 12714/22534 [00:03&lt;00:01, 4915.23it/s] 59%|█████▊    | 13234/22534 [00:03&lt;00:01, 4996.02it/s] 61%|██████    | 13800/22534 [00:03&lt;00:01, 5173.65it/s] 64%|██████▍   | 14369/22534 [00:03&lt;00:01, 5316.15it/s] 66%|██████▋   | 14943/22534 [00:03&lt;00:01, 5436.18it/s] 69%|██████▉   | 15514/22534 [00:03&lt;00:01, 5514.44it/s] 71%|███████▏  | 16085/22534 [00:03&lt;00:01, 5571.56it/s] 74%|███████▍  | 16647/22534 [00:03&lt;00:01, 5584.00it/s] 76%|███████▋  | 17219/22534 [00:03&lt;00:00, 5621.48it/s] 79%|███████▉  | 17790/22534 [00:03&lt;00:00, 5645.86it/s] 81%|████████▏ | 18357/22534 [00:04&lt;00:00, 5651.63it/s] 84%|████████▍ | 18923/22534 [00:04&lt;00:00, 5591.01it/s] 86%|████████▋ | 19483/22534 [00:04&lt;00:00, 5590.22it/s] 89%|████████▉ | 20048/22534 [00:04&lt;00:00, 5607.22it/s] 92%|█████████▏| 20625/22534 [00:04&lt;00:00, 5652.09it/s] 94%|█████████▍| 21191/22534 [00:04&lt;00:00, 5635.12it/s] 97%|█████████▋| 21758/22534 [00:04&lt;00:00, 5644.71it/s] 99%|█████████▉| 22323/22534 [00:04&lt;00:00, 5585.26it/s]100%|██████████| 22534/22534 [00:04&lt;00:00, 4656.47it/s]
+  0%|          | 0/299 [00:00&lt;?, ?it/s]  2%|▏         | 6/299 [00:00&lt;00:05, 53.39it/s]  3%|▎         | 9/299 [00:00&lt;00:07, 40.92it/s]  4%|▍         | 12/299 [00:00&lt;00:08, 35.77it/s]  5%|▌         | 15/299 [00:00&lt;00:08, 33.21it/s]  7%|▋         | 21/299 [00:00&lt;00:07, 35.63it/s]  8%|▊         | 25/299 [00:00&lt;00:07, 34.31it/s] 10%|▉         | 29/299 [00:00&lt;00:08, 33.25it/s] 11%|█         | 33/299 [00:00&lt;00:08, 30.72it/s] 13%|█▎        | 38/299 [00:01&lt;00:07, 34.34it/s] 14%|█▍        | 42/299 [00:01&lt;00:08, 30.65it/s] 15%|█▌        | 46/299 [00:01&lt;00:08, 29.11it/s] 16%|█▋        | 49/299 [00:01&lt;00:09, 27.56it/s] 18%|█▊        | 53/299 [00:01&lt;00:08, 29.86it/s] 19%|█▉        | 57/299 [00:01&lt;00:08, 29.62it/s] 20%|██        | 61/299 [00:01&lt;00:08, 27.67it/s] 22%|██▏       | 65/299 [00:02&lt;00:08, 28.48it/s] 23%|██▎       | 68/299 [00:02&lt;00:08, 28.58it/s] 24%|██▎       | 71/299 [00:02&lt;00:07, 28.89it/s] 25%|██▍       | 74/299 [00:02&lt;00:07, 28.24it/s] 26%|██▌       | 77/299 [00:02&lt;00:08, 27.32it/s] 27%|██▋       | 80/299 [00:02&lt;00:08, 26.80it/s] 28%|██▊       | 83/299 [00:02&lt;00:08, 26.37it/s] 29%|██▉       | 86/299 [00:02&lt;00:08, 26.16it/s] 30%|██▉       | 89/299 [00:02&lt;00:08, 25.26it/s] 31%|███       | 92/299 [00:03&lt;00:08, 23.62it/s] 32%|███▏      | 95/299 [00:03&lt;00:08, 22.79it/s] 33%|███▎      | 98/299 [00:03&lt;00:09, 21.65it/s] 34%|███▍      | 102/299 [00:03&lt;00:08, 23.67it/s] 35%|███▌      | 105/299 [00:03&lt;00:07, 24.52it/s] 36%|███▌      | 108/299 [00:03&lt;00:07, 23.97it/s] 37%|███▋      | 111/299 [00:04&lt;00:10, 18.63it/s] 38%|███▊      | 114/299 [00:04&lt;00:09, 20.09it/s] 39%|███▉      | 117/299 [00:04&lt;00:08, 22.13it/s] 40%|████      | 120/299 [00:04&lt;00:07, 23.59it/s] 41%|████      | 123/299 [00:04&lt;00:07, 24.51it/s] 42%|████▏     | 127/299 [00:04&lt;00:06, 26.11it/s] 44%|████▍     | 131/299 [00:04&lt;00:06, 27.60it/s] 45%|████▌     | 135/299 [00:04&lt;00:05, 28.54it/s] 46%|████▋     | 139/299 [00:05&lt;00:05, 28.73it/s] 47%|████▋     | 142/299 [00:05&lt;00:05, 28.97it/s] 49%|████▉     | 146/299 [00:05&lt;00:05, 30.35it/s] 50%|█████     | 150/299 [00:05&lt;00:04, 32.16it/s] 52%|█████▏    | 154/299 [00:05&lt;00:04, 32.82it/s] 53%|█████▎    | 159/299 [00:05&lt;00:04, 34.36it/s] 55%|█████▍    | 164/299 [00:05&lt;00:03, 36.60it/s] 56%|█████▌    | 168/299 [00:05&lt;00:03, 35.18it/s] 58%|█████▊    | 173/299 [00:05&lt;00:03, 37.58it/s] 60%|█████▉    | 178/299 [00:06&lt;00:03, 37.38it/s] 61%|██████    | 183/299 [00:06&lt;00:03, 38.17it/s] 63%|██████▎   | 188/299 [00:06&lt;00:02, 39.13it/s] 65%|██████▍   | 193/299 [00:06&lt;00:02, 39.81it/s] 66%|██████▌   | 198/299 [00:06&lt;00:02, 39.62it/s] 68%|██████▊   | 203/299 [00:06&lt;00:02, 40.77it/s] 70%|██████▉   | 208/299 [00:06&lt;00:02, 42.28it/s] 71%|███████   | 213/299 [00:06&lt;00:02, 41.63it/s] 73%|███████▎  | 218/299 [00:07&lt;00:02, 39.43it/s] 74%|███████▍  | 222/299 [00:07&lt;00:01, 39.51it/s] 76%|███████▌  | 226/299 [00:07&lt;00:02, 34.52it/s] 77%|███████▋  | 231/299 [00:07&lt;00:01, 37.99it/s] 79%|███████▉  | 236/299 [00:07&lt;00:01, 38.70it/s] 81%|████████  | 242/299 [00:07&lt;00:01, 40.26it/s] 83%|████████▎ | 247/299 [00:07&lt;00:01, 40.85it/s] 84%|████████▍ | 252/299 [00:07&lt;00:01, 38.44it/s] 86%|████████▌ | 257/299 [00:08&lt;00:01, 38.47it/s] 88%|████████▊ | 262/299 [00:08&lt;00:00, 40.50it/s] 90%|████████▉ | 269/299 [00:08&lt;00:00, 45.69it/s] 92%|█████████▏| 275/299 [00:08&lt;00:00, 48.89it/s] 95%|█████████▍| 283/299 [00:08&lt;00:00, 55.12it/s] 97%|█████████▋| 289/299 [00:08&lt;00:00, 55.16it/s] 99%|█████████▊| 295/299 [00:08&lt;00:00, 49.25it/s]100%|██████████| 299/299 [00:08&lt;00:00, 33.75it/s]
 Exception ignored in: &lt;_io.FileIO name=22 mode=&apos;rb&apos; closefd=True&gt;
 ResourceWarning: unclosed file &lt;_io.BufferedReader name=22&gt;
 Exception ignored in: &lt;_io.FileIO name=24 mode=&apos;rb&apos; closefd=True&gt;
 ResourceWarning: unclosed file &lt;_io.BufferedReader name=24&gt;
-</system-err></testcase><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="342" name="test_cli" time="29.336"><system-out>Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif [done]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif...
+</system-err></testcase><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="342" name="test_cli" time="26.639"><system-out>Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif [done]
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
@@ -225,39 +225,39 @@ Excluding event 225, off by -51 ms
 Excluding event 231, no event found
 Excluding event 256, no event found
 Excluding event 294, no event found
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-rawpd_raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-rawpd_raw.fif [done]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif...
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-rawpd_raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-rawpd_raw.fif [done]
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Go Cue&apos;, &apos;ISI Onset&apos;, &apos;Response&apos;, &apos;StimOff&apos;]
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/pd_data-raw.fif...
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
-Creating folder: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/sub-1/ieeg
+Creating folder: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/sub-1/ieeg
 
-Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/README&apos;...
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/README&apos;...
 
 References
 ----------
@@ -266,12 +266,12 @@ Appelhoff, S., Sanderson, M., Brooks, T., Vliet, M., Quentin, R., Holdgraf, C., 
 Holdgraf, C., Appelhoff, S., Bickel, S., Bouchard, K., D&apos;Ambrosio, S., David, O., … Hermes, D. (2019). iEEG-BIDS, extending the Brain Imaging Data Structure specification to human intracranial electrophysiology. Scientific Data, 6, 102. https://doi.org/10.1038/s41597-019-0105-7
 
 
-Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/participants.tsv&apos;...
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/participants.tsv&apos;...
 
 participant_id	age	sex	hand
 sub-1	n/a	n/a	n/a
 
-Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/participants.json&apos;...
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/participants.json&apos;...
 
 {
     &quot;participant_id&quot;: {
@@ -298,7 +298,7 @@ Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q
     }
 }
 
-Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/sub-1/ieeg/sub-1_task-test_events.tsv&apos;...
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/sub-1/ieeg/sub-1_task-test_events.tsv&apos;...
 
 onset	duration	trial_type	value	sample
 210.7579025950803	0.0	Fixation	1	210634
@@ -307,7 +307,7 @@ onset	duration	trial_type	value	sample
 212.18974436143122	0.0	Go Cue	2	212065
 212.5599620089154	0.0	Response	4	212435
 
-Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/dataset_description.json&apos;...
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/dataset_description.json&apos;...
 
 {
     &quot;Name&quot;: &quot; &quot;,
@@ -318,7 +318,7 @@ Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q
     ]
 }
 
-Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/sub-1/ieeg/sub-1_task-test_ieeg.json&apos;...
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/sub-1/ieeg/sub-1_task-test_ieeg.json&apos;...
 
 {
     &quot;TaskName&quot;: &quot;test&quot;,
@@ -339,7 +339,7 @@ Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q
     &quot;TriggerChannelCount&quot;: 1
 }
 
-Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/sub-1/ieeg/sub-1_task-test_channels.tsv&apos;...
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/sub-1/ieeg/sub-1_task-test_channels.tsv&apos;...
 
 name	type	units	low_cutoff	high_cutoff	description	sampling_frequency	status	status_description
 pd	TRIG	n/a	0.0	499.7060546875	Trigger	999.412109375	good	n/a
@@ -347,17 +347,17 @@ ch1	SEEG	V	0.0	499.7060546875	StereoEEG	999.412109375	good	n/a
 ch2	SEEG	V	0.0	499.7060546875	StereoEEG	999.412109375	good	n/a
 ch3	SEEG	V	0.0	499.7060546875	StereoEEG	999.412109375	good	n/a
 
-Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/sub-1/sub-1_scans.tsv&apos;...
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/sub-1/sub-1_scans.tsv&apos;...
 
 filename	acq_time
 ieeg/sub-1_task-test_ieeg.vhdr	n/a
-Wrote /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_q2s6g5u1/bids_dir/sub-1/sub-1_scans.tsv entry with ieeg/sub-1_task-test_ieeg.vhdr.
+Wrote /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_4t84a889/bids_dir/sub-1/sub-1_scans.tsv entry with ieeg/sub-1_task-test_ieeg.vhdr.
 </system-out><system-err>  0%|          | 0/22534 [00:00&lt;?, ?it/s]/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:153: RuntimeWarning: divide by zero encountered in true_divide
   s = (pd[i:i + 2 * max_len_i] - np.median(b)) / np.std(b)
 /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:153: RuntimeWarning: invalid value encountered in true_divide
   s = (pd[i:i + 2 * max_len_i] - np.median(b)) / np.std(b)
-  1%|          | 228/22534 [00:00&lt;00:09, 2274.95it/s]  2%|▏         | 414/22534 [00:00&lt;00:10, 2130.61it/s]  2%|▏         | 518/22534 [00:00&lt;00:14, 1496.33it/s]  3%|▎         | 660/22534 [00:00&lt;00:14, 1471.72it/s]  4%|▍         | 860/22534 [00:00&lt;00:13, 1597.79it/s]  5%|▌         | 1233/22534 [00:00&lt;00:11, 1928.35it/s]  7%|▋         | 1643/22534 [00:00&lt;00:09, 2292.23it/s]  8%|▊         | 1912/22534 [00:00&lt;00:08, 2343.59it/s] 11%|█         | 2414/22534 [00:00&lt;00:07, 2782.93it/s] 13%|█▎        | 2845/22534 [00:01&lt;00:06, 3111.12it/s] 14%|█▍        | 3207/22534 [00:01&lt;00:07, 2612.14it/s] 16%|█▌        | 3517/22534 [00:01&lt;00:07, 2686.23it/s] 17%|█▋        | 3849/22534 [00:01&lt;00:06, 2848.90it/s] 18%|█▊        | 4161/22534 [00:01&lt;00:06, 2868.48it/s] 20%|█▉        | 4468/22534 [00:01&lt;00:06, 2925.17it/s] 21%|██▏       | 4836/22534 [00:01&lt;00:05, 3116.37it/s] 23%|██▎       | 5161/22534 [00:01&lt;00:05, 3142.48it/s] 25%|██▍       | 5532/22534 [00:01&lt;00:05, 3292.69it/s] 26%|██▌       | 5870/22534 [00:02&lt;00:05, 2918.90it/s] 28%|██▊       | 6243/22534 [00:02&lt;00:05, 3121.86it/s] 30%|██▉       | 6673/22534 [00:02&lt;00:04, 3400.82it/s] 32%|███▏      | 7163/22534 [00:02&lt;00:04, 3743.14it/s] 34%|███▍      | 7656/22534 [00:02&lt;00:03, 4033.18it/s] 36%|███▌      | 8082/22534 [00:02&lt;00:03, 3977.45it/s] 38%|███▊      | 8623/22534 [00:02&lt;00:03, 4320.29it/s] 41%|████      | 9141/22534 [00:02&lt;00:02, 4545.48it/s] 43%|████▎     | 9653/22534 [00:02&lt;00:02, 4702.28it/s] 45%|████▍     | 10137/22534 [00:02&lt;00:02, 4734.17it/s] 47%|████▋     | 10620/22534 [00:03&lt;00:02, 4754.57it/s] 49%|████▉     | 11102/22534 [00:03&lt;00:02, 4652.57it/s] 51%|█████▏    | 11573/22534 [00:03&lt;00:02, 4628.27it/s] 53%|█████▎    | 12040/22534 [00:03&lt;00:02, 4582.66it/s] 56%|█████▌    | 12509/22534 [00:03&lt;00:02, 4610.75it/s] 58%|█████▊    | 12999/22534 [00:03&lt;00:02, 4693.17it/s] 60%|█████▉    | 13481/22534 [00:03&lt;00:01, 4729.04it/s] 62%|██████▏   | 13956/22534 [00:03&lt;00:01, 4690.02it/s] 64%|██████▍   | 14426/22534 [00:03&lt;00:01, 4610.91it/s] 66%|██████▌   | 14890/22534 [00:04&lt;00:01, 4618.66it/s] 68%|██████▊   | 15353/22534 [00:04&lt;00:01, 4374.54it/s] 70%|███████   | 15802/22534 [00:04&lt;00:01, 4407.91it/s] 72%|███████▏  | 16246/22534 [00:04&lt;00:01, 4256.50it/s] 74%|███████▍  | 16675/22534 [00:04&lt;00:01, 4229.62it/s] 76%|███████▌  | 17156/22534 [00:04&lt;00:01, 4387.58it/s] 78%|███████▊  | 17664/22534 [00:04&lt;00:01, 4571.98it/s] 81%|████████  | 18158/22534 [00:04&lt;00:00, 4675.88it/s] 83%|████████▎ | 18629/22534 [00:04&lt;00:00, 4494.62it/s] 85%|████████▍ | 19083/22534 [00:04&lt;00:00, 4450.45it/s] 87%|████████▋ | 19557/22534 [00:05&lt;00:00, 4531.11it/s] 89%|████████▉ | 20047/22534 [00:05&lt;00:00, 4633.93it/s] 91%|█████████ | 20513/22534 [00:05&lt;00:00, 4583.53it/s] 93%|█████████▎| 20974/22534 [00:05&lt;00:00, 4516.50it/s] 95%|█████████▌| 21428/22534 [00:05&lt;00:00, 4411.16it/s] 97%|█████████▋| 21871/22534 [00:05&lt;00:00, 4285.15it/s] 99%|█████████▉| 22329/22534 [00:05&lt;00:00, 4369.26it/s]100%|██████████| 22534/22534 [00:05&lt;00:00, 3918.88it/s]
-  0%|          | 0/299 [00:00&lt;?, ?it/s]  2%|▏         | 6/299 [00:00&lt;00:05, 51.24it/s]  3%|▎         | 9/299 [00:00&lt;00:07, 38.07it/s]  4%|▍         | 12/299 [00:00&lt;00:08, 33.97it/s]  5%|▌         | 15/299 [00:00&lt;00:08, 31.91it/s]  6%|▋         | 19/299 [00:00&lt;00:08, 33.81it/s]  7%|▋         | 22/299 [00:00&lt;00:08, 30.82it/s]  8%|▊         | 25/299 [00:00&lt;00:08, 30.47it/s]  9%|▉         | 28/299 [00:00&lt;00:09, 28.46it/s] 10%|█         | 31/299 [00:01&lt;00:09, 28.86it/s] 12%|█▏        | 35/299 [00:01&lt;00:08, 31.09it/s] 13%|█▎        | 39/299 [00:01&lt;00:08, 30.27it/s] 14%|█▍        | 43/299 [00:01&lt;00:09, 27.66it/s] 15%|█▌        | 46/299 [00:01&lt;00:09, 26.46it/s] 16%|█▋        | 49/299 [00:01&lt;00:09, 25.80it/s] 18%|█▊        | 53/299 [00:01&lt;00:08, 28.10it/s] 19%|█▉        | 57/299 [00:01&lt;00:08, 27.23it/s] 20%|██        | 60/299 [00:02&lt;00:09, 26.24it/s] 21%|██        | 63/299 [00:02&lt;00:08, 27.21it/s] 22%|██▏       | 66/299 [00:02&lt;00:08, 27.25it/s] 23%|██▎       | 69/299 [00:02&lt;00:08, 27.59it/s] 24%|██▍       | 72/299 [00:02&lt;00:08, 26.02it/s] 25%|██▌       | 75/299 [00:02&lt;00:09, 24.66it/s] 26%|██▌       | 78/299 [00:02&lt;00:09, 24.14it/s] 27%|██▋       | 81/299 [00:02&lt;00:08, 24.61it/s] 28%|██▊       | 84/299 [00:03&lt;00:08, 24.60it/s] 29%|██▉       | 87/299 [00:03&lt;00:08, 25.71it/s] 30%|███       | 90/299 [00:03&lt;00:08, 25.33it/s] 31%|███       | 93/299 [00:03&lt;00:08, 25.55it/s] 32%|███▏      | 96/299 [00:03&lt;00:07, 26.34it/s] 33%|███▎      | 99/299 [00:03&lt;00:07, 26.54it/s] 34%|███▍      | 103/299 [00:03&lt;00:06, 28.56it/s] 35%|███▌      | 106/299 [00:03&lt;00:06, 28.68it/s] 36%|███▋      | 109/299 [00:03&lt;00:06, 28.37it/s] 38%|███▊      | 113/299 [00:04&lt;00:06, 29.40it/s] 39%|███▉      | 116/299 [00:04&lt;00:06, 28.77it/s] 40%|███▉      | 119/299 [00:04&lt;00:06, 27.65it/s] 41%|████      | 122/299 [00:04&lt;00:06, 25.30it/s] 42%|████▏     | 125/299 [00:04&lt;00:06, 26.27it/s] 43%|████▎     | 128/299 [00:04&lt;00:06, 26.87it/s] 44%|████▍     | 132/299 [00:04&lt;00:05, 28.25it/s] 45%|████▌     | 135/299 [00:04&lt;00:05, 28.73it/s] 46%|████▌     | 138/299 [00:04&lt;00:05, 28.71it/s] 47%|████▋     | 141/299 [00:05&lt;00:05, 28.59it/s] 48%|████▊     | 144/299 [00:05&lt;00:05, 27.68it/s] 49%|████▉     | 148/299 [00:05&lt;00:05, 28.90it/s] 51%|█████     | 152/299 [00:05&lt;00:04, 30.24it/s] 52%|█████▏    | 156/299 [00:05&lt;00:04, 30.81it/s] 54%|█████▎    | 160/299 [00:05&lt;00:04, 31.94it/s] 55%|█████▌    | 165/299 [00:05&lt;00:04, 33.50it/s] 57%|█████▋    | 169/299 [00:05&lt;00:03, 33.78it/s] 58%|█████▊    | 173/299 [00:05&lt;00:03, 34.63it/s] 59%|█████▉    | 177/299 [00:06&lt;00:03, 34.32it/s] 61%|██████    | 181/299 [00:06&lt;00:03, 34.09it/s] 62%|██████▏   | 185/299 [00:06&lt;00:03, 32.15it/s] 63%|██████▎   | 189/299 [00:06&lt;00:03, 34.15it/s] 65%|██████▍   | 193/299 [00:06&lt;00:03, 34.39it/s] 66%|██████▌   | 197/299 [00:06&lt;00:02, 34.26it/s] 68%|██████▊   | 202/299 [00:06&lt;00:02, 36.87it/s] 69%|██████▉   | 207/299 [00:06&lt;00:02, 38.49it/s] 71%|███████   | 211/299 [00:07&lt;00:02, 38.38it/s] 72%|███████▏  | 215/299 [00:07&lt;00:02, 34.28it/s] 73%|███████▎  | 219/299 [00:07&lt;00:02, 35.39it/s] 75%|███████▍  | 223/299 [00:07&lt;00:02, 34.77it/s] 76%|███████▌  | 227/299 [00:07&lt;00:02, 33.72it/s] 78%|███████▊  | 232/299 [00:07&lt;00:01, 36.43it/s] 79%|███████▉  | 236/299 [00:07&lt;00:01, 34.82it/s] 81%|████████  | 241/299 [00:07&lt;00:01, 37.73it/s] 82%|████████▏ | 245/299 [00:07&lt;00:01, 38.34it/s] 83%|████████▎ | 249/299 [00:08&lt;00:01, 37.07it/s] 85%|████████▍ | 253/299 [00:08&lt;00:01, 33.79it/s] 86%|████████▌ | 257/299 [00:08&lt;00:01, 34.26it/s] 87%|████████▋ | 261/299 [00:08&lt;00:01, 35.10it/s] 90%|████████▉ | 269/299 [00:08&lt;00:00, 40.16it/s] 92%|█████████▏| 275/299 [00:08&lt;00:00, 43.29it/s] 94%|█████████▍| 282/299 [00:08&lt;00:00, 48.62it/s] 96%|█████████▋| 288/299 [00:08&lt;00:00, 49.22it/s] 98%|█████████▊| 294/299 [00:09&lt;00:00, 45.95it/s]100%|██████████| 299/299 [00:09&lt;00:00, 41.50it/s]100%|██████████| 299/299 [00:09&lt;00:00, 32.40it/s]
+  2%|▏         | 514/22534 [00:00&lt;00:04, 5137.33it/s]  4%|▍         | 991/22534 [00:00&lt;00:04, 5020.25it/s]  7%|▋         | 1511/22534 [00:00&lt;00:04, 5070.53it/s]  9%|▉         | 2064/22534 [00:00&lt;00:03, 5199.14it/s] 12%|█▏        | 2615/22534 [00:00&lt;00:03, 5286.69it/s] 14%|█▍        | 3159/22534 [00:00&lt;00:03, 5330.64it/s] 16%|█▋        | 3685/22534 [00:00&lt;00:03, 5309.09it/s] 19%|█▉        | 4238/22534 [00:00&lt;00:03, 5371.98it/s] 21%|██▏       | 4798/22534 [00:00&lt;00:03, 5436.42it/s] 24%|██▍       | 5355/22534 [00:01&lt;00:03, 5472.70it/s] 26%|██▋       | 5918/22534 [00:01&lt;00:03, 5517.19it/s] 29%|██▊       | 6460/22534 [00:01&lt;00:02, 5473.60it/s] 31%|███       | 7006/22534 [00:01&lt;00:02, 5468.25it/s] 34%|███▎      | 7556/22534 [00:01&lt;00:02, 5476.62it/s] 36%|███▌      | 8114/22534 [00:01&lt;00:02, 5505.65it/s] 38%|███▊      | 8669/22534 [00:01&lt;00:02, 5518.72it/s] 41%|████      | 9230/22534 [00:01&lt;00:02, 5543.68it/s] 43%|████▎     | 9784/22534 [00:01&lt;00:02, 5423.63it/s] 46%|████▌     | 10327/22534 [00:01&lt;00:02, 5409.19it/s] 48%|████▊     | 10868/22534 [00:02&lt;00:02, 5388.93it/s] 51%|█████     | 11407/22534 [00:02&lt;00:02, 5359.18it/s] 53%|█████▎    | 11943/22534 [00:02&lt;00:02, 5282.51it/s] 55%|█████▌    | 12472/22534 [00:02&lt;00:01, 5265.53it/s] 58%|█████▊    | 13000/22534 [00:02&lt;00:01, 5267.01it/s] 60%|██████    | 13538/22534 [00:02&lt;00:01, 5300.12it/s] 63%|██████▎   | 14086/22534 [00:02&lt;00:01, 5351.45it/s] 65%|██████▍   | 14631/22534 [00:02&lt;00:01, 5379.73it/s] 67%|██████▋   | 15185/22534 [00:02&lt;00:01, 5424.17it/s] 70%|██████▉   | 15732/22534 [00:02&lt;00:01, 5435.23it/s] 72%|███████▏  | 16276/22534 [00:03&lt;00:01, 5396.32it/s] 75%|███████▍  | 16816/22534 [00:03&lt;00:01, 5369.11it/s] 77%|███████▋  | 17354/22534 [00:03&lt;00:00, 5348.50it/s] 79%|███████▉  | 17903/22534 [00:03&lt;00:00, 5387.05it/s] 82%|████████▏ | 18444/22534 [00:03&lt;00:00, 5393.22it/s] 84%|████████▍ | 19000/22534 [00:03&lt;00:00, 5442.16it/s] 87%|████████▋ | 19545/22534 [00:03&lt;00:00, 5436.45it/s] 89%|████████▉ | 20089/22534 [00:03&lt;00:00, 5425.98it/s] 92%|█████████▏| 20642/22534 [00:03&lt;00:00, 5456.01it/s] 94%|█████████▍| 21188/22534 [00:03&lt;00:00, 5429.56it/s] 96%|█████████▋| 21732/22534 [00:04&lt;00:00, 5392.24it/s] 99%|█████████▉| 22272/22534 [00:04&lt;00:00, 5331.58it/s]100%|██████████| 22534/22534 [00:04&lt;00:00, 5383.74it/s]
+  0%|          | 0/299 [00:00&lt;?, ?it/s]  2%|▏         | 6/299 [00:00&lt;00:05, 53.91it/s]  3%|▎         | 9/299 [00:00&lt;00:06, 41.53it/s]  4%|▍         | 12/299 [00:00&lt;00:08, 35.58it/s]  5%|▌         | 15/299 [00:00&lt;00:08, 33.03it/s]  7%|▋         | 20/299 [00:00&lt;00:07, 36.66it/s]  8%|▊         | 24/299 [00:00&lt;00:07, 34.81it/s]  9%|▉         | 28/299 [00:00&lt;00:08, 31.10it/s] 11%|█         | 32/299 [00:00&lt;00:08, 31.32it/s] 12%|█▏        | 37/299 [00:01&lt;00:07, 34.74it/s] 14%|█▎        | 41/299 [00:01&lt;00:08, 31.08it/s] 15%|█▌        | 45/299 [00:01&lt;00:08, 29.00it/s] 16%|█▌        | 48/299 [00:01&lt;00:09, 27.87it/s] 17%|█▋        | 52/299 [00:01&lt;00:08, 30.61it/s] 19%|█▊        | 56/299 [00:01&lt;00:07, 30.41it/s] 20%|██        | 60/299 [00:01&lt;00:08, 28.77it/s] 21%|██▏       | 64/299 [00:02&lt;00:07, 29.47it/s] 23%|██▎       | 68/299 [00:02&lt;00:07, 29.31it/s] 24%|██▍       | 72/299 [00:02&lt;00:07, 29.43it/s] 25%|██▌       | 75/299 [00:02&lt;00:07, 28.72it/s] 26%|██▌       | 78/299 [00:02&lt;00:08, 27.48it/s] 27%|██▋       | 81/299 [00:02&lt;00:07, 27.33it/s] 28%|██▊       | 84/299 [00:02&lt;00:07, 26.91it/s] 29%|██▉       | 87/299 [00:02&lt;00:07, 27.43it/s] 30%|███       | 90/299 [00:02&lt;00:07, 27.16it/s] 31%|███       | 93/299 [00:03&lt;00:07, 27.63it/s] 32%|███▏      | 96/299 [00:03&lt;00:07, 28.26it/s] 33%|███▎      | 99/299 [00:03&lt;00:07, 27.89it/s] 34%|███▍      | 103/299 [00:03&lt;00:06, 29.67it/s] 36%|███▌      | 107/299 [00:03&lt;00:06, 29.78it/s] 37%|███▋      | 111/299 [00:03&lt;00:06, 30.13it/s] 38%|███▊      | 115/299 [00:03&lt;00:05, 30.72it/s] 40%|███▉      | 119/299 [00:03&lt;00:05, 30.75it/s] 41%|████      | 123/299 [00:04&lt;00:05, 30.76it/s] 42%|████▏     | 127/299 [00:04&lt;00:05, 31.53it/s] 44%|████▍     | 131/299 [00:04&lt;00:05, 32.34it/s] 45%|████▌     | 135/299 [00:04&lt;00:05, 32.55it/s] 46%|████▋     | 139/299 [00:04&lt;00:05, 31.58it/s] 48%|████▊     | 143/299 [00:04&lt;00:05, 31.10it/s] 49%|████▉     | 147/299 [00:04&lt;00:04, 32.22it/s] 51%|█████     | 151/299 [00:04&lt;00:04, 33.86it/s] 52%|█████▏    | 155/299 [00:05&lt;00:04, 34.28it/s] 53%|█████▎    | 159/299 [00:05&lt;00:03, 35.30it/s] 55%|█████▍    | 164/299 [00:05&lt;00:03, 37.44it/s] 56%|█████▌    | 168/299 [00:05&lt;00:03, 36.01it/s] 58%|█████▊    | 173/299 [00:05&lt;00:03, 38.39it/s] 60%|█████▉    | 178/299 [00:05&lt;00:03, 38.25it/s] 61%|██████    | 183/299 [00:05&lt;00:02, 38.81it/s] 63%|██████▎   | 188/299 [00:05&lt;00:02, 39.76it/s] 65%|██████▍   | 193/299 [00:05&lt;00:02, 40.25it/s] 66%|██████▌   | 198/299 [00:06&lt;00:02, 40.10it/s] 68%|██████▊   | 203/299 [00:06&lt;00:02, 41.51it/s] 70%|██████▉   | 208/299 [00:06&lt;00:02, 42.92it/s] 71%|███████   | 213/299 [00:06&lt;00:02, 41.84it/s] 73%|███████▎  | 218/299 [00:06&lt;00:02, 39.70it/s] 75%|███████▍  | 223/299 [00:06&lt;00:01, 38.47it/s] 76%|███████▌  | 227/299 [00:06&lt;00:01, 36.98it/s] 78%|███████▊  | 233/299 [00:06&lt;00:01, 38.84it/s] 80%|███████▉  | 239/299 [00:07&lt;00:01, 42.16it/s] 82%|████████▏ | 244/299 [00:07&lt;00:01, 42.23it/s] 83%|████████▎ | 249/299 [00:07&lt;00:01, 39.81it/s] 85%|████████▍ | 254/299 [00:07&lt;00:01, 37.43it/s] 87%|████████▋ | 259/299 [00:07&lt;00:01, 38.37it/s] 89%|████████▉ | 266/299 [00:07&lt;00:00, 43.84it/s] 91%|█████████ | 272/299 [00:07&lt;00:00, 46.79it/s] 93%|█████████▎| 278/299 [00:07&lt;00:00, 49.80it/s] 96%|█████████▌| 286/299 [00:08&lt;00:00, 54.62it/s] 98%|█████████▊| 292/299 [00:08&lt;00:00, 51.55it/s]100%|█████████▉| 298/299 [00:08&lt;00:00, 47.72it/s]100%|██████████| 299/299 [00:08&lt;00:00, 35.87it/s]
 /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:879: RuntimeWarning: The unit for channel(s) pd has changed from V to NA.
   raw.set_channel_types({ch: &apos;stim&apos; for ch in pd_channels
 /Users/alexrockhill/software/mne-bids/mne_bids/write.py:1115: RuntimeWarning: Converting data files to BrainVision format

@@ -1,6 +1,0 @@
-﻿pd\_parser.simulate\_pd\_data
-=============================
-
-.. currentmodule:: pd_parser
-
-.. autofunction:: simulate_pd_data
