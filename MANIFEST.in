@@ -15,6 +15,7 @@ include pd_parser/tests/data/pd_data.tsv
 include pd_parser/tests/data/events.tsv
 include examples/README.txt
 include examples/plot_find_pd_events.py
+include examples/plot_find_pd_on_and_off.py
 include pd_parser/tests/data/pd_beh.tsv
 include pd_parser/tests/data/pd_data-raw.fif
 include pd_parser/tests/data/pd_events.tsv
