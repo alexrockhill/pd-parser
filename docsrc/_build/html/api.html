@@ -344,7 +344,7 @@ of the function.</p>
 <p>Simulate data that is a square wave with a linear change in deflection
 <cite>drift</cite> amount towards zero that then over shoots and drifts back as
 photodiodes tend to do. Some events are also corrupted.</p>
-<dl class="field-list simple">
+<dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n_events</strong><span class="classifier">float</span></dt><dd><p>The number of events to simulate.</p>
@@ -371,19 +371,19 @@ over time with no external simulus (0. == perfect square wave).</p>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><dl class="simple">
+<dd class="field-even"><dl>
 <dt><strong>raw</strong><span class="classifier">mne.io.Raw</span></dt><dd><p>The raw object containing the photodiode data</p>
 </dd>
-<dt><strong>beh_df</strong><span class="classifier">dict</span></dt><dd><dl class="simple">
-<dt>A dictionary with columns:</dt><dd><dl class="simple">
-<dt>‘trial’<span class="classifier">int</span></dt><dd><p>The index of the event.</p>
+<dt><strong>beh_df</strong><span class="classifier">dict</span></dt><dd><p>A dictionary with columns:</p>
+<blockquote>
+<div><dl class="simple">
+<dt><cite>trial</cite><span class="classifier">int</span></dt><dd><p>The index of the event.</p>
 </dd>
-<dt>‘time’<span class="classifier">float</span></dt><dd><p>The time that both the corrupted and uncorrupted events
-occurred in seconds</p>
+<dt><cite>time</cite><span class="classifier">float</span></dt><dd><p>The time that both the corrupted and uncorrupted events
+occurred in seconds.</p>
 </dd>
 </dl>
-</dd>
-</dl>
+</div></blockquote>
 </dd>
 <dt><strong>events</strong><span class="classifier">np.array</span></dt><dd><p>The uncorrupted events where the first column is the time stamp,
 the second column is unused (zero) and the third column is the

@@ -937,11 +937,14 @@ def simulate_pd_data(n_events=10, n_secs_on=1.0, amp=300., iti=6.,
         The raw object containing the photodiode data
     beh_df : dict
         A dictionary with columns:
-            'trial' : int
+
+            `trial` : int
                 The index of the event.
-            'time' : float
+
+            `time` : float
                 The time that both the corrupted and uncorrupted events
-                occurred in seconds
+                occurred in seconds.
+
     events : np.array
         The uncorrupted events where the first column is the time stamp,
         the second column is unused (zero) and the third column is the
