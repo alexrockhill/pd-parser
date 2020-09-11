@@ -21,7 +21,7 @@ add_pd_events_to_raw
 
 .. rst-class:: callout
 
-usage: ``add_pd_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``add_pd_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--drop_pd_channels DROP_PD_CHANNELS] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------
@@ -36,6 +36,9 @@ optional arguments
 
 
 --out_fname OUT_FNAME		The name to save out the new raw file out to
+
+
+--drop_pd_channels DROP_PD_CHANNELS		Whether to drop the channels with the photodiode data.
 
 
 --verbose VERBOSE		Set verbose output to True or False.
@@ -129,7 +132,7 @@ parse_pd
 
 .. rst-class:: callout
 
-usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--resync RESYNC] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--chunk CHUNK] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--add_events ADD_EVENTS] [--verbose VERBOSE] [--overwrite OVERWRITE]``
 
 positional arguments
 --------------------
@@ -158,6 +161,9 @@ optional arguments
 --exclude_shift EXCLUDE_SHIFT		How many seconds off to exclude a photodiode- behavioral event difference
 
 
+--resync RESYNC		How large of a difference to use to resynchronize events. This is for when events are off but not by much and so they should be excluded but are still needed to fit an alignment.Increase if the alignment is failing because too many events are being excluded, decrease to speed up execution.
+
+
 --chunk CHUNK		How large to window the photodiode events, should >> 2 * longest event. but cannot contain multiple events. e.g. if the photodiode is on for 100 samples at 500 Hz sampling rate, then 2 seconds should be a good chunk, if it's on for 500 samples then 10 seconds will be better. Note: each chunk cannot contain multiple events or it won't work so the events must be at least chunk seconds away from each other. Use `find_pd_params` to determine if unsure.
 
 
@@ -170,7 +176,7 @@ optional arguments
 --baseline BASELINE		How much relative to the chunkto use to idenify the time before the photodiode event. Probably don't change but increasing will reduce false-positives and decreasing will reduce false-negatives.
 
 
---resync RESYNC		How large of a difference to use to resynchronize events. This is for when events are off but not by much and so they should be excluded but are still needed to fit an alignment.Increase if the alignment is failing because too many events are being excluded, decrease to speed up execution.
+--add_events ADD_EVENTS		Whether to run the parser a second time to add more events from deflections corresponding to multiple events on the same channel
 
 
 --verbose VERBOSE		Set verbose output to True or False.

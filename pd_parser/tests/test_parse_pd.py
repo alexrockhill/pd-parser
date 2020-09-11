@@ -11,6 +11,7 @@ import os
 import os.path as op
 import numpy as np
 import platform
+from subprocess import call
 
 import pytest
 
@@ -92,7 +93,7 @@ def test_core():
     with pytest.raises(ValueError, match='Unable to write'):
         _to_tsv('foo.bar', dict(test=1))
     # test read
-    raw, events = pd_parser.simulate_pd_data()
+    raw, events = pd_parser.simulate_pd_data(n_secs_on=1.)
     raw.save(op.join(out_dir, 'test-raw.fif'), overwrite=True)
     with pytest.raises(ValueError, match='not recognized'):
         _read_raw('foo.bar')
@@ -306,3 +307,32 @@ def test_parse_pd(_bids_validate):
     pd_parser.pd_parser_save_to_bids(bids_dir, fname, '1', 'test',
                                      verbose=False)
     _bids_validate(bids_dir)
+
+
+def test_cli():
+    out_dir = _TempDir()
+    fname = op.join(out_dir, 'pd_data-raw.fif')
+    info = mne.create_info(['ch1', 'ch2', 'ch3'], raw_tmp.info['sfreq'],
+                           ['seeg'] * 3)
+    raw_tmp2 = \
+        mne.io.RawArray(np.random.random((3, raw_tmp.times.size)) * 1e-6,
+                        info)
+    raw_tmp2.info['lowpass'] = raw_tmp.info['lowpass']
+    raw_tmp.add_channels([raw_tmp2])
+    raw_tmp.info['dig'] = None
+    raw_tmp.info['line_freq'] = 60
+    raw_tmp.save(fname)
+    # can't test with a live plot, but if this should be called by hand
+    # call([f'find_pd_params {fname} --pd_ch_names pd'], shell=True,
+    #      env=os.environ)
+    assert call([f'parse_pd {fname} --behf {behf} --pd_ch_names pd'],
+                shell=True, env=os.environ) == 0
+    assert call([f'add_pd_relative_events {fname} --behf {behf} '
+                 '--relative_event_cols fix_duration go_time response_time '
+                 '--relative_event_names "ISI Onset" "Go Cue" "Response"'],
+                shell=True, env=os.environ) == 0
+    assert call([f'add_pd_events_to_raw {fname} --drop_pd_channels False'],
+                shell=True, env=os.environ) == 0
+    bids_dir = op.join(out_dir, 'bids_dir')
+    assert call([f'pd_parser_save_to_bids {bids_dir} {fname} 1 test'],
+                shell=True, env=os.environ) == 0

@@ -254,11 +254,12 @@
                                     <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">min_i</span><span class="p">,</span> <span class="n">min_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">this_pd_c</span> <span class="ow">in</span>
                                     <span class="n">pd_candidates</span><span class="o">.</span><span class="n">values</span><span class="p">()]):</span>
                             <span class="n">pd_candidates</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span>
-    <span class="n">pd_candidates</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd_candidates</span><span class="p">[</span><span class="s1">&#39;down&#39;</span><span class="p">]</span> <span class="k">if</span>
-                     <span class="nb">len</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">[</span><span class="s1">&#39;down&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">])</span> <span class="k">else</span>
-                     <span class="n">pd_candidates</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">])</span>
+    <span class="n">pd_direction</span> <span class="o">=</span> <span class="s1">&#39;down&#39;</span> <span class="k">if</span> \
+        <span class="nb">len</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">[</span><span class="s1">&#39;down&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">])</span> <span class="k">else</span> <span class="s1">&#39;up&#39;</span>
+    <span class="n">pd_candidates</span> <span class="o">=</span> <span class="n">pd_candidates</span><span class="p">[</span><span class="n">pd_direction</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">)</span><span class="si">}</span><span class="s1"> photodiode candidate events found&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">)</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="n">pd_direction</span><span class="si">}</span><span class="s1">-deflection photodiode &#39;</span>
+              <span class="s1">&#39;candidate events found&#39;</span><span class="p">)</span>
     <span class="n">sorted_pds</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">sorted</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">pd_candidates</span><span class="p">,</span> <span class="n">sorted_pds</span>
 
@@ -621,8 +622,9 @@
 
 
 <div class="viewcode-block" id="parse_pd"><a class="viewcode-back" href="../api.html#parse_pd.parse_pd">[docs]</a><span class="k">def</span> <span class="nf">parse_pd</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pd_event_name</span><span class="o">=</span><span class="s1">&#39;Fixation&#39;</span><span class="p">,</span> <span class="n">behf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-             <span class="n">beh_col</span><span class="o">=</span><span class="s1">&#39;fix_onset_time&#39;</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">exclude_shift</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span>
-             <span class="n">chunk</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">resync</span><span class="o">=</span><span class="mf">0.075</span><span class="p">,</span>
+             <span class="n">beh_col</span><span class="o">=</span><span class="s1">&#39;fix_onset_time&#39;</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+             <span class="n">exclude_shift</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">resync</span><span class="o">=</span><span class="mf">0.075</span><span class="p">,</span>
+             <span class="n">chunk</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
              <span class="n">add_events</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Parse photodiode events.</span>
 
@@ -650,6 +652,18 @@
 <span class="sd">    exclude_shift: float</span>
 <span class="sd">        How many seconds different than expected from the behavior events</span>
 <span class="sd">        to exclude that event. Use `find_pd_params` to determine if unsure.</span>
+<span class="sd">    resync : float</span>
+<span class="sd">        The number of seconds to difference allowed to still use a photodiode</span>
+<span class="sd">        event to resynchronize with time-stamped events. Events with</span>
+<span class="sd">        differences between `resync` and `exclude_shift` will still be</span>
+<span class="sd">        used for alignment but will be excluded from the events. When</span>
+<span class="sd">        `exclude_shift` is smaller than `resync`, this parameter allows</span>
+<span class="sd">        event differences less than `exclude_shift` to be removed without</span>
+<span class="sd">        losing an alignment which depends on resynchronizing to these events</span>
+<span class="sd">        between `exclude_shift` and `resync`. This is most likely to happen</span>
+<span class="sd">        when the drift between behavior events and the photodiode is large,</span>
+<span class="sd">        so many events are to be excluded for being off by a small amount</span>
+<span class="sd">        but still correctly correspond to a behavior event.</span>
 <span class="sd">    chunk: float</span>
 <span class="sd">        The size of the window to chunk the photodiode events by</span>
 <span class="sd">        should be larger than 2x the longest photodiode event.</span>
@@ -664,18 +678,6 @@
 <span class="sd">        How much relative to the chunk to use to idenify the time before</span>
 <span class="sd">        the photodiode event. This should not be changed most likely</span>
 <span class="sd">        unless there is a specific reason/issue.</span>
-<span class="sd">    resync : float</span>
-<span class="sd">        The number of seconds to difference allowed to still use a photodiode</span>
-<span class="sd">        event to resynchronize with time-stamped events. Events with</span>
-<span class="sd">        differences between `resync` and `exclude_shift` will still be</span>
-<span class="sd">        used for alignment but will be excluded from the events. When</span>
-<span class="sd">        `exclude_shift` is smaller than `resync`, this parameter allows</span>
-<span class="sd">        event differences less than `exclude_shift` to be removed without</span>
-<span class="sd">        losing an alignment which depends on resynchronizing to these events</span>
-<span class="sd">        between `exclude_shift` and `resync`. This is most likely to happen</span>
-<span class="sd">        when the drift between behavior events and the photodiode is large,</span>
-<span class="sd">        so many events are to be excluded for being off by a small amount</span>
-<span class="sd">        but still correctly correspond to a behavior event.</span>
 <span class="sd">    add_events : bool</span>
 <span class="sd">        Whether to add the events found from the current call of `parse_pd`</span>
 <span class="sd">        to a events found previously (e.g. first parse with</span>
@@ -745,6 +747,15 @@
     <span class="n">_save_pd_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span> <span class="n">event_id</span><span class="o">=</span><span class="n">pd_event_name</span><span class="p">,</span>
                   <span class="n">pd_ch_names</span><span class="o">=</span><span class="n">pd_ch_names</span><span class="p">,</span> <span class="n">beh_df</span><span class="o">=</span><span class="n">beh_df</span><span class="p">,</span>
                   <span class="n">add_events</span><span class="o">=</span><span class="n">add_events</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="add_pd_off_event"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_off_event">[docs]</a><span class="k">def</span> <span class="nf">add_pd_off_event</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    off_event : str</span>
+<span class="sd">        If None, no event will be assigned to cessation of the photodiode</span>
+<span class="sd">        deflection. If a string is provided, an event of that name will</span>
+<span class="sd">        be assigned to the cessation of the deflection.</span>
+<span class="sd">    &quot;&quot;&quot;</span></div>
 
 
 <div class="viewcode-block" id="add_pd_relative_events"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_relative_events">[docs]</a><span class="k">def</span> <span class="nf">add_pd_relative_events</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="p">,</span> <span class="n">relative_event_cols</span><span class="p">,</span>
@@ -879,6 +890,10 @@
 <span class="sd">        The name of the subject.</span>
 <span class="sd">    task : str</span>
 <span class="sd">        The name of the task.</span>
+<span class="sd">    ses : str</span>
+<span class="sd">        The name of the session (optional).</span>
+<span class="sd">    run : str</span>
+<span class="sd">        The name of the run (optional).</span>
 <span class="sd">    data_type: str</span>
 <span class="sd">        The type of the channels containing data, i.e. &#39;eeg&#39; or &#39;seeg&#39;.</span>
 <span class="sd">    eogs: list | None</span>
@@ -931,7 +946,7 @@
         <span class="n">_to_tsv</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bids_beh_dir</span><span class="p">,</span> <span class="n">bids_path</span><span class="o">.</span><span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;_beh.tsv&#39;</span><span class="p">),</span> <span class="n">beh_df</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="simulate_pd_data"><a class="viewcode-back" href="../api.html#parse_pd.simulate_pd_data">[docs]</a><span class="k">def</span> <span class="nf">simulate_pd_data</span><span class="p">(</span><span class="n">n_events</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_sec_on</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">iti</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span>
+<div class="viewcode-block" id="simulate_pd_data"><a class="viewcode-back" href="../api.html#parse_pd.simulate_pd_data">[docs]</a><span class="k">def</span> <span class="nf">simulate_pd_data</span><span class="p">(</span><span class="n">n_events</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_secs_on</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">iti</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span>
                      <span class="n">iti_jitter</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">prop_corrupted</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                      <span class="n">sfreq</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate photodiode data.</span>
@@ -944,6 +959,11 @@
 <span class="sd">    ----------</span>
 <span class="sd">    n_events : float</span>
 <span class="sd">        The number of events to simulate.</span>
+<span class="sd">    n_secs_on : float | np.array</span>
+<span class="sd">        The number of seconds each event is on. If a float is provided, the</span>
+<span class="sd">        time is the same for each event. If an array is provided, it must be</span>
+<span class="sd">        the length of the number of events, and it determines the length of</span>
+<span class="sd">        each event respectively.</span>
 <span class="sd">    amp : float</span>
 <span class="sd">        The amplitude of the photodiode in standard deviations above baseline.</span>
 <span class="sd">    iti : float</span>
@@ -968,16 +988,27 @@
 <span class="sd">        the second column is unused (zero) and the third column is the</span>
 <span class="sd">        event identifier.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">iti</span> <span class="o">-</span> <span class="n">iti_jitter</span> <span class="o">&lt;=</span> <span class="n">n_sec_on</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Events will run into each other because &#39;</span>
-                         <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">iti</span><span class="si">}</span><span class="s1"> iti - </span><span class="si">{</span><span class="n">iti_jitter</span><span class="si">}</span><span class="s1"> iti_jitter is less than&#39;</span>
-                         <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">n_sec_on</span><span class="si">}</span><span class="s1"> n_sec_on&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_secs_on</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_secs_on</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_events</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If a list of `n_secs_on` is provided, it must &#39;</span>
+                         <span class="sa">f</span><span class="s1">&#39;match the number of events, </span><span class="si">{</span><span class="n">n_events</span><span class="si">}</span><span class="s1">, got &#39;</span>
+                         <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">n_secs_on</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="n">drift</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">iti</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">iti_jitter</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="c1"># n_secs on as list is okay, just make an array</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_secs_on</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="n">n_secs_on</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n_secs_on</span><span class="p">)</span>
     <span class="c1"># convert events to samples</span>
-    <span class="n">n_sec_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">n_sec_on</span> <span class="o">*</span> <span class="n">sfreq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_secs_on</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">n_samp_on</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">n_secs_on</span> <span class="o">*</span> <span class="n">sfreq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n_samp_on</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">n_secs_on</span> <span class="o">*</span> <span class="n">sfreq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">),</span>
+                              <span class="n">n_events</span><span class="p">)</span>
     <span class="n">iti_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">iti</span> <span class="o">*</span> <span class="n">sfreq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">iti_jitter_samp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">iti_jitter</span> <span class="o">*</span> <span class="n">sfreq</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="n">drift_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_sec_samp</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">iti_samp</span> <span class="o">-</span> <span class="n">iti_jitter_samp</span> <span class="o">&lt;=</span> <span class="n">n_samp_on</span><span class="o">.</span><span class="n">min</span><span class="p">():</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;Events will run into each other because `iti` (</span><span class="si">{</span><span class="n">iti</span><span class="si">}</span><span class="s1">)&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39; - `iti_jitter` (</span><span class="si">{</span><span class="n">iti_jitter</span><span class="si">}</span><span class="s1">) is less the than minimum&#39;</span>
+            <span class="sa">f</span><span class="s1">&#39; `n_secs_on` (</span><span class="si">{</span><span class="n">n_samp_on</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">/</span> <span class="n">sfreq</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
     <span class="c1"># seed random number generator</span>
     <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
     <span class="c1"># make events</span>
@@ -993,23 +1024,25 @@
     <span class="n">pd_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fft</span><span class="o">.</span><span class="n">irfft</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">real</span>
     <span class="n">pd_data</span> <span class="o">/=</span> <span class="n">pd_data</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
     <span class="c1"># add photodiode square waves to pink noise</span>
-    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]:</span>
-        <span class="n">pd_data</span><span class="p">[</span><span class="n">event</span><span class="p">:</span> <span class="n">event</span> <span class="o">+</span> <span class="n">n_sec_samp</span><span class="p">]</span> <span class="o">+=</span> \
+    <span class="k">for</span> <span class="n">event</span><span class="p">,</span> <span class="n">n_on</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">events</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">n_samp_on</span><span class="p">):</span>
+        <span class="n">drift_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">n_on</span><span class="p">)</span>
+        <span class="n">pd_data</span><span class="p">[</span><span class="n">event</span><span class="p">:</span> <span class="n">event</span> <span class="o">+</span> <span class="n">n_on</span><span class="p">]</span> <span class="o">+=</span> \
             <span class="n">amp</span> <span class="o">-</span> <span class="n">drift</span> <span class="o">*</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">drift_array</span>
-        <span class="n">pd_data</span><span class="p">[</span><span class="n">event</span> <span class="o">+</span> <span class="n">n_sec_samp</span><span class="p">:</span> <span class="n">event</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n_sec_samp</span><span class="p">]</span> <span class="o">+=</span> \
+        <span class="n">pd_data</span><span class="p">[</span><span class="n">event</span> <span class="o">+</span> <span class="n">n_on</span><span class="p">:</span> <span class="n">event</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">n_on</span><span class="p">]</span> <span class="o">+=</span> \
             <span class="n">drift</span> <span class="o">*</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">drift_array</span> <span class="o">-</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">drift</span>
     <span class="c1"># corrupt some events</span>
     <span class="n">n_events_corrupted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">n_events</span> <span class="o">*</span> <span class="n">prop_corrupted</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">corrupted_indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">n_events</span><span class="p">),</span> <span class="n">n_events_corrupted</span><span class="p">,</span>
                                          <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">corrupted_indices</span><span class="p">:</span>
+        <span class="n">n_on</span> <span class="o">=</span> <span class="n">n_samp_on</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="n">samp_range</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">iti_jitter_samp</span><span class="p">,</span>
-                           <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">n_sec_samp</span> <span class="o">+</span> <span class="n">iti_jitter_samp</span><span class="p">)</span>
+                           <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">n_on</span> <span class="o">+</span> <span class="n">iti_jitter_samp</span><span class="p">)</span>
         <span class="c1"># about 2% of times corrupted</span>
         <span class="n">ts_cor</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">samp_range</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mf">0.02</span> <span class="o">+</span> <span class="mf">0.005</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">ts</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">samp_range</span><span class="p">,</span> <span class="n">ts_cor</span><span class="p">,</span> <span class="n">replace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
             <span class="c1"># disrupt 1 / 5 of on time, 5 times amplitude</span>
-            <span class="n">pd_data</span><span class="p">[</span><span class="n">ts</span> <span class="o">-</span> <span class="n">n_sec_samp</span> <span class="o">//</span> <span class="mi">10</span><span class="p">:</span> <span class="n">ts</span> <span class="o">+</span> <span class="n">n_sec_samp</span> <span class="o">//</span> <span class="mi">10</span><span class="p">]</span> <span class="o">=</span> \
+            <span class="n">pd_data</span><span class="p">[</span><span class="n">ts</span> <span class="o">-</span> <span class="n">n_on</span> <span class="o">//</span> <span class="mi">10</span><span class="p">:</span> <span class="n">ts</span> <span class="o">+</span> <span class="n">n_on</span> <span class="o">//</span> <span class="mi">10</span><span class="p">]</span> <span class="o">=</span> \
                 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">amp</span> <span class="o">-</span> <span class="n">amp</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">corrupted_indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># plot if show</span>

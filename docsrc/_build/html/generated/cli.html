@@ -110,7 +110,7 @@
 </div>
 <div class="section" id="add-pd-events-to-raw">
 <span id="gen-add-pd-events-to-raw"></span><h2><a class="toc-backref" href="#id9">add_pd_events_to_raw</a><a class="headerlink" href="#add-pd-events-to-raw" title="Permalink to this headline">¶</a></h2>
-<p class="callout">usage: <code class="docutils literal notranslate"><span class="pre">add_pd_events_to_raw</span> <span class="pre">fname</span> <span class="pre">[-h]</span> <span class="pre">[--out_fname</span> <span class="pre">OUT_FNAME]</span> <span class="pre">[--verbose</span> <span class="pre">VERBOSE]</span> <span class="pre">[--overwrite</span> <span class="pre">OVERWRITE]</span></code></p>
+<p class="callout">usage: <code class="docutils literal notranslate"><span class="pre">add_pd_events_to_raw</span> <span class="pre">fname</span> <span class="pre">[-h]</span> <span class="pre">[--out_fname</span> <span class="pre">OUT_FNAME]</span> <span class="pre">[--drop_pd_channels</span> <span class="pre">DROP_PD_CHANNELS]</span> <span class="pre">[--verbose</span> <span class="pre">VERBOSE]</span> <span class="pre">[--overwrite</span> <span class="pre">OVERWRITE]</span></code></p>
 <div class="section" id="positional-arguments">
 <h3>positional arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
@@ -126,6 +126,9 @@
 </dd>
 <dt><kbd><span class="option">--out_fname <var>OUT_FNAME</var></span></kbd></dt>
 <dd><p>The name to save out the new raw file out to</p>
+</dd>
+<dt><kbd><span class="option">--drop_pd_channels <var>DROP_PD_CHANNELS</var></span></kbd></dt>
+<dd><p>Whether to drop the channels with the photodiode data.</p>
 </dd>
 <dt><kbd><span class="option">--verbose <var>VERBOSE</var></span></kbd></dt>
 <dd><p>Set verbose output to True or False.</p>
@@ -197,7 +200,7 @@
 </div>
 <div class="section" id="parse-pd">
 <span id="gen-parse-pd"></span><h2><a class="toc-backref" href="#id12">parse_pd</a><a class="headerlink" href="#parse-pd" title="Permalink to this headline">¶</a></h2>
-<p class="callout">usage: <code class="docutils literal notranslate"><span class="pre">parse_pd</span> <span class="pre">fname</span> <span class="pre">[-h]</span> <span class="pre">[--pd_event_name</span> <span class="pre">PD_EVENT_NAME]</span> <span class="pre">[--behf</span> <span class="pre">BEHF]</span> <span class="pre">[--beh_col</span> <span class="pre">BEH_COL]</span> <span class="pre">[--pd_ch_names</span> <span class="pre">LIST_OF_PD_CH_NAMES]</span> <span class="pre">[--exclude_shift</span> <span class="pre">EXCLUDE_SHIFT]</span> <span class="pre">[--chunk</span> <span class="pre">CHUNK]</span> <span class="pre">[--zscore</span> <span class="pre">ZSCORE]</span> <span class="pre">[--min_i</span> <span class="pre">MIN_I]</span> <span class="pre">[--baseline</span> <span class="pre">BASELINE]</span> <span class="pre">[--resync</span> <span class="pre">RESYNC]</span> <span class="pre">[--verbose</span> <span class="pre">VERBOSE]</span> <span class="pre">[--overwrite</span> <span class="pre">OVERWRITE]</span></code></p>
+<p class="callout">usage: <code class="docutils literal notranslate"><span class="pre">parse_pd</span> <span class="pre">fname</span> <span class="pre">[-h]</span> <span class="pre">[--pd_event_name</span> <span class="pre">PD_EVENT_NAME]</span> <span class="pre">[--behf</span> <span class="pre">BEHF]</span> <span class="pre">[--beh_col</span> <span class="pre">BEH_COL]</span> <span class="pre">[--pd_ch_names</span> <span class="pre">LIST_OF_PD_CH_NAMES]</span> <span class="pre">[--exclude_shift</span> <span class="pre">EXCLUDE_SHIFT]</span> <span class="pre">[--resync</span> <span class="pre">RESYNC]</span> <span class="pre">[--chunk</span> <span class="pre">CHUNK]</span> <span class="pre">[--zscore</span> <span class="pre">ZSCORE]</span> <span class="pre">[--min_i</span> <span class="pre">MIN_I]</span> <span class="pre">[--baseline</span> <span class="pre">BASELINE]</span> <span class="pre">[--add_events</span> <span class="pre">ADD_EVENTS]</span> <span class="pre">[--verbose</span> <span class="pre">VERBOSE]</span> <span class="pre">[--overwrite</span> <span class="pre">OVERWRITE]</span></code></p>
 <div class="section" id="id5">
 <h3>positional arguments<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h3>
 <dl class="simple">
@@ -226,6 +229,9 @@
 <dt><kbd><span class="option">--exclude_shift <var>EXCLUDE_SHIFT</var></span></kbd></dt>
 <dd><p>How many seconds off to exclude a photodiode- behavioral event difference</p>
 </dd>
+<dt><kbd><span class="option">--resync <var>RESYNC</var></span></kbd></dt>
+<dd><p>How large of a difference to use to resynchronize events. This is for when events are off but not by much and so they should be excluded but are still needed to fit an alignment.Increase if the alignment is failing because too many events are being excluded, decrease to speed up execution.</p>
+</dd>
 <dt><kbd><span class="option">--chunk <var>CHUNK</var></span></kbd></dt>
 <dd><p>How large to window the photodiode events, should &gt;&gt; 2 * longest event. but cannot contain multiple events. e.g. if the photodiode is on for 100 samples at 500 Hz sampling rate, then 2 seconds should be a good chunk, if it’s on for 500 samples then 10 seconds will be better. Note: each chunk cannot contain multiple events or it won’t work so the events must be at least chunk seconds away from each other. Use <cite>find_pd_params</cite> to determine if unsure.</p>
 </dd>
@@ -238,8 +244,8 @@
 <dt><kbd><span class="option">--baseline <var>BASELINE</var></span></kbd></dt>
 <dd><p>How much relative to the chunkto use to idenify the time before the photodiode event. Probably don’t change but increasing will reduce false-positives and decreasing will reduce false-negatives.</p>
 </dd>
-<dt><kbd><span class="option">--resync <var>RESYNC</var></span></kbd></dt>
-<dd><p>How large of a difference to use to resynchronize events. This is for when events are off but not by much and so they should be excluded but are still needed to fit an alignment.Increase if the alignment is failing because too many events are being excluded, decrease to speed up execution.</p>
+<dt><kbd><span class="option">--add_events <var>ADD_EVENTS</var></span></kbd></dt>
+<dd><p>Whether to run the parser a second time to add more events from deflections corresponding to multiple events on the same channel</p>
 </dd>
 <dt><kbd><span class="option">--verbose <var>VERBOSE</var></span></kbd></dt>
 <dd><p>Set verbose output to True or False.</p>

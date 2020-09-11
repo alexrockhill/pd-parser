@@ -160,11 +160,12 @@ def _find_pd_candidates(pd, chunk_i, baseline_i, zscore, min_i, verbose=True):
                                     range(-min_i, min_i + 1) for this_pd_c in
                                     pd_candidates.values()]):
                             pd_candidates[name].add(i + e)
-    pd_candidates = (pd_candidates['down'] if
-                     len(pd_candidates['down']) > len(pd_candidates['up']) else
-                     pd_candidates['up'])
+    pd_direction = 'down' if \
+        len(pd_candidates['down']) > len(pd_candidates['up']) else 'up'
+    pd_candidates = pd_candidates[pd_direction]
     if verbose:
-        print(f'{len(pd_candidates)} photodiode candidate events found')
+        print(f'{len(pd_candidates)} {pd_direction}-deflection photodiode '
+              'candidate events found')
     sorted_pds = np.array(sorted(pd_candidates))
     return pd_candidates, sorted_pds
 
@@ -527,8 +528,9 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 
 
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
-             beh_col='fix_onset_time', pd_ch_names=None, exclude_shift=0.03,
-             chunk=2, zscore=20, min_i=10, baseline=0.25, resync=0.075,
+             beh_col='fix_onset_time', pd_ch_names=None,
+             exclude_shift=0.03, resync=0.075,
+             chunk=2, zscore=20, min_i=10, baseline=0.25,
              add_events=False, overwrite=False, verbose=True):
     """Parse photodiode events.
 
@@ -556,6 +558,18 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     exclude_shift: float
         How many seconds different than expected from the behavior events
         to exclude that event. Use `find_pd_params` to determine if unsure.
+    resync : float
+        The number of seconds to difference allowed to still use a photodiode
+        event to resynchronize with time-stamped events. Events with
+        differences between `resync` and `exclude_shift` will still be
+        used for alignment but will be excluded from the events. When
+        `exclude_shift` is smaller than `resync`, this parameter allows
+        event differences less than `exclude_shift` to be removed without
+        losing an alignment which depends on resynchronizing to these events
+        between `exclude_shift` and `resync`. This is most likely to happen
+        when the drift between behavior events and the photodiode is large,
+        so many events are to be excluded for being off by a small amount
+        but still correctly correspond to a behavior event.
     chunk: float
         The size of the window to chunk the photodiode events by
         should be larger than 2x the longest photodiode event.
@@ -570,18 +584,6 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         How much relative to the chunk to use to idenify the time before
         the photodiode event. This should not be changed most likely
         unless there is a specific reason/issue.
-    resync : float
-        The number of seconds to difference allowed to still use a photodiode
-        event to resynchronize with time-stamped events. Events with
-        differences between `resync` and `exclude_shift` will still be
-        used for alignment but will be excluded from the events. When
-        `exclude_shift` is smaller than `resync`, this parameter allows
-        event differences less than `exclude_shift` to be removed without
-        losing an alignment which depends on resynchronizing to these events
-        between `exclude_shift` and `resync`. This is most likely to happen
-        when the drift between behavior events and the photodiode is large,
-        so many events are to be excluded for being off by a small amount
-        but still correctly correspond to a behavior event.
     add_events : bool
         Whether to add the events found from the current call of `parse_pd`
         to a events found previously (e.g. first parse with
@@ -651,6 +653,15 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     _save_pd_data(fname, raw=raw, events=events, event_id=pd_event_name,
                   pd_ch_names=pd_ch_names, beh_df=beh_df,
                   add_events=add_events, overwrite=overwrite)
+
+
+def add_pd_off_event():
+    """
+    off_event : str
+        If None, no event will be assigned to cessation of the photodiode
+        deflection. If a string is provided, an event of that name will
+        be assigned to the cessation of the deflection.
+    """
 
 
 def add_pd_relative_events(fname, behf, relative_event_cols,
@@ -785,6 +796,10 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
         The name of the subject.
     task : str
         The name of the task.
+    ses : str
+        The name of the session (optional).
+    run : str
+        The name of the run (optional).
     data_type: str
         The type of the channels containing data, i.e. 'eeg' or 'seeg'.
     eogs: list | None
@@ -837,7 +852,7 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
         _to_tsv(op.join(bids_beh_dir, bids_path.basename + '_beh.tsv'), beh_df)
 
 
-def simulate_pd_data(n_events=10, n_sec_on=1.0, amp=100., iti=6.,
+def simulate_pd_data(n_events=10, n_secs_on=1.0, amp=100., iti=6.,
                      iti_jitter=1.5, drift=0.1, prop_corrupted=0.1,
                      sfreq=1000., seed=11, show=False):
     """Simulate photodiode data.
@@ -850,6 +865,11 @@ def simulate_pd_data(n_events=10, n_sec_on=1.0, amp=100., iti=6.,
     ----------
     n_events : float
         The number of events to simulate.
+    n_secs_on : float | np.array
+        The number of seconds each event is on. If a float is provided, the
+        time is the same for each event. If an array is provided, it must be
+        the length of the number of events, and it determines the length of
+        each event respectively.
     amp : float
         The amplitude of the photodiode in standard deviations above baseline.
     iti : float
@@ -874,16 +894,27 @@ def simulate_pd_data(n_events=10, n_sec_on=1.0, amp=100., iti=6.,
         the second column is unused (zero) and the third column is the
         event identifier.
     """
-    if iti - iti_jitter <= n_sec_on:
-        raise ValueError('Events will run into each other because '
-                         f'{iti} iti - {iti_jitter} iti_jitter is less than'
-                         f'{n_sec_on} n_sec_on')
+    if isinstance(n_secs_on, list) and len(n_secs_on) != n_events:
+        raise ValueError('If a list of `n_secs_on` is provided, it must '
+                         f'match the number of events, {n_events}, got '
+                         f'{len(n_secs_on)}')
     assert drift > 0 and iti > 0 and iti_jitter > 0
+    # n_secs on as list is okay, just make an array
+    if isinstance(n_secs_on, list):
+        n_secs_on = np.array(n_secs_on)
     # convert events to samples
-    n_sec_samp = np.round(n_sec_on * sfreq).astype(int)
+    if isinstance(n_secs_on, np.ndarray):
+        n_samp_on = np.round(n_secs_on * sfreq).astype(int)
+    else:
+        n_samp_on = np.repeat(np.round(n_secs_on * sfreq).astype(int),
+                              n_events)
     iti_samp = np.round(iti * sfreq).astype(int)
     iti_jitter_samp = np.round(iti_jitter * sfreq).astype(int)
-    drift_array = np.linspace(0, 1, n_sec_samp)
+    if iti_samp - iti_jitter_samp <= n_samp_on.min():
+        raise ValueError(
+            f'Events will run into each other because `iti` ({iti})'
+            f' - `iti_jitter` ({iti_jitter}) is less the than minimum'
+            f' `n_secs_on` ({n_samp_on.min() / sfreq})')
     # seed random number generator
     np.random.seed(seed)
     # make events
@@ -899,23 +930,25 @@ def simulate_pd_data(n_events=10, n_sec_on=1.0, amp=100., iti=6.,
     pd_data = np.fft.irfft(x).real
     pd_data /= pd_data.std()
     # add photodiode square waves to pink noise
-    for event in events[:, 0]:
-        pd_data[event: event + n_sec_samp] += \
+    for event, n_on in zip(events[:, 0], n_samp_on):
+        drift_array = np.linspace(0, 1, n_on)
+        pd_data[event: event + n_on] += \
             amp - drift * amp * drift_array
-        pd_data[event + n_sec_samp: event + 2 * n_sec_samp] += \
+        pd_data[event + n_on: event + 2 * n_on] += \
             drift * amp * drift_array - amp * drift
     # corrupt some events
     n_events_corrupted = np.round(n_events * prop_corrupted).astype(int)
     corrupted_indices = np.random.choice(range(n_events), n_events_corrupted,
                                          replace=False)
     for i in corrupted_indices:
+        n_on = n_samp_on[i]
         samp_range = range(events[i, 0] - iti_jitter_samp,
-                           events[i, 0] + n_sec_samp + iti_jitter_samp)
+                           events[i, 0] + n_on + iti_jitter_samp)
         # about 2% of times corrupted
         ts_cor = int(len(samp_range) * np.random.random() * 0.02 + 0.005)
         for ts in np.random.choice(samp_range, ts_cor, replace=False):
             # disrupt 1 / 5 of on time, 5 times amplitude
-            pd_data[ts - n_sec_samp // 10: ts + n_sec_samp // 10] = \
+            pd_data[ts - n_on // 10: ts + n_on // 10] = \
                 np.random.random() * 5 * amp - amp
     events = np.delete(events, corrupted_indices, axis=0)
     # plot if show

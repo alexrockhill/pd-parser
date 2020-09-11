@@ -1,91 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="0" hostname="Alexs-MacBook-Pro.local" name="pytest" skipped="0" tests="3" time="34.989" timestamp="2020-09-05T18:03:20.028258"><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="69" name="test_core" time="1.738"><system-out>Creating RawArray with float64 data, n_channels=1, n_times=84876
-    Range : 0 ... 84875 =      0.000 ...    84.875 secs
-Ready.
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_r9_1_60t/test-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_r9_1_60t/test-raw.fif [done]
-Reading in foo.bar
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_r9_1_60t/test-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_r9_1_60t/test-raw.fif...
-Isotrak not found
-    Range : 0 ... 84875 =      0.000 ...    84.875 secs
-Ready.
-Reading 0 ... 84875  =      0.000 ...    84.875 secs...
-Creating RawArray with float64 data, n_channels=1, n_times=84876
-    Range : 0 ... 84875 =      0.000 ...    84.875 secs
-Ready.
-Finding photodiode events
-10 photodiode candidate events found
-Checking best behavior-photodiode difference alignments
-Best alignment with the photodiode shifted 25 ms relative to the first behavior event errors: min -16, q1 -12, med -1, q3 12, max 28
-Excluding events that have zero close events or more than one photodiode event within `chunk` time
-Used Annotations descriptions: [&apos;Fixation&apos;]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_r9_1_60t/test-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_r9_1_60t/test-raw.fif...
-Isotrak not found
-    Range : 0 ... 84875 =      0.000 ...    84.875 secs
-Ready.
-Reading 0 ... 84875  =      0.000 ...    84.875 secs...
-Finding photodiode events
-10 photodiode candidate events found
-No behavioral tsv file was provided so the photodiode events will be returned without validation by task timing
-Used Annotations descriptions: [&apos;Fixation&apos;]
-Excluding events that have zero close events or more than one photodiode event within `chunk` time
-Excluding event 1, off by 64.0 ms
-Excluding event 2, off by -57.0 ms
-</system-out><system-err>  0%|          | 0/660 [00:00&lt;?, ?it/s] 59%|█████▊    | 387/660 [00:00&lt;00:00, 3866.98it/s]100%|██████████| 660/660 [00:00&lt;00:00, 3996.27it/s]
-  0%|          | 0/6 [00:00&lt;?, ?it/s]100%|██████████| 6/6 [00:00&lt;00:00, 1157.63it/s]
-  0%|          | 0/328 [00:00&lt;?, ?it/s] 94%|█████████▍| 309/328 [00:00&lt;00:00, 3081.34it/s]100%|██████████| 328/328 [00:00&lt;00:00, 3115.45it/s]
-</system-err></testcase><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="206" name="test_two_pd_alignment" time="0.550"><system-out>Creating RawArray with float64 data, n_channels=1, n_times=84876
-    Range : 0 ... 84875 =      0.000 ...    84.875 secs
-Ready.
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_tfmtttlz/test-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_tfmtttlz/test-raw.fif [done]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_tfmtttlz/test-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_tfmtttlz/test-raw.fif...
-Isotrak not found
-    Range : 0 ... 84875 =      0.000 ...    84.875 secs
-Ready.
-Reading 0 ... 84875  =      0.000 ...    84.875 secs...
-Finding photodiode events
-10 photodiode candidate events found
-Checking best behavior-photodiode difference alignments
-Best alignment with the photodiode shifted 12 ms relative to the first behavior event errors: min -26, q1 -24, med -19, q3 14, max 29
-Excluding events that have zero close events or more than one photodiode event within `chunk` time
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_tfmtttlz/test-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_tfmtttlz/test-raw.fif...
-Isotrak not found
-    Range : 0 ... 84875 =      0.000 ...    84.875 secs
-Ready.
-Reading 0 ... 84875  =      0.000 ...    84.875 secs...
-Finding photodiode events
-10 photodiode candidate events found
-Checking best behavior-photodiode difference alignments
-Best alignment with the photodiode shifted 18 ms relative to the first behavior event errors: min -43, q1 -12, med -0, q3 12, max 46
-Excluding events that have zero close events or more than one photodiode event within `chunk` time
-Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Response&apos;]
-</system-out><system-err>  0%|          | 0/328 [00:00&lt;?, ?it/s]100%|██████████| 328/328 [00:00&lt;00:00, 3596.81it/s]
-  0%|          | 0/4 [00:00&lt;?, ?it/s]100%|██████████| 4/4 [00:00&lt;00:00, 635.02it/s]
-  0%|          | 0/328 [00:00&lt;?, ?it/s] 86%|████████▌ | 281/328 [00:00&lt;00:00, 2741.92it/s]100%|██████████| 328/328 [00:00&lt;00:00, 2753.79it/s]
-  0%|          | 0/3 [00:00&lt;?, ?it/s]100%|██████████| 3/3 [00:00&lt;00:00, 1114.81it/s]
-</system-err></testcase><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="250" name="test_parse_pd" time="28.188"><system-out>Creating RawArray with float64 data, n_channels=3, n_times=2818158
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="0" hostname="Alexs-MacBook-Pro.local" name="pytest" skipped="0" tests="1" time="25.555" timestamp="2020-09-10T19:10:17.424637"><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="311" name="test_cli" time="23.531"><system-out>Creating RawArray with float64 data, n_channels=3, n_times=2818158
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif [done]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif...
-Isotrak not found
-    Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
-Ready.
-Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif...
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif [done]
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
 Finding photodiode events
-313 photodiode candidate events found
+313 up-deflection photodiode candidate events found
 Checking best behavior-photodiode difference alignments
 Best alignment with the photodiode shifted 203 ms relative to the first behavior event errors: min -50, q1 -9, med -5, q3 -1, max 75
 Excluding events that have zero close events or more than one photodiode event within `chunk` time
@@ -94,89 +19,135 @@ Excluding event 75, off by -108.06 ms
 Excluding event 150, off by -83.05 ms
 Excluding event 225, off by -50.03 ms
 Excluding event 294, no event found
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif...
-Isotrak not found
-    Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
-Ready.
-Used Annotations descriptions: [&apos;Fixation&apos;]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
-Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Go Cue&apos;, &apos;ISI Onset&apos;, &apos;Response&apos;]
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif...
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Reading 0 ... 2818157  =      0.000 ...  2819.815 secs...
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-rawpd_raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-rawpd_raw.fif [done]
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-rawpd_raw.fif...
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-rawpd_raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-rawpd_raw.fif [done]
+Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
 Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Go Cue&apos;, &apos;ISI Onset&apos;, &apos;Response&apos;]
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif...
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/pd_data-raw.fif...
 Isotrak not found
     Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
 Ready.
-Used Annotations descriptions: [&apos;Fixation&apos;, &apos;Go Cue&apos;, &apos;ISI Onset&apos;, &apos;Response&apos;]
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/pd_data-raw.fif...
-Isotrak not found
-    Range : 0 ... 2818157 =      0.000 ...  2819.815 secs
-Ready.
-Running subprocess: bids-validator --config.error=41 /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cp0shl17/bids_dir
-bids-validator@1.5.2
+Creating folder: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/sub-1/ieeg
+
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/README&apos;...
+
+References
+----------
+Appelhoff, S., Sanderson, M., Brooks, T., Vliet, M., Quentin, R., Holdgraf, C., Chaumon, M., Mikulan, E., Tavabi, K., Höchenberger, R., Welke, D., Brunner, C., Rockhill, A., Larson, E., Gramfort, A. and Jas, M. (2019). MNE-BIDS: Organizing electrophysiological data into the BIDS format and facilitating their analysis. Journal of Open Source Software 4: (1896). https://doi.org/10.21105/joss.01896
+
+Holdgraf, C., Appelhoff, S., Bickel, S., Bouchard, K., D&apos;Ambrosio, S., David, O., … Hermes, D. (2019). iEEG-BIDS, extending the Brain Imaging Data Structure specification to human intracranial electrophysiology. Scientific Data, 6, 102. https://doi.org/10.1038/s41597-019-0105-7
 
 
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/participants.tsv&apos;...
 
-	#x1B[33m1: [WARN] Tabular file contains custom columns not described in a data dictionary (code: 82 - CUSTOM_COLUMN_WITHOUT_DESCRIPTION)#x1B[39m
+participant_id	age	sex	hand
+sub-1	n/a	n/a	n/a
 
-		./sub-1/beh/sub-1_task-test_beh.tsv
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/participants.json&apos;...
 
-			Evidence: Columns: fix_onset_time, fix_duration, go_time, response_time, pd_sample not defined, please define in: /task-test_beh.json, /beh.json,/sub-1/sub-1_task-test_beh.json,/sub-1/sub-1_beh.json,/sub-1/beh/sub-1_task-test_beh.json,/sub-1/beh/sub-1_beh.json
+{
+    &quot;participant_id&quot;: {
+        &quot;Description&quot;: &quot;Unique participant identifier&quot;
+    },
+    &quot;age&quot;: {
+        &quot;Description&quot;: &quot;Age of the participant at time of testing&quot;,
+        &quot;Units&quot;: &quot;years&quot;
+    },
+    &quot;sex&quot;: {
+        &quot;Description&quot;: &quot;Biological sex of the participant&quot;,
+        &quot;Levels&quot;: {
+            &quot;F&quot;: &quot;female&quot;,
+            &quot;M&quot;: &quot;male&quot;
+        }
+    },
+    &quot;hand&quot;: {
+        &quot;Description&quot;: &quot;Handedness of the participant&quot;,
+        &quot;Levels&quot;: {
+            &quot;R&quot;: &quot;right&quot;,
+            &quot;L&quot;: &quot;left&quot;,
+            &quot;A&quot;: &quot;ambidextrous&quot;
+        }
+    }
+}
 
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/sub-1/ieeg/sub-1_task-test_events.tsv&apos;...
 
+onset	duration	trial_type	value	sample
+210.75690200684386	0.0	Fixation	1	210633
+211.45731377235444	0.0	ISI Onset	3	211333
+212.1887437731948	0.0	Go Cue	2	212064
+212.55896142067894	0.0	Response	4	212434
+218.65754672180324	0.0	Fixation	1	218529
 
-#x1B[36m	Please visit https://neurostars.org/search?q=CUSTOM_COLUMN_WITHOUT_DESCRIPTION for existing conversations about this issue.#x1B[39m
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/dataset_description.json&apos;...
 
+{
+    &quot;Name&quot;: &quot; &quot;,
+    &quot;BIDSVersion&quot;: &quot;1.4.0&quot;,
+    &quot;DatasetType&quot;: &quot;raw&quot;,
+    &quot;Authors&quot;: [
+        &quot;Please cite MNE-BIDS in your publication before removing this (citations in README)&quot;
+    ]
+}
 
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/sub-1/ieeg/sub-1_task-test_ieeg.json&apos;...
 
-	#x1B[33m2: [WARN] The Authors field of dataset_description.json should contain an array of fields - with one author per field. This was triggered based on the presence of only one author field. Please ignore if all contributors are already properly listed. (code: 102 - TOO_FEW_AUTHORS)#x1B[39m
+{
+    &quot;TaskName&quot;: &quot;test&quot;,
+    &quot;Manufacturer&quot;: &quot;Elekta&quot;,
+    &quot;PowerLineFrequency&quot;: 60.0,
+    &quot;SamplingFrequency&quot;: 999.412109375,
+    &quot;SoftwareFilters&quot;: &quot;n/a&quot;,
+    &quot;RecordingDuration&quot;: 2819.8147426514415,
+    &quot;RecordingType&quot;: &quot;continuous&quot;,
+    &quot;iEEGReference&quot;: &quot;n/a&quot;,
+    &quot;ECOGChannelCount&quot;: 0,
+    &quot;SEEGChannelCount&quot;: 3,
+    &quot;EEGChannelCount&quot;: 0,
+    &quot;EOGChannelCount&quot;: 0,
+    &quot;ECGChannelCount&quot;: 0,
+    &quot;EMGChannelCount&quot;: 0,
+    &quot;MiscChannelCount&quot;: 0,
+    &quot;TriggerChannelCount&quot;: 1
+}
 
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/sub-1/ieeg/sub-1_task-test_channels.tsv&apos;...
 
+name	type	units	low_cutoff	high_cutoff	description	sampling_frequency	status	status_description
+pd	TRIG	n/a	0.0	499.7060546875	Trigger	999.412109375	good	n/a
+ch1	SEEG	V	0.0	499.7060546875	StereoEEG	999.412109375	good	n/a
+ch2	SEEG	V	0.0	499.7060546875	StereoEEG	999.412109375	good	n/a
+ch3	SEEG	V	0.0	499.7060546875	StereoEEG	999.412109375	good	n/a
 
-#x1B[36m	Please visit https://neurostars.org/search?q=TOO_FEW_AUTHORS for existing conversations about this issue.#x1B[39m
+Writing &apos;/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/sub-1/sub-1_scans.tsv&apos;...
 
-
-
-
-
-        #x1B[34m#x1B[4mSummary:#x1B[24m#x1B[39m                #x1B[34m#x1B[4mAvailable Tasks:#x1B[24m#x1B[39m        #x1B[34m#x1B[4mAvailable Modalities:#x1B[24m#x1B[39m 
-
-        12 Files, 43.1MB        test                    beh                   
-
-        1 - Subject                                     channels              
-
-        1 - Session                                     events                
-
-                                                        ieeg                  
-
-
-
-
-
-#x1B[36m	If you have any questions, please post on https://neurostars.org/tags/bids.#x1B[39m
-
-
-
-</system-out><system-err>  0%|          | 0/11261 [00:00&lt;?, ?it/s]  3%|▎         | 321/11261 [00:00&lt;00:03, 3205.87it/s]  6%|▌         | 698/11261 [00:00&lt;00:03, 3354.68it/s]  9%|▉         | 1034/11261 [00:00&lt;00:03, 3355.29it/s] 12%|█▏        | 1338/11261 [00:00&lt;00:03, 3252.93it/s] 15%|█▍        | 1661/11261 [00:00&lt;00:02, 3245.98it/s] 17%|█▋        | 1933/11261 [00:00&lt;00:03, 2752.57it/s] 20%|██        | 2297/11261 [00:00&lt;00:03, 2969.57it/s] 23%|██▎       | 2632/11261 [00:00&lt;00:02, 3073.54it/s] 26%|██▌       | 2944/11261 [00:00&lt;00:02, 3085.69it/s] 29%|██▉       | 3281/11261 [00:01&lt;00:02, 3165.70it/s] 32%|███▏      | 3631/11261 [00:01&lt;00:02, 3257.65it/s] 35%|███▌      | 3956/11261 [00:01&lt;00:02, 3157.65it/s] 38%|███▊      | 4284/11261 [00:01&lt;00:02, 3193.02it/s] 41%|████      | 4644/11261 [00:01&lt;00:02, 3303.43it/s] 44%|████▍     | 4976/11261 [00:01&lt;00:02, 2928.26it/s] 47%|████▋     | 5278/11261 [00:01&lt;00:02, 2734.60it/s] 49%|████▉     | 5560/11261 [00:01&lt;00:02, 2714.30it/s] 52%|█████▏    | 5838/11261 [00:02&lt;00:02, 1935.99it/s] 54%|█████▍    | 6067/11261 [00:02&lt;00:02, 1890.40it/s] 56%|█████▌    | 6282/11261 [00:02&lt;00:02, 1866.17it/s] 58%|█████▊    | 6487/11261 [00:02&lt;00:02, 1862.90it/s] 60%|██████    | 6811/11261 [00:02&lt;00:02, 2134.66it/s] 63%|██████▎   | 7120/11261 [00:02&lt;00:01, 2352.53it/s] 67%|██████▋   | 7497/11261 [00:02&lt;00:01, 2651.20it/s] 70%|██████▉   | 7831/11261 [00:02&lt;00:01, 2823.44it/s] 73%|███████▎  | 8170/11261 [00:02&lt;00:01, 2972.00it/s] 76%|███████▌  | 8510/11261 [00:03&lt;00:00, 3088.22it/s] 78%|███████▊  | 8833/11261 [00:03&lt;00:00, 3126.92it/s] 82%|████████▏ | 9202/11261 [00:03&lt;00:00, 3276.06it/s] 85%|████████▍ | 9539/11261 [00:03&lt;00:00, 2862.07it/s] 87%|████████▋ | 9850/11261 [00:03&lt;00:00, 2930.32it/s] 90%|█████████ | 10171/11261 [00:03&lt;00:00, 3008.28it/s] 94%|█████████▎| 10534/11261 [00:03&lt;00:00, 3158.86it/s] 96%|█████████▋| 10865/11261 [00:03&lt;00:00, 3193.73it/s]100%|█████████▉| 11208/11261 [00:03&lt;00:00, 3260.62it/s]100%|██████████| 11261/11261 [00:03&lt;00:00, 2893.93it/s]
-  0%|          | 0/299 [00:00&lt;?, ?it/s]  1%|          | 3/299 [00:00&lt;00:13, 22.43it/s]  2%|▏         | 6/299 [00:00&lt;00:14, 20.67it/s]  3%|▎         | 8/299 [00:00&lt;00:14, 19.48it/s]  3%|▎         | 10/299 [00:00&lt;00:15, 18.38it/s]  4%|▍         | 12/299 [00:00&lt;00:17, 16.65it/s]  5%|▍         | 14/299 [00:00&lt;00:18, 15.81it/s]  5%|▌         | 16/299 [00:00&lt;00:18, 14.97it/s]  6%|▋         | 19/299 [00:01&lt;00:17, 16.29it/s]  7%|▋         | 21/299 [00:01&lt;00:16, 16.69it/s]  8%|▊         | 23/299 [00:01&lt;00:18, 15.07it/s]  8%|▊         | 25/299 [00:01&lt;00:20, 13.61it/s]  9%|▉         | 27/299 [00:01&lt;00:20, 13.00it/s] 10%|▉         | 29/299 [00:01&lt;00:23, 11.39it/s] 10%|█         | 31/299 [00:02&lt;00:27,  9.85it/s] 11%|█         | 33/299 [00:02&lt;00:27,  9.71it/s] 12%|█▏        | 35/299 [00:02&lt;00:23, 11.13it/s] 12%|█▏        | 37/299 [00:02&lt;00:20, 12.68it/s] 13%|█▎        | 39/299 [00:03&lt;00:35,  7.30it/s] 14%|█▎        | 41/299 [00:03&lt;00:33,  7.71it/s] 14%|█▍        | 43/299 [00:03&lt;00:36,  7.01it/s] 15%|█▍        | 44/299 [00:03&lt;00:36,  7.04it/s] 15%|█▌        | 45/299 [00:04&lt;00:38,  6.58it/s] 16%|█▌        | 47/299 [00:04&lt;00:32,  7.81it/s] 16%|█▋        | 49/299 [00:04&lt;00:26,  9.37it/s] 17%|█▋        | 52/299 [00:04&lt;00:22, 11.03it/s] 18%|█▊        | 55/299 [00:04&lt;00:19, 12.81it/s] 19%|█▉        | 57/299 [00:04&lt;00:17, 13.55it/s] 20%|█▉        | 59/299 [00:04&lt;00:16, 14.24it/s] 21%|██        | 62/299 [00:05&lt;00:15, 15.72it/s] 21%|██▏       | 64/299 [00:05&lt;00:14, 16.20it/s] 22%|██▏       | 67/299 [00:05&lt;00:12, 18.33it/s] 23%|██▎       | 70/299 [00:05&lt;00:12, 18.42it/s] 24%|██▍       | 73/299 [00:05&lt;00:11, 19.08it/s] 25%|██▌       | 76/299 [00:05&lt;00:12, 17.47it/s] 26%|██▋       | 79/299 [00:05&lt;00:11, 18.46it/s] 27%|██▋       | 81/299 [00:06&lt;00:12, 17.87it/s] 28%|██▊       | 83/299 [00:06&lt;00:12, 17.95it/s] 28%|██▊       | 85/299 [00:06&lt;00:11, 18.04it/s] 29%|██▉       | 87/299 [00:06&lt;00:12, 17.33it/s] 30%|██▉       | 89/299 [00:06&lt;00:12, 16.83it/s] 31%|███       | 92/299 [00:06&lt;00:11, 17.54it/s] 32%|███▏      | 95/299 [00:06&lt;00:11, 18.34it/s] 32%|███▏      | 97/299 [00:06&lt;00:10, 18.45it/s] 33%|███▎      | 99/299 [00:07&lt;00:10, 18.35it/s] 34%|███▍      | 102/299 [00:07&lt;00:09, 20.00it/s] 35%|███▌      | 105/299 [00:07&lt;00:10, 18.62it/s] 36%|███▌      | 107/299 [00:07&lt;00:10, 18.26it/s] 37%|███▋      | 110/299 [00:07&lt;00:09, 18.98it/s] 38%|███▊      | 114/299 [00:07&lt;00:08, 21.29it/s] 39%|███▉      | 118/299 [00:07&lt;00:07, 23.28it/s] 41%|████      | 122/299 [00:08&lt;00:07, 25.09it/s] 42%|████▏     | 126/299 [00:08&lt;00:06, 27.17it/s] 43%|████▎     | 130/299 [00:08&lt;00:05, 28.90it/s] 45%|████▍     | 134/299 [00:08&lt;00:05, 30.64it/s] 46%|████▌     | 138/299 [00:08&lt;00:05, 31.21it/s] 47%|████▋     | 142/299 [00:08&lt;00:05, 28.67it/s] 48%|████▊     | 145/299 [00:08&lt;00:08, 17.97it/s] 49%|████▉     | 148/299 [00:09&lt;00:08, 17.07it/s] 51%|█████     | 151/299 [00:09&lt;00:08, 17.70it/s] 52%|█████▏    | 154/299 [00:09&lt;00:07, 18.87it/s] 53%|█████▎    | 158/299 [00:09&lt;00:06, 21.84it/s] 54%|█████▍    | 162/299 [00:09&lt;00:05, 25.26it/s] 56%|█████▌    | 166/299 [00:09&lt;00:04, 27.67it/s] 57%|█████▋    | 171/299 [00:09&lt;00:04, 31.11it/s] 59%|█████▉    | 176/299 [00:10&lt;00:03, 33.95it/s] 61%|██████    | 181/299 [00:10&lt;00:03, 35.86it/s] 62%|██████▏   | 185/299 [00:10&lt;00:03, 36.91it/s] 64%|██████▎   | 190/299 [00:10&lt;00:02, 38.77it/s] 65%|██████▌   | 195/299 [00:10&lt;00:02, 37.12it/s] 67%|██████▋   | 200/299 [00:10&lt;00:02, 39.99it/s] 69%|██████▊   | 205/299 [00:10&lt;00:02, 42.44it/s] 70%|███████   | 210/299 [00:10&lt;00:02, 41.60it/s] 72%|███████▏  | 215/299 [00:10&lt;00:02, 39.40it/s] 74%|███████▎  | 220/299 [00:11&lt;00:01, 41.39it/s] 75%|███████▌  | 225/299 [00:11&lt;00:01, 39.34it/s] 77%|███████▋  | 231/299 [00:11&lt;00:01, 42.69it/s] 79%|███████▉  | 236/299 [00:11&lt;00:01, 43.71it/s] 81%|████████  | 242/299 [00:11&lt;00:01, 46.77it/s] 83%|████████▎ | 247/299 [00:11&lt;00:01, 47.20it/s] 84%|████████▍ | 252/299 [00:11&lt;00:01, 45.21it/s] 86%|████████▌ | 257/299 [00:11&lt;00:00, 45.19it/s] 88%|████████▊ | 263/299 [00:11&lt;00:00, 48.37it/s] 91%|█████████ | 271/299 [00:12&lt;00:00, 53.37it/s] 93%|█████████▎| 279/299 [00:12&lt;00:00, 59.19it/s] 96%|█████████▌| 287/299 [00:12&lt;00:00, 64.00it/s] 98%|█████████▊| 294/299 [00:12&lt;00:00, 60.04it/s]100%|██████████| 299/299 [00:12&lt;00:00, 23.74it/s]
-Exception ignored in: &lt;_io.FileIO name=22 mode=&apos;rb&apos; closefd=True&gt;
-ResourceWarning: unclosed file &lt;_io.BufferedReader name=22&gt;
-Exception ignored in: &lt;_io.FileIO name=24 mode=&apos;rb&apos; closefd=True&gt;
-ResourceWarning: unclosed file &lt;_io.BufferedReader name=24&gt;
+filename	acq_time
+ieeg/sub-1_task-test_ieeg.vhdr	n/a
+Wrote /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_odccfsmt/bids_dir/sub-1/sub-1_scans.tsv entry with ieeg/sub-1_task-test_ieeg.vhdr.
+</system-out><system-err>  0%|          | 0/11261 [00:00&lt;?, ?it/s]  6%|▌         | 691/11261 [00:00&lt;00:01, 6905.10it/s] 11%|█▏        | 1289/11261 [00:00&lt;00:01, 6598.26it/s] 17%|█▋        | 1898/11261 [00:00&lt;00:01, 6434.48it/s] 23%|██▎       | 2553/11261 [00:00&lt;00:01, 6465.87it/s] 28%|██▊       | 3160/11261 [00:00&lt;00:01, 6338.77it/s] 33%|███▎      | 3704/11261 [00:00&lt;00:01, 6002.58it/s] 38%|███▊      | 4229/11261 [00:00&lt;00:01, 5538.29it/s] 42%|████▏     | 4737/11261 [00:00&lt;00:01, 5159.63it/s] 46%|████▋     | 5226/11261 [00:00&lt;00:01, 4969.94it/s] 51%|█████▏    | 5784/11261 [00:01&lt;00:01, 5137.56it/s] 56%|█████▌    | 6287/11261 [00:01&lt;00:01, 4970.71it/s] 60%|██████    | 6778/11261 [00:01&lt;00:00, 4890.07it/s] 65%|██████▌   | 7331/11261 [00:01&lt;00:00, 5065.47it/s] 72%|███████▏  | 8058/11261 [00:01&lt;00:00, 5571.54it/s] 77%|███████▋  | 8724/11261 [00:01&lt;00:00, 5858.20it/s] 83%|████████▎ | 9352/11261 [00:01&lt;00:00, 5977.66it/s] 89%|████████▉ | 10028/11261 [00:01&lt;00:00, 6190.66it/s]/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:149: RuntimeWarning: divide by zero encountered in true_divide
+  s = (pd[i:i + chunk_i] - np.median(b)) / np.std(b)
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:149: RuntimeWarning: invalid value encountered in true_divide
+  s = (pd[i:i + chunk_i] - np.median(b)) / np.std(b)
+ 95%|█████████▍| 10657/11261 [00:01&lt;00:00, 5772.77it/s]100%|█████████▉| 11247/11261 [00:01&lt;00:00, 5481.83it/s]100%|██████████| 11261/11261 [00:01&lt;00:00, 5638.90it/s]
+  0%|          | 0/299 [00:00&lt;?, ?it/s]  2%|▏         | 5/299 [00:00&lt;00:07, 40.99it/s]  3%|▎         | 9/299 [00:00&lt;00:07, 40.39it/s]  4%|▍         | 12/299 [00:00&lt;00:08, 33.75it/s]  5%|▌         | 15/299 [00:00&lt;00:09, 29.40it/s]  6%|▋         | 19/299 [00:00&lt;00:08, 31.14it/s]  8%|▊         | 23/299 [00:00&lt;00:08, 31.15it/s]  9%|▊         | 26/299 [00:00&lt;00:09, 29.12it/s] 10%|█         | 30/299 [00:00&lt;00:09, 29.71it/s] 11%|█         | 33/299 [00:01&lt;00:09, 27.42it/s] 12%|█▏        | 36/299 [00:01&lt;00:09, 28.12it/s] 13%|█▎        | 40/299 [00:01&lt;00:09, 28.40it/s] 15%|█▍        | 44/299 [00:01&lt;00:08, 28.38it/s] 16%|█▌        | 47/299 [00:01&lt;00:09, 26.58it/s] 17%|█▋        | 50/299 [00:01&lt;00:09, 25.76it/s] 18%|█▊        | 54/299 [00:01&lt;00:08, 27.82it/s] 19%|█▉        | 57/299 [00:01&lt;00:09, 26.42it/s] 20%|██        | 61/299 [00:02&lt;00:08, 26.93it/s] 21%|██▏       | 64/299 [00:02&lt;00:09, 25.84it/s] 23%|██▎       | 68/299 [00:02&lt;00:08, 28.01it/s] 24%|██▎       | 71/299 [00:02&lt;00:08, 27.52it/s] 25%|██▌       | 75/299 [00:02&lt;00:07, 28.04it/s] 26%|██▌       | 78/299 [00:02&lt;00:07, 28.08it/s] 27%|██▋       | 81/299 [00:02&lt;00:08, 25.51it/s] 28%|██▊       | 84/299 [00:02&lt;00:08, 25.83it/s] 29%|██▉       | 87/299 [00:03&lt;00:08, 26.00it/s] 30%|███       | 90/299 [00:03&lt;00:07, 26.20it/s] 31%|███       | 93/299 [00:03&lt;00:07, 26.02it/s] 32%|███▏      | 96/299 [00:03&lt;00:07, 27.09it/s] 33%|███▎      | 99/299 [00:03&lt;00:07, 27.32it/s] 34%|███▍      | 102/299 [00:03&lt;00:07, 27.32it/s] 35%|███▌      | 106/299 [00:03&lt;00:06, 28.38it/s] 36%|███▋      | 109/299 [00:03&lt;00:06, 28.36it/s] 37%|███▋      | 112/299 [00:03&lt;00:06, 28.40it/s] 39%|███▉      | 116/299 [00:04&lt;00:06, 28.58it/s] 40%|███▉      | 119/299 [00:04&lt;00:06, 27.48it/s] 41%|████      | 122/299 [00:04&lt;00:06, 27.71it/s] 42%|████▏     | 125/299 [00:04&lt;00:06, 28.27it/s] 43%|████▎     | 129/299 [00:04&lt;00:05, 29.55it/s] 44%|████▍     | 133/299 [00:04&lt;00:05, 30.61it/s] 46%|████▌     | 137/299 [00:04&lt;00:05, 30.57it/s] 47%|████▋     | 141/299 [00:04&lt;00:05, 28.17it/s] 48%|████▊     | 144/299 [00:05&lt;00:05, 27.06it/s] 49%|████▉     | 147/299 [00:05&lt;00:05, 26.89it/s] 51%|█████     | 151/299 [00:05&lt;00:05, 27.64it/s] 52%|█████▏    | 155/299 [00:05&lt;00:05, 28.42it/s] 53%|█████▎    | 159/299 [00:05&lt;00:04, 29.36it/s] 55%|█████▍    | 163/299 [00:05&lt;00:04, 30.87it/s] 56%|█████▌    | 167/299 [00:05&lt;00:04, 32.00it/s] 58%|█████▊    | 172/299 [00:05&lt;00:03, 34.47it/s] 59%|█████▉    | 176/299 [00:06&lt;00:03, 35.95it/s] 60%|██████    | 180/299 [00:06&lt;00:03, 35.11it/s] 62%|██████▏   | 184/299 [00:06&lt;00:03, 33.96it/s] 63%|██████▎   | 188/299 [00:06&lt;00:03, 35.02it/s] 64%|██████▍   | 192/299 [00:06&lt;00:02, 35.77it/s] 66%|██████▌   | 196/299 [00:06&lt;00:03, 32.71it/s] 67%|██████▋   | 200/299 [00:06&lt;00:02, 33.49it/s] 68%|██████▊   | 204/299 [00:06&lt;00:02, 34.60it/s] 70%|██████▉   | 208/299 [00:06&lt;00:02, 34.08it/s] 71%|███████   | 212/299 [00:07&lt;00:02, 33.35it/s] 72%|███████▏  | 216/299 [00:07&lt;00:02, 31.28it/s] 74%|███████▎  | 220/299 [00:07&lt;00:02, 33.40it/s] 75%|███████▍  | 224/299 [00:07&lt;00:02, 33.96it/s] 77%|███████▋  | 229/299 [00:07&lt;00:01, 36.37it/s] 78%|███████▊  | 234/299 [00:07&lt;00:01, 39.58it/s] 80%|███████▉  | 239/299 [00:07&lt;00:01, 41.09it/s] 82%|████████▏ | 244/299 [00:08&lt;00:01, 30.38it/s] 83%|████████▎ | 249/299 [00:08&lt;00:01, 32.64it/s] 85%|████████▍ | 253/299 [00:08&lt;00:01, 34.22it/s] 87%|████████▋ | 259/299 [00:08&lt;00:01, 38.65it/s] 88%|████████▊ | 264/299 [00:08&lt;00:00, 39.63it/s] 91%|█████████ | 271/299 [00:08&lt;00:00, 45.10it/s] 93%|█████████▎| 279/299 [00:08&lt;00:00, 51.49it/s] 96%|█████████▋| 288/299 [00:08&lt;00:00, 57.08it/s] 99%|█████████▊| 295/299 [00:09&lt;00:00, 51.51it/s]100%|██████████| 299/299 [00:09&lt;00:00, 32.70it/s]
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:829: RuntimeWarning: The unit for channel(s) pd has changed from V to NA.
+  raw.set_channel_types({ch: &apos;stim&apos; for ch in pd_channels
+/Users/alexrockhill/software/mne-bids/mne_bids/write.py:1115: RuntimeWarning: Converting data files to BrainVision format
+  warn(&apos;Converting data files to BrainVision format&apos;)
 </system-err></testcase></testsuite></testsuites>

@@ -32,7 +32,7 @@ raw, events = pd_parser.simulate_pd_data(n_events=320)
 # make some errent photodiode signals
 raw2 = pd_parser.simulate_pd_data(n_events=10, iti=31.,
                                   iti_jitter=15.,
-                                  n_sec_on=2.5)[0]
+                                  n_secs_on=2.5)[0]
 raw._data[0, :raw2._data.size] += raw2._data[0]
 # take only the last 300 events to test alignment
 events = events[20:]
