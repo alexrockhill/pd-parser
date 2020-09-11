@@ -95,14 +95,27 @@ def _load_beh_df(behf, beh_col):
     return df[beh_col], df
 
 
+def _get_pd_channel_data(raw, pd_ch_names):
+    """Get the time-series data from the channel names."""
+    if any([ch not in raw.ch_names for ch in pd_ch_names]):
+        raise ValueError(f'Not all pd_ch_names, {pd_ch_names}, '
+                         'in raw channel names')
+    if len(pd_ch_names) == 2:
+        pd = raw._data[raw.ch_names.index(pd_ch_names[0])]
+        pd -= raw._data[raw.ch_names.index(pd_ch_names[1])]
+    else:
+        pd = raw._data[raw.ch_names.index(pd_ch_names[0])]
+    pd -= np.median(pd)
+    return pd
+
+
 def _get_pd_data(raw, pd_ch_names):
     """Get the names of the photodiode channels from the user."""
     # if pd_ch_names provided
     if pd_ch_names is not None:
-        for ch in pd_ch_names:
-            if ch not in raw.ch_names:
-                raise ValueError(f'{ch} in pd_ch_names {pd_ch_names} not '
-                                 'in raw channel names')
+        if any([ch not in raw.ch_names for ch in pd_ch_names]):
+            raise ValueError(f'Not all pd_ch_names, {pd_ch_names}, '
+                             'in raw channel names')
     else:  # if no pd_ch_names provided
         pd_ch_names = input('Enter photodiode channel names separated by a '
                             'comma or type "plot" to plot the data first:\t')
@@ -123,43 +136,52 @@ def _get_pd_data(raw, pd_ch_names):
                       '2 names for bipolar reference')
         pd_ch_names = [ch.strip() for ch in pd_ch_names.split(',')]
     # get pd data using channel names
-    if len(pd_ch_names) == 2:
-        pd = raw._data[raw.ch_names.index(pd_ch_names[0])]
-        pd -= raw._data[raw.ch_names.index(pd_ch_names[1])]
-    else:
-        pd = raw._data[raw.ch_names.index(pd_ch_names[0])]
-    pd -= np.median(pd)
+    pd = _get_pd_channel_data(raw, pd_ch_names)
     return pd, pd_ch_names
 
 
-def _find_pd_candidates(pd, chunk_i, baseline_i, zscore, min_i, verbose=True):
+def _check_if_pd_event(pd, i, max_len_i, zscore, min_i, baseline_i):
+    """Take one stretch of data and determine if there is an event there.
+
+    Move in chunks twice as long as your longest photodiode signal
+    with the first 0.25 as baseline to test whether the signal goes
+    above/below baseline and back below/above.
+    The event onset must have a minimum length `min_i`.
+    """
+    b = pd[i - baseline_i:i]
+    # use twice the length so event can be centered
+    s = (pd[i:i + 2 * max_len_i] - np.median(b)) / np.std(b)
+    binned_s = np.digitize(s, [-np.inf, -zscore, zscore, np.inf]) - 2
+    for direction, binary_s in {'up': binned_s, 'down': s < -binned_s}.items():
+        onset = np.where(binary_s[:max_len_i] == 1)[0]
+        if onset.size > min_i:  # must be long enough
+            e = onset[0]
+            if all(binary_s[:e] == 0):  # must start off:
+                # must have an offset and no more events
+                offset = np.where(binary_s[e:] < 1)[0]
+                if offset.size > 0:
+                    oe = offset[0]
+                    if oe <= max_len_i and \
+                            all(binary_s[e + oe:e + max_len_i] == 0):
+                        return direction, i + e, i + e + oe
+    return None, None, None
+
+
+def _find_pd_candidates(pd, max_len_i, baseline_i, zscore, min_i,
+                        verbose=True):
     """Find all points in the signal that look like a square wave."""
     if verbose:
         print('Finding photodiode events')
-    ''' Move in chunks twice as long as your longest photodiode signal
-        with the first 0.25 as baseline to test whether the signal goes
-        above/below baseline and back below/above.
-        The event onset must have a minimum length `min_i` and
-        `overlap` should be set such that no events will be missed
-        and if a pd event gets cut off, you'll find it the next chunk'''
     pd_candidates = dict(up=set(), down=set())
-    for i in tqdm(range(baseline_i, len(pd) - chunk_i - baseline_i,
+    for i in tqdm(range(baseline_i, len(pd) - max_len_i - baseline_i,
                         baseline_i // 2)):
-        b = pd[i - baseline_i:i]
-        s = (pd[i:i + chunk_i] - np.median(b)) / np.std(b)
-        for name, binary_s in {'up': s > zscore, 'down': s < -zscore}.items():
-            if not binary_s[0]:  # must start off
-                onset = np.where(binary_s)[0]
-                if onset.size > min_i:
-                    e = onset[0]
-                    # must have an offset and no more events
-                    offset = np.where(1 - binary_s[e:])[0]
-                    # no rounding errors
-                    if offset.size > 0 and not any(binary_s[e + offset[0]:]):
-                        if not any([i + e + j in this_pd_c for j in
-                                    range(-min_i, min_i + 1) for this_pd_c in
-                                    pd_candidates.values()]):
-                            pd_candidates[name].add(i + e)
+        direction, onset, _ = _check_if_pd_event(
+            pd, i, max_len_i, zscore, min_i, baseline_i)
+        # no rounding errors
+        if onset is not None and all(
+            [onset + j not in this_pd_cs for j in range(-min_i, min_i + 1)
+             for this_pd_cs in pd_candidates.values()]):
+            pd_candidates[direction].add(onset)
     pd_direction = 'down' if \
         len(pd_candidates['down']) > len(pd_candidates['up']) else 'up'
     pd_candidates = pd_candidates[pd_direction]
@@ -223,7 +245,7 @@ def _find_best_alignment(beh_events, sorted_pds, max_i, sfreq,
             best_errors = beh_errors
     if verbose:
         print('Best alignment with the photodiode shifted {:.0f} ms '
-              'relative to the first behavior event errors: min {:.0f}, '
+              'relative to the first behavior event\nerrors: min {:.0f}, '
               'q1 {:.0f}, med {:.0f}, q3 {:.0f}, max {:.0f}'.format(
                   (beh_events[0] + best_alignment) / sfreq, min(best_errors),
                   np.quantile(best_errors, 0.25), np.median(best_errors),
@@ -232,14 +254,14 @@ def _find_best_alignment(beh_events, sorted_pds, max_i, sfreq,
 
 
 def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
-                              exclude_shift_i, chunk_i, resync_i, sfreq,
+                              exclude_shift_i, max_len_i, resync_i, sfreq,
                               verbose=True):
     """Exclude all events that are outside the given shift compared to beh."""
     if verbose:
         import matplotlib.pyplot as plt
         pd_section_data = dict(b_event=list(), title=list())
         print('Excluding events that have zero close events or more than '
-              'one photodiode event within `chunk` time')
+              'one photodiode event within `max_len` time')
     events = dict()
     errors = dict()
     pd_candidates = set(sorted_pds)
@@ -252,8 +274,8 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
             best_alignment -= j
             events[i] = np.round(b_event - j).astype(int)
             errors[i] = j
-            pd_events = np.logical_and(sorted_pds < (events[i] + chunk_i),
-                                       sorted_pds > (events[i] - chunk_i))
+            pd_events = np.logical_and(sorted_pds < (events[i] + max_len_i),
+                                       sorted_pds > (events[i] - max_len_i))
             if sum(pd_events) > 1:
                 events.pop(i)
                 errors.pop(i)
@@ -268,11 +290,11 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
                 # if off by nearly exclude_shift_i, still use for adjusting
                 if abs(j) < resync_i:
                     best_alignment -= j
-                # if off by a less than a chunk, report samples
-                if abs(j) < chunk_i:
-                    j_ms = np.round(j / sfreq * 1000, 2)
+                # if off by a less than max_len, report samples
+                if abs(j) < max_len_i:
+                    j_ms = int(j / sfreq * 1000)
                     text = f'Excluding event {i},\noff by {j_ms} ms'
-                else:  # if off by more than a chunk, just say missing
+                else:  # if off by more than max_len, just say missing
                     text = f'Excluding event {i},\nno event found'
                 print(text.replace('\n', ' '))
                 pd_section_data['b_event'].append(b_event)
@@ -295,8 +317,8 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
             for b_event, title, ax in zip(pd_section_data['b_event'],
                                           pd_section_data['title'],
                                           axes[:n_events_ex]):
-                pd_section = pd[int(b_event - chunk_i):
-                                int(b_event + chunk_i)]
+                pd_section = pd[int(b_event - max_len_i):
+                                int(b_event + max_len_i)]
                 ax.plot(np.linspace(-1, 1, pd_section.size), pd_section)
                 ax.plot([0, 0], [pd_section.min(), pd_section.max()],
                         color='r')
@@ -304,7 +326,7 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
                 ax.set_ylabel('voltage')
                 ax.set_xticks(np.linspace(-1, 1, 5))
                 ax.set_xticklabels(np.round(np.linspace(
-                    -chunk_i / sfreq, chunk_i / sfreq, 5), 2))
+                    -max_len_i / sfreq, max_len_i / sfreq, 5), 2))
                 ax.set_xlabel('time (s)')
             fig.show()
         trials = sorted(errors.keys())
@@ -377,9 +399,8 @@ def _load_pd_data(fname):
 def find_pd_params(fname, pd_ch_names=None, verbose=True):
     """Plot the data so the user can determine the right parameters.
 
-    The user can adjust window size to determine chunk, horizontal
-    line height to determine zscore and seperation length of two
-    vertical lines to determine min_i.
+    The user can adjust window size to determine max_len and horizontal
+    line height to determine zscore.
 
     Parameters
     ----------
@@ -413,64 +434,47 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
         ax.set_ylim([ymin, ymax])
         fig.canvas.draw()
 
-    def set_min_i(event):
+    def set_zscore(event):
         if event.key == 'enter':
+            ymin, ymax = ax.get_ylim()
             xmin, xmax = ax.get_xlim()
-            chunk = (xmax - xmin) * 1.1
+            max_len = (xmax - xmin) / 2 * 1.1
             b = pd[raw.time_as_index(xmin)[0]: raw.time_as_index(
                 xmin + (xmax - xmin) * 0.25)[0]]  # 0.25 == default baseline
             zy = plot_data['zscore'].get_ydata()[0]
             zscore = (zy - np.median(b)) / np.std(b)
-            min_i = plot_data['min_i'].get_xdata()[0]
-            min_i -= plot_data['zero'].get_xdata()[0]
-            min_i = int(min_i * raw.info['sfreq'])
-            ax.set_title('Recommendations\nchunk: {:.2f}, zscore: {:.2f}, '
-                         'min_i: {:d}\nYou may now close the window\n'
+            ax.set_title('Recommendations\nmax_len: {:.2f}, zscore: {:.2f}\n'
+                         'You may now close the window\n'
                          'Try using these parameters for `parse_pd` and\n'
                          'please report to the developers if there are issues'
-                         ''.format(chunk, zscore, min_i))
-            fig.canvas.draw()
-        elif event.key in ('left', 'right'):
-            min_i_x = plot_data['min_i'].get_xdata()[0]
-            min_i_x += 0.01 if event.key == 'left' else -0.01
-            plot_data['min_i'].set_xdata([min_i_x, min_i_x])
-            fig.canvas.draw()
-
-    def set_zscore(event):
-        if event.key == 'enter':
-            eid = fig.canvas.mpl_connect('key_press_event', set_min_i)
-            fig.canvas.mpl_disconnect(eid - 1)  # disconnect previous
-            xmin, xmax = ax.get_xlim()
-            zerox = plot_data['zero'].get_xdata()[0]
-            min_i_x = (xmax + zerox) / 2
-            ymin, ymax = ax.get_ylim()
-            plot_data['min_i'] = ax.plot([min_i_x, min_i_x], [ymin, ymax],
-                                         color='r')[0]
-            ax.set_title(
-                'Length\nUse the left/right arrows to set the vertical\n'
-                'line to a point on the photodiode plateau\n'
-                'where all events would still be on the plateau\n'
-                'press enter when finished')
+                         ''.format(max_len, zscore))
             fig.canvas.draw()
         elif event.key in ('up', 'down'):
             ymin, ymax = ax.get_ylim()
             delta = (ymax - ymin) / 100
             zy = plot_data['zscore'].get_ydata()[0]
+            zy_ref = plot_data['zscore_reflection'].get_ydata()[0]
             zy += delta if event.key == 'up' else -delta
+            zy_ref -= delta if event.key == 'up' else -delta
             plot_data['zscore'].set_ydata(np.ones((pd.size)) * zy)
+            plot_data['zscore_reflection'].set_ydata(
+                np.ones((pd.size)) * zy_ref)
             fig.canvas.draw()
 
-    def set_chunk(event):
+    def set_max_len(event):
         if event.key == 'enter':
             eid = fig.canvas.mpl_connect('key_press_event', set_zscore)
             fig.canvas.mpl_disconnect(eid - 1)  # disconnect previous
             plot_data['zscore'] = ax.plot(
                 raw.times, np.ones((pd.size)) * np.quantile(pd, 0.25),
                 color='g')[0]
+            plot_data['zscore_reflection'] = ax.plot(
+                raw.times, -np.ones((pd.size)) * np.quantile(pd, 0.25),
+                color='r')[0]
             ax.set_title(
-                'Scale\nUse the up/down arrows to set the horizontal\n'
-                'line at a level where the plateau of all the\n'
-                'photodiode events would still be above the line\n'
+                'Scale\nUse the up/down arrows to set the horizontal line \n'
+                'at a level where the plateau of all the photodiode events \n'
+                'is above the green line nothing is below the red line\n'
                 'press enter when finished')
             fig.canvas.draw()
         elif event.key in ('up', 'down'):
@@ -483,7 +487,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 
     def align_keypress(event):
         if event.key == 'enter':
-            eid = fig.canvas.mpl_connect('key_press_event', set_chunk)
+            eid = fig.canvas.mpl_connect('key_press_event', set_max_len)
             fig.canvas.mpl_disconnect(eid - 1)  # disconnect previous
             ax.set_title(
                 'Window\nUse the up/down arrows to increase/decrease the\n'
@@ -511,8 +515,8 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
             fig.canvas.draw()
 
     ax.set_title(
-        'Align\nUse the left/right keys to find a photodiode event\n'
-        'and align the onset to the center of the window\n'
+        'Align\nUse the left/right keys to find an uncorrupted photodiode'
+        'event\nand align the onset to the center of the window\n'
         'use +/- to zoom the yaxis in and out (up/down to translate)\n'
         'press enter when finished')
     ax.set_xlabel('time (s)')
@@ -530,7 +534,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
 def parse_pd(fname, pd_event_name='Fixation', behf=None,
              beh_col='fix_onset_time', pd_ch_names=None,
              exclude_shift=0.03, resync=0.075,
-             chunk=2, zscore=20, min_i=10, baseline=0.25,
+             max_len=1., zscore=100, min_i=10, baseline=0.25,
              add_events=False, overwrite=False, verbose=True):
     """Parse photodiode events.
 
@@ -570,18 +574,17 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         when the drift between behavior events and the photodiode is large,
         so many events are to be excluded for being off by a small amount
         but still correctly correspond to a behavior event.
-    chunk: float
-        The size of the window to chunk the photodiode events by
-        should be larger than 2x the longest photodiode event.
-        Use `find_pd_params` to determine if unsure.
+    max_len: float
+        The longest photodiode event can be.
     zscore: float
         How large of a z-score difference to use to threshold photodiode
-        events. Use `find_pd_params` to determine if unsure.
+        events. Note, the must be large enough that any overshoot when
+        returning to threshold is less than zscore compared to baseline.
     min_i: int
         The minimum number of samples the photodiode event must be on for.
-        Use `find_pd_params` to determine if unsure.
+        This should not be changed unless the event is shorter.
     baseline: float
-        How much relative to the chunk to use to idenify the time before
+        How much relative to the max_len to use to idenify the time before
         the photodiode event. This should not be changed most likely
         unless there is a specific reason/issue.
     add_events : bool
@@ -608,6 +611,8 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     if resync < exclude_shift:
         raise ValueError(f'`exclude_shift` ({exclude_shift}) cannot be longer '
                          f'than `resync` ({resync})')
+    if baseline <= 0 or baseline > 1:
+        raise ValueError(f'baseline must be between 0 and 1, got {baseline}')
     # check if already parsed
     basename = op.splitext(op.basename(fname))[0]
     if op.isdir(op.join(op.dirname(fname), basename + '_pd_data')
@@ -617,15 +622,15 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     # load raw data file with the photodiode data
     raw = _read_raw(fname, verbose=verbose)
     # transform behavior events to sample time
-    chunk_i = np.round(raw.info['sfreq'] * chunk).astype(int)
+    max_len_i = np.round(raw.info['sfreq'] * max_len).astype(int)
     exclude_shift_i = np.round(raw.info['sfreq'] * exclude_shift).astype(int)
-    baseline_i = np.round(chunk_i * baseline).astype(int)
+    baseline_i = np.round(max_len_i * baseline).astype(int)
     resync_i = np.round(raw.info['sfreq'] * resync).astype(int)
     # use keyword argument if given, otherwise get the user to enter pd names
     # and get data
     pd, pd_ch_names = _get_pd_data(raw, pd_ch_names)
     pd_candidates, sorted_pds = _find_pd_candidates(
-        pd=pd, chunk_i=chunk_i, baseline_i=baseline_i, zscore=zscore,
+        pd=pd, max_len_i=max_len_i, baseline_i=baseline_i, zscore=zscore,
         min_i=min_i, verbose=verbose)
     # load behavioral data with which to validate event timing
     if behf is None:
@@ -648,20 +653,68 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
     events = _exclude_ambiguous_events(
         beh_events=beh_events, sorted_pds=sorted_pds,
         best_alignment=best_alignment, pd=pd, exclude_shift_i=exclude_shift_i,
-        chunk_i=chunk_i, resync_i=resync_i, sfreq=raw.info['sfreq'],
+        max_len_i=max_len_i, resync_i=resync_i, sfreq=raw.info['sfreq'],
         verbose=verbose)
     _save_pd_data(fname, raw=raw, events=events, event_id=pd_event_name,
                   pd_ch_names=pd_ch_names, beh_df=beh_df,
                   add_events=add_events, overwrite=overwrite)
 
 
-def add_pd_off_event():
-    """
+def add_pd_off_event(fname, off_event_name='Stim Off', max_len=1.,
+                     zscore=100, min_i=10, baseline=0.25,
+                     verbose=True, overwrite=False):
+    """Add an event for when the photodiode deflection returns to baseline.
+
+    Parameters
+    ----------
+    fname: str
+        The filepath to the electrophysiology file (meg/eeg/ieeg).
     off_event : str
         If None, no event will be assigned to cessation of the photodiode
         deflection. If a string is provided, an event of that name will
         be assigned to the cessation of the deflection.
+    max_len: float
+        The maximum length of the photodiode events.
+    zscore: float
+        How large of a z-score difference to use to threshold photodiode
+        events.
+    min_i: int
+        The minimum number of samples the photodiode event must be on for.
+    baseline: float
+        How much relative to max_len to use to idenify the time before
+        the photodiode event.
+    verbose : bool
+        Whether to display or supress text output on the progress
+        of the function.
+    overwrite : bool
+        Whether to overwrite existing data if it exists.
+
     """
+    raw = _read_raw(fname, verbose=verbose)
+    annot, pd_ch_names, beh_df = _load_pd_data(fname)
+    pd = _get_pd_channel_data(raw, pd_ch_names)
+    max_len_i = np.round(raw.info['sfreq'] * max_len).astype(int)
+    baseline_i = np.round(max_len_i * baseline).astype(int)
+    events = {i: samp for i, samp in enumerate(beh_df['pd_sample'])
+              if samp != 'n/a'}
+    off_events = {'up': dict(), 'down': dict()}
+    for event_idx, i in events.items():
+        i -= baseline_i  # move back one baseline avoid ramp up
+        direction, pd_start, pd_end = _check_if_pd_event(
+            pd, i, max_len_i, zscore, min_i, baseline_i)
+        assert abs(pd_start - events[event_idx]) < min_i
+        off_events[direction][event_idx] = pd_end
+    pd_direction = 'down' if \
+        len(off_events['down']) > len(off_events['up']) else 'up'
+    off_events = off_events[pd_direction]
+    onsets = np.array(list(off_events.values()))
+    annot += mne.Annotations(
+        onset=raw.times[onsets], duration=np.repeat(0.1, onsets.size),
+        description=np.repeat(off_event_name, onsets.size))
+    # save modified data
+    basename = op.splitext(op.basename(fname))[0]
+    pd_data_dir = op.join(op.dirname(fname), basename + '_pd_data')
+    annot.save(op.join(pd_data_dir, basename + '_pd_annot.fif'))
 
 
 def add_pd_relative_events(fname, behf, relative_event_cols,
@@ -685,13 +738,6 @@ def add_pd_relative_events(fname, behf, relative_event_cols,
         of the function.
     overwrite : bool
         Whether to overwrite existing data if it exists.
-
-    Returns
-    -------
-    events: DataFrame
-        A DataFrame that has a column for to the (zero)
-        indexed behavioral events and another column corresponding
-        to the time stamp of the eeg file.
 
     """
     if relative_event_names is None:
@@ -852,7 +898,7 @@ def pd_parser_save_to_bids(bids_dir, fname, sub, task, ses=None, run=None,
         _to_tsv(op.join(bids_beh_dir, bids_path.basename + '_beh.tsv'), beh_df)
 
 
-def simulate_pd_data(n_events=10, n_secs_on=1.0, amp=100., iti=6.,
+def simulate_pd_data(n_events=10, n_secs_on=1.0, amp=300., iti=6.,
                      iti_jitter=1.5, drift=0.1, prop_corrupted=0.1,
                      sfreq=1000., seed=11, show=False):
     """Simulate photodiode data.
@@ -889,10 +935,19 @@ def simulate_pd_data(n_events=10, n_secs_on=1.0, amp=100., iti=6.,
     -------
     raw : mne.io.Raw
         The raw object containing the photodiode data
+    beh_df : dict
+        A dictionary with columns:
+            - trial : int
+                The index of the event.
+            - time : float
+                The time that both the corrupted and uncorrupted events
+                occurred in seconds
     events : np.array
         The uncorrupted events where the first column is the time stamp,
         the second column is unused (zero) and the third column is the
         event identifier.
+    corrupted_indices : np.array
+        The indices of the events which were corrupted in the simulation.
     """
     if isinstance(n_secs_on, list) and len(n_secs_on) != n_events:
         raise ValueError('If a list of `n_secs_on` is provided, it must '
@@ -950,6 +1005,8 @@ def simulate_pd_data(n_events=10, n_secs_on=1.0, amp=100., iti=6.,
             # disrupt 1 / 5 of on time, 5 times amplitude
             pd_data[ts - n_on // 10: ts + n_on // 10] = \
                 np.random.random() * 5 * amp - amp
+    beh_df = dict(trial=np.arange(n_events),
+                  time=events[:, 0].astype(float) / sfreq)
     events = np.delete(events, corrupted_indices, axis=0)
     # plot if show
     if show:
@@ -963,4 +1020,4 @@ def simulate_pd_data(n_events=10, n_secs_on=1.0, amp=100., iti=6.,
     # create mne.io.Raw object
     info = mne.create_info(['pd'], sfreq, ['stim'])
     raw = mne.io.RawArray(pd_data[np.newaxis], info)
-    return raw, events
+    return raw, beh_df, events, corrupted_indices

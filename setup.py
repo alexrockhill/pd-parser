@@ -58,6 +58,7 @@ if __name__ == "__main__":
           entry_points={'console_scripts': [
               'find_pd_params = pd_parser.commands.run:find_pd_params',
               'parse_pd = pd_parser.commands.run:parse_pd',
+              'add_pd_off_events = pd_parser.commands.run:add_pd_off_events',
               'add_pd_relative_events = '
               'pd_parser.commands.run:add_pd_relative_events',
               'add_pd_events_to_raw = '

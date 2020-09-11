@@ -189,14 +189,27 @@
     <span class="k">return</span> <span class="n">df</span><span class="p">[</span><span class="n">beh_col</span><span class="p">],</span> <span class="n">df</span>
 
 
+<span class="k">def</span> <span class="nf">_get_pd_channel_data</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get the time-series data from the channel names.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">pd_ch_names</span><span class="p">]):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not all pd_ch_names, </span><span class="si">{</span><span class="n">pd_ch_names</span><span class="si">}</span><span class="s1">, &#39;</span>
+                         <span class="s1">&#39;in raw channel names&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd_ch_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">pd</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pd_ch_names</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+        <span class="n">pd</span> <span class="o">-=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pd_ch_names</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">pd</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pd_ch_names</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="n">pd</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">pd</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">pd</span>
+
+
 <span class="k">def</span> <span class="nf">_get_pd_data</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Get the names of the photodiode channels from the user.&quot;&quot;&quot;</span>
     <span class="c1"># if pd_ch_names provided</span>
     <span class="k">if</span> <span class="n">pd_ch_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">pd_ch_names</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">ch</span><span class="si">}</span><span class="s1"> in pd_ch_names </span><span class="si">{</span><span class="n">pd_ch_names</span><span class="si">}</span><span class="s1"> not &#39;</span>
-                                 <span class="s1">&#39;in raw channel names&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">([</span><span class="n">ch</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">pd_ch_names</span><span class="p">]):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Not all pd_ch_names, </span><span class="si">{</span><span class="n">pd_ch_names</span><span class="si">}</span><span class="s1">, &#39;</span>
+                             <span class="s1">&#39;in raw channel names&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># if no pd_ch_names provided</span>
         <span class="n">pd_ch_names</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s1">&#39;Enter photodiode channel names separated by a &#39;</span>
                             <span class="s1">&#39;comma or type &quot;plot&quot; to plot the data first:</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
@@ -217,43 +230,52 @@
                       <span class="s1">&#39;2 names for bipolar reference&#39;</span><span class="p">)</span>
         <span class="n">pd_ch_names</span> <span class="o">=</span> <span class="p">[</span><span class="n">ch</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span> <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">pd_ch_names</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)]</span>
     <span class="c1"># get pd data using channel names</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd_ch_names</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">pd</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pd_ch_names</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-        <span class="n">pd</span> <span class="o">-=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pd_ch_names</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">pd</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">ch_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">pd_ch_names</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
-    <span class="n">pd</span> <span class="o">-=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">pd</span><span class="p">)</span>
+    <span class="n">pd</span> <span class="o">=</span> <span class="n">_get_pd_channel_data</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">pd</span><span class="p">,</span> <span class="n">pd_ch_names</span>
 
 
-<span class="k">def</span> <span class="nf">_find_pd_candidates</span><span class="p">(</span><span class="n">pd</span><span class="p">,</span> <span class="n">chunk_i</span><span class="p">,</span> <span class="n">baseline_i</span><span class="p">,</span> <span class="n">zscore</span><span class="p">,</span> <span class="n">min_i</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_check_if_pd_event</span><span class="p">(</span><span class="n">pd</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">max_len_i</span><span class="p">,</span> <span class="n">zscore</span><span class="p">,</span> <span class="n">min_i</span><span class="p">,</span> <span class="n">baseline_i</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Take one stretch of data and determine if there is an event there.</span>
+
+<span class="sd">    Move in chunks twice as long as your longest photodiode signal</span>
+<span class="sd">    with the first 0.25 as baseline to test whether the signal goes</span>
+<span class="sd">    above/below baseline and back below/above.</span>
+<span class="sd">    The event onset must have a minimum length `min_i`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">baseline_i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>
+    <span class="c1"># use twice the length so event can be centered</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">max_len_i</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+    <span class="n">binned_s</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">,</span> <span class="o">-</span><span class="n">zscore</span><span class="p">,</span> <span class="n">zscore</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">])</span> <span class="o">-</span> <span class="mi">2</span>
+    <span class="k">for</span> <span class="n">direction</span><span class="p">,</span> <span class="n">binary_s</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="n">binned_s</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">binned_s</span><span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">onset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">binary_s</span><span class="p">[:</span><span class="n">max_len_i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">onset</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">min_i</span><span class="p">:</span>  <span class="c1"># must be long enough</span>
+            <span class="n">e</span> <span class="o">=</span> <span class="n">onset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">all</span><span class="p">(</span><span class="n">binary_s</span><span class="p">[:</span><span class="n">e</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>  <span class="c1"># must start off:</span>
+                <span class="c1"># must have an offset and no more events</span>
+                <span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">binary_s</span><span class="p">[</span><span class="n">e</span><span class="p">:]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">offset</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">oe</span> <span class="o">=</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">oe</span> <span class="o">&lt;=</span> <span class="n">max_len_i</span> <span class="ow">and</span> \
+                            <span class="nb">all</span><span class="p">(</span><span class="n">binary_s</span><span class="p">[</span><span class="n">e</span> <span class="o">+</span> <span class="n">oe</span><span class="p">:</span><span class="n">e</span> <span class="o">+</span> <span class="n">max_len_i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                        <span class="k">return</span> <span class="n">direction</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">e</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">e</span> <span class="o">+</span> <span class="n">oe</span>
+    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">_find_pd_candidates</span><span class="p">(</span><span class="n">pd</span><span class="p">,</span> <span class="n">max_len_i</span><span class="p">,</span> <span class="n">baseline_i</span><span class="p">,</span> <span class="n">zscore</span><span class="p">,</span> <span class="n">min_i</span><span class="p">,</span>
+                        <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Find all points in the signal that look like a square wave.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Finding photodiode events&#39;</span><span class="p">)</span>
-    <span class="sd">&#39;&#39;&#39; Move in chunks twice as long as your longest photodiode signal</span>
-<span class="sd">        with the first 0.25 as baseline to test whether the signal goes</span>
-<span class="sd">        above/below baseline and back below/above.</span>
-<span class="sd">        The event onset must have a minimum length `min_i` and</span>
-<span class="sd">        `overlap` should be set such that no events will be missed</span>
-<span class="sd">        and if a pd event gets cut off, you&#39;ll find it the next chunk&#39;&#39;&#39;</span>
     <span class="n">pd_candidates</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">up</span><span class="o">=</span><span class="nb">set</span><span class="p">(),</span> <span class="n">down</span><span class="o">=</span><span class="nb">set</span><span class="p">())</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">baseline_i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd</span><span class="p">)</span> <span class="o">-</span> <span class="n">chunk_i</span> <span class="o">-</span> <span class="n">baseline_i</span><span class="p">,</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">baseline_i</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd</span><span class="p">)</span> <span class="o">-</span> <span class="n">max_len_i</span> <span class="o">-</span> <span class="n">baseline_i</span><span class="p">,</span>
                         <span class="n">baseline_i</span> <span class="o">//</span> <span class="mi">2</span><span class="p">)):</span>
-        <span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="n">baseline_i</span><span class="p">:</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">pd</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">chunk_i</span><span class="p">]</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-        <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">binary_s</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="n">s</span> <span class="o">&gt;</span> <span class="n">zscore</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="n">s</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">zscore</span><span class="p">}</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">binary_s</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>  <span class="c1"># must start off</span>
-                <span class="n">onset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">binary_s</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                <span class="k">if</span> <span class="n">onset</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="n">min_i</span><span class="p">:</span>
-                    <span class="n">e</span> <span class="o">=</span> <span class="n">onset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="c1"># must have an offset and no more events</span>
-                    <span class="n">offset</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">binary_s</span><span class="p">[</span><span class="n">e</span><span class="p">:])[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="c1"># no rounding errors</span>
-                    <span class="k">if</span> <span class="n">offset</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">(</span><span class="n">binary_s</span><span class="p">[</span><span class="n">e</span> <span class="o">+</span> <span class="n">offset</span><span class="p">[</span><span class="mi">0</span><span class="p">]:]):</span>
-                        <span class="k">if</span> <span class="ow">not</span> <span class="nb">any</span><span class="p">([</span><span class="n">i</span> <span class="o">+</span> <span class="n">e</span> <span class="o">+</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">this_pd_c</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span>
-                                    <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">min_i</span><span class="p">,</span> <span class="n">min_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">this_pd_c</span> <span class="ow">in</span>
-                                    <span class="n">pd_candidates</span><span class="o">.</span><span class="n">values</span><span class="p">()]):</span>
-                            <span class="n">pd_candidates</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span>
+        <span class="n">direction</span><span class="p">,</span> <span class="n">onset</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">_check_if_pd_event</span><span class="p">(</span>
+            <span class="n">pd</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">max_len_i</span><span class="p">,</span> <span class="n">zscore</span><span class="p">,</span> <span class="n">min_i</span><span class="p">,</span> <span class="n">baseline_i</span><span class="p">)</span>
+        <span class="c1"># no rounding errors</span>
+        <span class="k">if</span> <span class="n">onset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">onset</span> <span class="o">+</span> <span class="n">j</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">this_pd_cs</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="o">-</span><span class="n">min_i</span><span class="p">,</span> <span class="n">min_i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+             <span class="k">for</span> <span class="n">this_pd_cs</span> <span class="ow">in</span> <span class="n">pd_candidates</span><span class="o">.</span><span class="n">values</span><span class="p">()]):</span>
+            <span class="n">pd_candidates</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">onset</span><span class="p">)</span>
     <span class="n">pd_direction</span> <span class="o">=</span> <span class="s1">&#39;down&#39;</span> <span class="k">if</span> \
         <span class="nb">len</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">[</span><span class="s1">&#39;down&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">pd_candidates</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">])</span> <span class="k">else</span> <span class="s1">&#39;up&#39;</span>
     <span class="n">pd_candidates</span> <span class="o">=</span> <span class="n">pd_candidates</span><span class="p">[</span><span class="n">pd_direction</span><span class="p">]</span>
@@ -317,7 +339,7 @@
             <span class="n">best_errors</span> <span class="o">=</span> <span class="n">beh_errors</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Best alignment with the photodiode shifted </span><span class="si">{:.0f}</span><span class="s1"> ms &#39;</span>
-              <span class="s1">&#39;relative to the first behavior event errors: min </span><span class="si">{:.0f}</span><span class="s1">, &#39;</span>
+              <span class="s1">&#39;relative to the first behavior event</span><span class="se">\n</span><span class="s1">errors: min </span><span class="si">{:.0f}</span><span class="s1">, &#39;</span>
               <span class="s1">&#39;q1 </span><span class="si">{:.0f}</span><span class="s1">, med </span><span class="si">{:.0f}</span><span class="s1">, q3 </span><span class="si">{:.0f}</span><span class="s1">, max </span><span class="si">{:.0f}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
                   <span class="p">(</span><span class="n">beh_events</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">best_alignment</span><span class="p">)</span> <span class="o">/</span> <span class="n">sfreq</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">best_errors</span><span class="p">),</span>
                   <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">best_errors</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">best_errors</span><span class="p">),</span>
@@ -326,14 +348,14 @@
 
 
 <span class="k">def</span> <span class="nf">_exclude_ambiguous_events</span><span class="p">(</span><span class="n">beh_events</span><span class="p">,</span> <span class="n">sorted_pds</span><span class="p">,</span> <span class="n">best_alignment</span><span class="p">,</span> <span class="n">pd</span><span class="p">,</span>
-                              <span class="n">exclude_shift_i</span><span class="p">,</span> <span class="n">chunk_i</span><span class="p">,</span> <span class="n">resync_i</span><span class="p">,</span> <span class="n">sfreq</span><span class="p">,</span>
+                              <span class="n">exclude_shift_i</span><span class="p">,</span> <span class="n">max_len_i</span><span class="p">,</span> <span class="n">resync_i</span><span class="p">,</span> <span class="n">sfreq</span><span class="p">,</span>
                               <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Exclude all events that are outside the given shift compared to beh.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
         <span class="n">pd_section_data</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">b_event</span><span class="o">=</span><span class="nb">list</span><span class="p">(),</span> <span class="n">title</span><span class="o">=</span><span class="nb">list</span><span class="p">())</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Excluding events that have zero close events or more than &#39;</span>
-              <span class="s1">&#39;one photodiode event within `chunk` time&#39;</span><span class="p">)</span>
+              <span class="s1">&#39;one photodiode event within `max_len` time&#39;</span><span class="p">)</span>
     <span class="n">events</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">errors</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">pd_candidates</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">sorted_pds</span><span class="p">)</span>
@@ -346,8 +368,8 @@
             <span class="n">best_alignment</span> <span class="o">-=</span> <span class="n">j</span>
             <span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">b_event</span> <span class="o">-</span> <span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
             <span class="n">errors</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">j</span>
-            <span class="n">pd_events</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">sorted_pds</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">chunk_i</span><span class="p">),</span>
-                                       <span class="n">sorted_pds</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">chunk_i</span><span class="p">))</span>
+            <span class="n">pd_events</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">sorted_pds</span> <span class="o">&lt;</span> <span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">max_len_i</span><span class="p">),</span>
+                                       <span class="n">sorted_pds</span> <span class="o">&gt;</span> <span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">max_len_i</span><span class="p">))</span>
             <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="n">pd_events</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">events</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                 <span class="n">errors</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
@@ -362,11 +384,11 @@
                 <span class="c1"># if off by nearly exclude_shift_i, still use for adjusting</span>
                 <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">resync_i</span><span class="p">:</span>
                     <span class="n">best_alignment</span> <span class="o">-=</span> <span class="n">j</span>
-                <span class="c1"># if off by a less than a chunk, report samples</span>
-                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">chunk_i</span><span class="p">:</span>
-                    <span class="n">j_ms</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">j</span> <span class="o">/</span> <span class="n">sfreq</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="c1"># if off by a less than max_len, report samples</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_len_i</span><span class="p">:</span>
+                    <span class="n">j_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">j</span> <span class="o">/</span> <span class="n">sfreq</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>
                     <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Excluding event </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">off by </span><span class="si">{</span><span class="n">j_ms</span><span class="si">}</span><span class="s1"> ms&#39;</span>
-                <span class="k">else</span><span class="p">:</span>  <span class="c1"># if off by more than a chunk, just say missing</span>
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># if off by more than max_len, just say missing</span>
                     <span class="n">text</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Excluding event </span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">,</span><span class="se">\n</span><span class="s1">no event found&#39;</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">text</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">))</span>
                 <span class="n">pd_section_data</span><span class="p">[</span><span class="s1">&#39;b_event&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">b_event</span><span class="p">)</span>
@@ -389,8 +411,8 @@
             <span class="k">for</span> <span class="n">b_event</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">pd_section_data</span><span class="p">[</span><span class="s1">&#39;b_event&#39;</span><span class="p">],</span>
                                           <span class="n">pd_section_data</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">],</span>
                                           <span class="n">axes</span><span class="p">[:</span><span class="n">n_events_ex</span><span class="p">]):</span>
-                <span class="n">pd_section</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">b_event</span> <span class="o">-</span> <span class="n">chunk_i</span><span class="p">):</span>
-                                <span class="nb">int</span><span class="p">(</span><span class="n">b_event</span> <span class="o">+</span> <span class="n">chunk_i</span><span class="p">)]</span>
+                <span class="n">pd_section</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">b_event</span> <span class="o">-</span> <span class="n">max_len_i</span><span class="p">):</span>
+                                <span class="nb">int</span><span class="p">(</span><span class="n">b_event</span> <span class="o">+</span> <span class="n">max_len_i</span><span class="p">)]</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">pd_section</span><span class="o">.</span><span class="n">size</span><span class="p">),</span> <span class="n">pd_section</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="n">pd_section</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span> <span class="n">pd_section</span><span class="o">.</span><span class="n">max</span><span class="p">()],</span>
                         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
@@ -398,7 +420,7 @@
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;voltage&#39;</span><span class="p">)</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
-                    <span class="o">-</span><span class="n">chunk_i</span> <span class="o">/</span> <span class="n">sfreq</span><span class="p">,</span> <span class="n">chunk_i</span> <span class="o">/</span> <span class="n">sfreq</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
+                    <span class="o">-</span><span class="n">max_len_i</span> <span class="o">/</span> <span class="n">sfreq</span><span class="p">,</span> <span class="n">max_len_i</span> <span class="o">/</span> <span class="n">sfreq</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="mi">2</span><span class="p">))</span>
                 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
         <span class="n">trials</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">errors</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -471,9 +493,8 @@
 <div class="viewcode-block" id="find_pd_params"><a class="viewcode-back" href="../api.html#parse_pd.find_pd_params">[docs]</a><span class="k">def</span> <span class="nf">find_pd_params</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Plot the data so the user can determine the right parameters.</span>
 
-<span class="sd">    The user can adjust window size to determine chunk, horizontal</span>
-<span class="sd">    line height to determine zscore and seperation length of two</span>
-<span class="sd">    vertical lines to determine min_i.</span>
+<span class="sd">    The user can adjust window size to determine max_len and horizontal</span>
+<span class="sd">    line height to determine zscore.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -507,64 +528,47 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">([</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">])</span>
         <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">set_min_i</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_zscore</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;enter&#39;</span><span class="p">:</span>
+            <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
             <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
-            <span class="n">chunk</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.1</span>
+            <span class="n">max_len</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="mf">1.1</span>
             <span class="n">b</span> <span class="o">=</span> <span class="n">pd</span><span class="p">[</span><span class="n">raw</span><span class="o">.</span><span class="n">time_as_index</span><span class="p">(</span><span class="n">xmin</span><span class="p">)[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">raw</span><span class="o">.</span><span class="n">time_as_index</span><span class="p">(</span>
                 <span class="n">xmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">)[</span><span class="mi">0</span><span class="p">]]</span>  <span class="c1"># 0.25 == default baseline</span>
             <span class="n">zy</span> <span class="o">=</span> <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_ydata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">zscore</span> <span class="o">=</span> <span class="p">(</span><span class="n">zy</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">b</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
-            <span class="n">min_i</span> <span class="o">=</span> <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;min_i&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_xdata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">min_i</span> <span class="o">-=</span> <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zero&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_xdata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">min_i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">min_i</span> <span class="o">*</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">])</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Recommendations</span><span class="se">\n</span><span class="s1">chunk: </span><span class="si">{:.2f}</span><span class="s1">, zscore: </span><span class="si">{:.2f}</span><span class="s1">, &#39;</span>
-                         <span class="s1">&#39;min_i: </span><span class="si">{:d}</span><span class="se">\n</span><span class="s1">You may now close the window</span><span class="se">\n</span><span class="s1">&#39;</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Recommendations</span><span class="se">\n</span><span class="s1">max_len: </span><span class="si">{:.2f}</span><span class="s1">, zscore: </span><span class="si">{:.2f}</span><span class="se">\n</span><span class="s1">&#39;</span>
+                         <span class="s1">&#39;You may now close the window</span><span class="se">\n</span><span class="s1">&#39;</span>
                          <span class="s1">&#39;Try using these parameters for `parse_pd` and</span><span class="se">\n</span><span class="s1">&#39;</span>
                          <span class="s1">&#39;please report to the developers if there are issues&#39;</span>
-                         <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">chunk</span><span class="p">,</span> <span class="n">zscore</span><span class="p">,</span> <span class="n">min_i</span><span class="p">))</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-        <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">):</span>
-            <span class="n">min_i_x</span> <span class="o">=</span> <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;min_i&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_xdata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">min_i_x</span> <span class="o">+=</span> <span class="mf">0.01</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;left&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="mf">0.01</span>
-            <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;min_i&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_xdata</span><span class="p">([</span><span class="n">min_i_x</span><span class="p">,</span> <span class="n">min_i_x</span><span class="p">])</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
-
-    <span class="k">def</span> <span class="nf">set_zscore</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;enter&#39;</span><span class="p">:</span>
-            <span class="n">eid</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;key_press_event&#39;</span><span class="p">,</span> <span class="n">set_min_i</span><span class="p">)</span>
-            <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_disconnect</span><span class="p">(</span><span class="n">eid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># disconnect previous</span>
-            <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_xlim</span><span class="p">()</span>
-            <span class="n">zerox</span> <span class="o">=</span> <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zero&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_xdata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">min_i_x</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">+</span> <span class="n">zerox</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
-            <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
-            <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;min_i&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">min_i_x</span><span class="p">,</span> <span class="n">min_i_x</span><span class="p">],</span> <span class="p">[</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">],</span>
-                                         <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-                <span class="s1">&#39;Length</span><span class="se">\n</span><span class="s1">Use the left/right arrows to set the vertical</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;line to a point on the photodiode plateau</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;where all events would still be on the plateau</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;press enter when finished&#39;</span><span class="p">)</span>
+                         <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">max_len</span><span class="p">,</span> <span class="n">zscore</span><span class="p">))</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">):</span>
             <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_ylim</span><span class="p">()</span>
             <span class="n">delta</span> <span class="o">=</span> <span class="p">(</span><span class="n">ymax</span> <span class="o">-</span> <span class="n">ymin</span><span class="p">)</span> <span class="o">/</span> <span class="mi">100</span>
             <span class="n">zy</span> <span class="o">=</span> <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_ydata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">zy_ref</span> <span class="o">=</span> <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zscore_reflection&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_ydata</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">zy</span> <span class="o">+=</span> <span class="n">delta</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;up&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="n">delta</span>
+            <span class="n">zy_ref</span> <span class="o">-=</span> <span class="n">delta</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;up&#39;</span> <span class="k">else</span> <span class="o">-</span><span class="n">delta</span>
             <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_ydata</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">pd</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="n">zy</span><span class="p">)</span>
+            <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zscore_reflection&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_ydata</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">pd</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="n">zy_ref</span><span class="p">)</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">set_chunk</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_max_len</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;enter&#39;</span><span class="p">:</span>
             <span class="n">eid</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;key_press_event&#39;</span><span class="p">,</span> <span class="n">set_zscore</span><span class="p">)</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_disconnect</span><span class="p">(</span><span class="n">eid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># disconnect previous</span>
             <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zscore&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
                 <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">pd</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">pd</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
                 <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">plot_data</span><span class="p">[</span><span class="s1">&#39;zscore_reflection&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+                <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">pd</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">pd</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">),</span>
+                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-                <span class="s1">&#39;Scale</span><span class="se">\n</span><span class="s1">Use the up/down arrows to set the horizontal</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;line at a level where the plateau of all the</span><span class="se">\n</span><span class="s1">&#39;</span>
-                <span class="s1">&#39;photodiode events would still be above the line</span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;Scale</span><span class="se">\n</span><span class="s1">Use the up/down arrows to set the horizontal line </span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;at a level where the plateau of all the photodiode events </span><span class="se">\n</span><span class="s1">&#39;</span>
+                <span class="s1">&#39;is above the green line nothing is below the red line</span><span class="se">\n</span><span class="s1">&#39;</span>
                 <span class="s1">&#39;press enter when finished&#39;</span><span class="p">)</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
         <span class="k">elif</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="ow">in</span> <span class="p">(</span><span class="s1">&#39;up&#39;</span><span class="p">,</span> <span class="s1">&#39;down&#39;</span><span class="p">):</span>
@@ -577,7 +581,7 @@
 
     <span class="k">def</span> <span class="nf">align_keypress</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;enter&#39;</span><span class="p">:</span>
-            <span class="n">eid</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;key_press_event&#39;</span><span class="p">,</span> <span class="n">set_chunk</span><span class="p">)</span>
+            <span class="n">eid</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_connect</span><span class="p">(</span><span class="s1">&#39;key_press_event&#39;</span><span class="p">,</span> <span class="n">set_max_len</span><span class="p">)</span>
             <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">mpl_disconnect</span><span class="p">(</span><span class="n">eid</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># disconnect previous</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
                 <span class="s1">&#39;Window</span><span class="se">\n</span><span class="s1">Use the up/down arrows to increase/decrease the</span><span class="se">\n</span><span class="s1">&#39;</span>
@@ -605,8 +609,8 @@
             <span class="n">fig</span><span class="o">.</span><span class="n">canvas</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
-        <span class="s1">&#39;Align</span><span class="se">\n</span><span class="s1">Use the left/right keys to find a photodiode event</span><span class="se">\n</span><span class="s1">&#39;</span>
-        <span class="s1">&#39;and align the onset to the center of the window</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="s1">&#39;Align</span><span class="se">\n</span><span class="s1">Use the left/right keys to find an uncorrupted photodiode&#39;</span>
+        <span class="s1">&#39;event</span><span class="se">\n</span><span class="s1">and align the onset to the center of the window</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="s1">&#39;use +/- to zoom the yaxis in and out (up/down to translate)</span><span class="se">\n</span><span class="s1">&#39;</span>
         <span class="s1">&#39;press enter when finished&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span>
@@ -624,7 +628,7 @@
 <div class="viewcode-block" id="parse_pd"><a class="viewcode-back" href="../api.html#parse_pd.parse_pd">[docs]</a><span class="k">def</span> <span class="nf">parse_pd</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pd_event_name</span><span class="o">=</span><span class="s1">&#39;Fixation&#39;</span><span class="p">,</span> <span class="n">behf</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">beh_col</span><span class="o">=</span><span class="s1">&#39;fix_onset_time&#39;</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
              <span class="n">exclude_shift</span><span class="o">=</span><span class="mf">0.03</span><span class="p">,</span> <span class="n">resync</span><span class="o">=</span><span class="mf">0.075</span><span class="p">,</span>
-             <span class="n">chunk</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+             <span class="n">max_len</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
              <span class="n">add_events</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Parse photodiode events.</span>
 
@@ -664,18 +668,17 @@
 <span class="sd">        when the drift between behavior events and the photodiode is large,</span>
 <span class="sd">        so many events are to be excluded for being off by a small amount</span>
 <span class="sd">        but still correctly correspond to a behavior event.</span>
-<span class="sd">    chunk: float</span>
-<span class="sd">        The size of the window to chunk the photodiode events by</span>
-<span class="sd">        should be larger than 2x the longest photodiode event.</span>
-<span class="sd">        Use `find_pd_params` to determine if unsure.</span>
+<span class="sd">    max_len: float</span>
+<span class="sd">        The longest photodiode event can be.</span>
 <span class="sd">    zscore: float</span>
 <span class="sd">        How large of a z-score difference to use to threshold photodiode</span>
-<span class="sd">        events. Use `find_pd_params` to determine if unsure.</span>
+<span class="sd">        events. Note, the must be large enough that any overshoot when</span>
+<span class="sd">        returning to threshold is less than zscore compared to baseline.</span>
 <span class="sd">    min_i: int</span>
 <span class="sd">        The minimum number of samples the photodiode event must be on for.</span>
-<span class="sd">        Use `find_pd_params` to determine if unsure.</span>
+<span class="sd">        This should not be changed unless the event is shorter.</span>
 <span class="sd">    baseline: float</span>
-<span class="sd">        How much relative to the chunk to use to idenify the time before</span>
+<span class="sd">        How much relative to the max_len to use to idenify the time before</span>
 <span class="sd">        the photodiode event. This should not be changed most likely</span>
 <span class="sd">        unless there is a specific reason/issue.</span>
 <span class="sd">    add_events : bool</span>
@@ -702,6 +705,8 @@
     <span class="k">if</span> <span class="n">resync</span> <span class="o">&lt;</span> <span class="n">exclude_shift</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;`exclude_shift` (</span><span class="si">{</span><span class="n">exclude_shift</span><span class="si">}</span><span class="s1">) cannot be longer &#39;</span>
                          <span class="sa">f</span><span class="s1">&#39;than `resync` (</span><span class="si">{</span><span class="n">resync</span><span class="si">}</span><span class="s1">)&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">baseline</span> <span class="o">&lt;=</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">baseline</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;baseline must be between 0 and 1, got </span><span class="si">{</span><span class="n">baseline</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="c1"># check if already parsed</span>
     <span class="n">basename</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">op</span><span class="o">.</span><span class="n">isdir</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;_pd_data&#39;</span><span class="p">)</span>
@@ -711,15 +716,15 @@
     <span class="c1"># load raw data file with the photodiode data</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">_read_raw</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="c1"># transform behavior events to sample time</span>
-    <span class="n">chunk_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">chunk</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">max_len_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">max_len</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">exclude_shift_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">exclude_shift</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
-    <span class="n">baseline_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">chunk_i</span> <span class="o">*</span> <span class="n">baseline</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">baseline_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">max_len_i</span> <span class="o">*</span> <span class="n">baseline</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="n">resync_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">resync</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
     <span class="c1"># use keyword argument if given, otherwise get the user to enter pd names</span>
     <span class="c1"># and get data</span>
     <span class="n">pd</span><span class="p">,</span> <span class="n">pd_ch_names</span> <span class="o">=</span> <span class="n">_get_pd_data</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="p">)</span>
     <span class="n">pd_candidates</span><span class="p">,</span> <span class="n">sorted_pds</span> <span class="o">=</span> <span class="n">_find_pd_candidates</span><span class="p">(</span>
-        <span class="n">pd</span><span class="o">=</span><span class="n">pd</span><span class="p">,</span> <span class="n">chunk_i</span><span class="o">=</span><span class="n">chunk_i</span><span class="p">,</span> <span class="n">baseline_i</span><span class="o">=</span><span class="n">baseline_i</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="n">zscore</span><span class="p">,</span>
+        <span class="n">pd</span><span class="o">=</span><span class="n">pd</span><span class="p">,</span> <span class="n">max_len_i</span><span class="o">=</span><span class="n">max_len_i</span><span class="p">,</span> <span class="n">baseline_i</span><span class="o">=</span><span class="n">baseline_i</span><span class="p">,</span> <span class="n">zscore</span><span class="o">=</span><span class="n">zscore</span><span class="p">,</span>
         <span class="n">min_i</span><span class="o">=</span><span class="n">min_i</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="c1"># load behavioral data with which to validate event timing</span>
     <span class="k">if</span> <span class="n">behf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -742,20 +747,68 @@
     <span class="n">events</span> <span class="o">=</span> <span class="n">_exclude_ambiguous_events</span><span class="p">(</span>
         <span class="n">beh_events</span><span class="o">=</span><span class="n">beh_events</span><span class="p">,</span> <span class="n">sorted_pds</span><span class="o">=</span><span class="n">sorted_pds</span><span class="p">,</span>
         <span class="n">best_alignment</span><span class="o">=</span><span class="n">best_alignment</span><span class="p">,</span> <span class="n">pd</span><span class="o">=</span><span class="n">pd</span><span class="p">,</span> <span class="n">exclude_shift_i</span><span class="o">=</span><span class="n">exclude_shift_i</span><span class="p">,</span>
-        <span class="n">chunk_i</span><span class="o">=</span><span class="n">chunk_i</span><span class="p">,</span> <span class="n">resync_i</span><span class="o">=</span><span class="n">resync_i</span><span class="p">,</span> <span class="n">sfreq</span><span class="o">=</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span>
+        <span class="n">max_len_i</span><span class="o">=</span><span class="n">max_len_i</span><span class="p">,</span> <span class="n">resync_i</span><span class="o">=</span><span class="n">resync_i</span><span class="p">,</span> <span class="n">sfreq</span><span class="o">=</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span>
         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
     <span class="n">_save_pd_data</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">raw</span><span class="o">=</span><span class="n">raw</span><span class="p">,</span> <span class="n">events</span><span class="o">=</span><span class="n">events</span><span class="p">,</span> <span class="n">event_id</span><span class="o">=</span><span class="n">pd_event_name</span><span class="p">,</span>
                   <span class="n">pd_ch_names</span><span class="o">=</span><span class="n">pd_ch_names</span><span class="p">,</span> <span class="n">beh_df</span><span class="o">=</span><span class="n">beh_df</span><span class="p">,</span>
                   <span class="n">add_events</span><span class="o">=</span><span class="n">add_events</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="add_pd_off_event"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_off_event">[docs]</a><span class="k">def</span> <span class="nf">add_pd_off_event</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="add_pd_off_event"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_off_event">[docs]</a><span class="k">def</span> <span class="nf">add_pd_off_event</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">off_event_name</span><span class="o">=</span><span class="s1">&#39;Stim Off&#39;</span><span class="p">,</span> <span class="n">max_len</span><span class="o">=</span><span class="mf">1.</span><span class="p">,</span>
+                     <span class="n">zscore</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">min_i</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">baseline</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+                     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Add an event for when the photodiode deflection returns to baseline.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fname: str</span>
+<span class="sd">        The filepath to the electrophysiology file (meg/eeg/ieeg).</span>
 <span class="sd">    off_event : str</span>
 <span class="sd">        If None, no event will be assigned to cessation of the photodiode</span>
 <span class="sd">        deflection. If a string is provided, an event of that name will</span>
 <span class="sd">        be assigned to the cessation of the deflection.</span>
-<span class="sd">    &quot;&quot;&quot;</span></div>
+<span class="sd">    max_len: float</span>
+<span class="sd">        The maximum length of the photodiode events.</span>
+<span class="sd">    zscore: float</span>
+<span class="sd">        How large of a z-score difference to use to threshold photodiode</span>
+<span class="sd">        events.</span>
+<span class="sd">    min_i: int</span>
+<span class="sd">        The minimum number of samples the photodiode event must be on for.</span>
+<span class="sd">    baseline: float</span>
+<span class="sd">        How much relative to max_len to use to idenify the time before</span>
+<span class="sd">        the photodiode event.</span>
+<span class="sd">    verbose : bool</span>
+<span class="sd">        Whether to display or supress text output on the progress</span>
+<span class="sd">        of the function.</span>
+<span class="sd">    overwrite : bool</span>
+<span class="sd">        Whether to overwrite existing data if it exists.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">raw</span> <span class="o">=</span> <span class="n">_read_raw</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+    <span class="n">annot</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="p">,</span> <span class="n">beh_df</span> <span class="o">=</span> <span class="n">_load_pd_data</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+    <span class="n">pd</span> <span class="o">=</span> <span class="n">_get_pd_channel_data</span><span class="p">(</span><span class="n">raw</span><span class="p">,</span> <span class="n">pd_ch_names</span><span class="p">)</span>
+    <span class="n">max_len_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="n">max_len</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">baseline_i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">max_len_i</span> <span class="o">*</span> <span class="n">baseline</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">events</span> <span class="o">=</span> <span class="p">{</span><span class="n">i</span><span class="p">:</span> <span class="n">samp</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">samp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">beh_df</span><span class="p">[</span><span class="s1">&#39;pd_sample&#39;</span><span class="p">])</span>
+              <span class="k">if</span> <span class="n">samp</span> <span class="o">!=</span> <span class="s1">&#39;n/a&#39;</span><span class="p">}</span>
+    <span class="n">off_events</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;up&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span> <span class="s1">&#39;down&#39;</span><span class="p">:</span> <span class="nb">dict</span><span class="p">()}</span>
+    <span class="k">for</span> <span class="n">event_idx</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">events</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">i</span> <span class="o">-=</span> <span class="n">baseline_i</span>  <span class="c1"># move back one baseline avoid ramp up</span>
+        <span class="n">direction</span><span class="p">,</span> <span class="n">pd_start</span><span class="p">,</span> <span class="n">pd_end</span> <span class="o">=</span> <span class="n">_check_if_pd_event</span><span class="p">(</span>
+            <span class="n">pd</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">max_len_i</span><span class="p">,</span> <span class="n">zscore</span><span class="p">,</span> <span class="n">min_i</span><span class="p">,</span> <span class="n">baseline_i</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">abs</span><span class="p">(</span><span class="n">pd_start</span> <span class="o">-</span> <span class="n">events</span><span class="p">[</span><span class="n">event_idx</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">min_i</span>
+        <span class="n">off_events</span><span class="p">[</span><span class="n">direction</span><span class="p">][</span><span class="n">event_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd_end</span>
+    <span class="n">pd_direction</span> <span class="o">=</span> <span class="s1">&#39;down&#39;</span> <span class="k">if</span> \
+        <span class="nb">len</span><span class="p">(</span><span class="n">off_events</span><span class="p">[</span><span class="s1">&#39;down&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">off_events</span><span class="p">[</span><span class="s1">&#39;up&#39;</span><span class="p">])</span> <span class="k">else</span> <span class="s1">&#39;up&#39;</span>
+    <span class="n">off_events</span> <span class="o">=</span> <span class="n">off_events</span><span class="p">[</span><span class="n">pd_direction</span><span class="p">]</span>
+    <span class="n">onsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">off_events</span><span class="o">.</span><span class="n">values</span><span class="p">()))</span>
+    <span class="n">annot</span> <span class="o">+=</span> <span class="n">mne</span><span class="o">.</span><span class="n">Annotations</span><span class="p">(</span>
+        <span class="n">onset</span><span class="o">=</span><span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="n">onsets</span><span class="p">],</span> <span class="n">duration</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">onsets</span><span class="o">.</span><span class="n">size</span><span class="p">),</span>
+        <span class="n">description</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">off_event_name</span><span class="p">,</span> <span class="n">onsets</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+    <span class="c1"># save modified data</span>
+    <span class="n">basename</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">fname</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pd_data_dir</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;_pd_data&#39;</span><span class="p">)</span>
+    <span class="n">annot</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">pd_data_dir</span><span class="p">,</span> <span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;_pd_annot.fif&#39;</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="add_pd_relative_events"><a class="viewcode-back" href="../api.html#parse_pd.add_pd_relative_events">[docs]</a><span class="k">def</span> <span class="nf">add_pd_relative_events</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="p">,</span> <span class="n">relative_event_cols</span><span class="p">,</span>
@@ -779,13 +832,6 @@
 <span class="sd">        of the function.</span>
 <span class="sd">    overwrite : bool</span>
 <span class="sd">        Whether to overwrite existing data if it exists.</span>
-
-<span class="sd">    Returns</span>
-<span class="sd">    -------</span>
-<span class="sd">    events: DataFrame</span>
-<span class="sd">        A DataFrame that has a column for to the (zero)</span>
-<span class="sd">        indexed behavioral events and another column corresponding</span>
-<span class="sd">        to the time stamp of the eeg file.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">relative_event_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -946,7 +992,7 @@
         <span class="n">_to_tsv</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">bids_beh_dir</span><span class="p">,</span> <span class="n">bids_path</span><span class="o">.</span><span class="n">basename</span> <span class="o">+</span> <span class="s1">&#39;_beh.tsv&#39;</span><span class="p">),</span> <span class="n">beh_df</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="simulate_pd_data"><a class="viewcode-back" href="../api.html#parse_pd.simulate_pd_data">[docs]</a><span class="k">def</span> <span class="nf">simulate_pd_data</span><span class="p">(</span><span class="n">n_events</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_secs_on</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mf">100.</span><span class="p">,</span> <span class="n">iti</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span>
+<div class="viewcode-block" id="simulate_pd_data"><a class="viewcode-back" href="../api.html#parse_pd.simulate_pd_data">[docs]</a><span class="k">def</span> <span class="nf">simulate_pd_data</span><span class="p">(</span><span class="n">n_events</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_secs_on</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mf">300.</span><span class="p">,</span> <span class="n">iti</span><span class="o">=</span><span class="mf">6.</span><span class="p">,</span>
                      <span class="n">iti_jitter</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">prop_corrupted</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
                      <span class="n">sfreq</span><span class="o">=</span><span class="mf">1000.</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span> <span class="n">show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Simulate photodiode data.</span>
@@ -983,10 +1029,19 @@
 <span class="sd">    -------</span>
 <span class="sd">    raw : mne.io.Raw</span>
 <span class="sd">        The raw object containing the photodiode data</span>
+<span class="sd">    beh_df : dict</span>
+<span class="sd">        A dictionary with columns:</span>
+<span class="sd">            - trial : int</span>
+<span class="sd">                The index of the event.</span>
+<span class="sd">            - time : float</span>
+<span class="sd">                The time that both the corrupted and uncorrupted events</span>
+<span class="sd">                occurred in seconds</span>
 <span class="sd">    events : np.array</span>
 <span class="sd">        The uncorrupted events where the first column is the time stamp,</span>
 <span class="sd">        the second column is unused (zero) and the third column is the</span>
 <span class="sd">        event identifier.</span>
+<span class="sd">    corrupted_indices : np.array</span>
+<span class="sd">        The indices of the events which were corrupted in the simulation.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">n_secs_on</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">n_secs_on</span><span class="p">)</span> <span class="o">!=</span> <span class="n">n_events</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;If a list of `n_secs_on` is provided, it must &#39;</span>
@@ -1044,6 +1099,8 @@
             <span class="c1"># disrupt 1 / 5 of on time, 5 times amplitude</span>
             <span class="n">pd_data</span><span class="p">[</span><span class="n">ts</span> <span class="o">-</span> <span class="n">n_on</span> <span class="o">//</span> <span class="mi">10</span><span class="p">:</span> <span class="n">ts</span> <span class="o">+</span> <span class="n">n_on</span> <span class="o">//</span> <span class="mi">10</span><span class="p">]</span> <span class="o">=</span> \
                 <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span> <span class="o">*</span> <span class="mi">5</span> <span class="o">*</span> <span class="n">amp</span> <span class="o">-</span> <span class="n">amp</span>
+    <span class="n">beh_df</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">trial</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_events</span><span class="p">),</span>
+                  <span class="n">time</span><span class="o">=</span><span class="n">events</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="n">sfreq</span><span class="p">)</span>
     <span class="n">events</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">events</span><span class="p">,</span> <span class="n">corrupted_indices</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="c1"># plot if show</span>
     <span class="k">if</span> <span class="n">show</span><span class="p">:</span>
@@ -1057,7 +1114,7 @@
     <span class="c1"># create mne.io.Raw object</span>
     <span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">([</span><span class="s1">&#39;pd&#39;</span><span class="p">],</span> <span class="n">sfreq</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;stim&#39;</span><span class="p">])</span>
     <span class="n">raw</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">RawArray</span><span class="p">(</span><span class="n">pd_data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">],</span> <span class="n">info</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">raw</span><span class="p">,</span> <span class="n">events</span></div>
+    <span class="k">return</span> <span class="n">raw</span><span class="p">,</span> <span class="n">beh_df</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">corrupted_indices</span></div>
 </pre></div>
 
     </div>

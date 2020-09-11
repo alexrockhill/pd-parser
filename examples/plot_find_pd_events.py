@@ -11,7 +11,7 @@ align them to behavior. Then, save the data to BIDS format.
 # License: BSD (3-clause)
 
 ###############################################################################
-# Import data and use it to make a raw object:
+# Simulate data and use it to make a raw object:
 #
 # We'll make an mne.io.Raw object so that we can save out some random
 # data with a photodiode event channel in it in fif format (a standard
@@ -28,41 +28,50 @@ from pd_parser.parse_pd import _to_tsv
 out_dir = _TempDir()
 
 # simulate photodiode data
-raw, events = pd_parser.simulate_pd_data(n_events=320)
-# make some errent photodiode signals
-raw2 = pd_parser.simulate_pd_data(n_events=10, iti=31.,
-                                  iti_jitter=15.,
-                                  n_secs_on=2.5)[0]
-raw._data[0, :raw2._data.size] += raw2._data[0]
-# take only the last 300 events to test alignment
-events = events[20:]
+n_events = 300
+prop_corrupted = 0.01
+raw, beh_df, events, corrupted_indices = \
+    pd_parser.simulate_pd_data(n_events=n_events,
+                               prop_corrupted=prop_corrupted)
 
 # make fake electrophysiology data
 info = mne.create_info(['ch1', 'ch2', 'ch3'], raw.info['sfreq'],
                        ['seeg'] * 3)
-raw3 = mne.io.RawArray(np.random.random((3, raw.times.size)) * 1e-6, info)
-raw3.info['lowpass'] = raw.info['lowpass']  # these must match to combine
-raw.add_channels([raw3])
+raw2 = mne.io.RawArray(np.random.random((3, raw.times.size)) * 1e-6, info)
+raw2.info['lowpass'] = raw.info['lowpass']  # these must match to combine
+raw.add_channels([raw2])
 # bids needs these data fields
 raw.info['dig'] = None
 raw.info['line_freq'] = 60
 
-
 fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
 raw.save(fname)
 
-# make behavior data
+###############################################################################
+# Make behavior data:
+#
+# We'll make a dictionary with lists for the events that are time-stamped when
+# the photodiode was turned on and other events relative to those events.
+# We'll add some noise to the time-stamps so that we can see how behavior
+# might look in an experimental setting.
+# Let's make a task where there is a fixation stimulus, then a go cue,
+# and a then response as an example.
+
 np.random.seed(12)
-beh_events = events[:, 0].astype(float) / raw.info['sfreq']
-offsets = np.random.random(len(beh_events)) * 0.035 - 0.0125
-beh_events += offsets
-fix_duration = np.repeat(0.7, beh_events.size)
-go_time = np.random.random(beh_events.size) + 2
-response_time = go_time + np.random.random(beh_events.size) + 1.5
+# add some noise to make it harder to align, use just over
+# the exclusion of 0.03 to make some events excluded
+offsets = np.random.random(n_events) * 0.035 - 0.0125
+# in this example, the fixation would always be 700 ms
+# after which point a cue would appear which is the "go time"
+go_time = np.repeat(0.7, n_events)
+# let's make the response time between 0.5 and 1.5 seconds uniform random
+response_time = list(go_time + np.random.random(n_events) + 1.5)
+for i in [10, 129, 232, 288]:
+    response_time[i] = 'n/a'  # make some no responses
 # put in dictionary to be converted to tsv file
-beh_df = dict(trial=np.arange(beh_events.size),
-              fix_onset_time=beh_events, fix_duration=fix_duration,
-              go_time=go_time, response_time=response_time)
+beh_df['fix_onset_time'] = beh_df['time'] + offsets
+beh_df['go_time'] = go_time
+beh_df['response_time'] = response_time
 behf = op.join(out_dir, 'sub-1_task-mytask_beh.tsv')
 # save behavior file out
 _to_tsv(behf, beh_df)
@@ -103,8 +112,8 @@ pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'])
 
 pd_parser.add_pd_relative_events(
     fname, behf,
-    relative_event_cols=['fix_duration', 'go_time', 'response_time'],
-    relative_event_names=['ISI Onset', 'Go Cue', 'Response'])
+    relative_event_cols=['go_time', 'response_time'],
+    relative_event_names=['Go Cue', 'Response'])
 
 
 ###############################################################################

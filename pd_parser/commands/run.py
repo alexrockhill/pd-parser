@@ -59,20 +59,11 @@ def parse_pd():
                         'Increase if the alignment is failing because too '
                         'many events are being excluded, decrease to speed up '
                         'execution.')
-    parser.add_argument('--chunk', type=float, required=False,
-                        default=2, help='How large to window the '
-                        'photodiode events, should >> 2 * longest event. '
-                        'but cannot contain multiple events. e.g. if the '
-                        'photodiode is on for 100 samples at 500 Hz '
-                        'sampling rate, then 2 seconds should be '
-                        'a good chunk, if it\'s on for 500 samples then '
-                        '10 seconds will be better. Note: each chunk '
-                        'cannot contain multiple events or it won\'t work '
-                        'so the events must be at least chunk seconds '
-                        'away from each other. Use `find_pd_params` to '
-                        'determine if unsure.')
+    parser.add_argument('--max_len', type=float, required=False,
+                        default=1, help='The length of the longest '
+                        'photodiode event')
     parser.add_argument('--zscore', type=float, required=False,
-                        default=20, help='How many standard deviations '
+                        default=100, help='How many standard deviations '
                         'larger than the baseline the photodiode event is. '
                         'Decrease if too many events are being found '
                         'and increase if too few. Use `find_pd_params` '
@@ -81,10 +72,9 @@ def parse_pd():
                         default=10, help='The minimum number of samples '
                         'to qualify as a pd event. Increase for fewer '
                         'false-positives, decrease if your photodiode '
-                        'is on for fewer samples. Use `find_pd_params` '
-                        'to determine if unsure.')
+                        'is on for fewer samples.')
     parser.add_argument('--baseline', type=float, required=False,
-                        default=0.25, help='How much relative to the chunk'
+                        default=0.25, help='How much relative to the max_len'
                         'to use to idenify the time before the '
                         'photodiode event. Probably don\'t change but '
                         'increasing will reduce false-positives and '
@@ -102,14 +92,14 @@ def parse_pd():
     args = parser.parse_args()
     pd_parser.parse_pd(
         args.fname, pd_event_name=args.pd_event_name, behf=args.behf,
-        beh_col=args.beh_col, pd_ch_names=args.pd_ch_names, chunk=args.chunk,
-        exclude_shift=args.exclude_shift, resync=args.resync,
-        zscore=args.zscore, min_i=args.min_i, baseline=args.baseline,
-        add_events=args.add_events, verbose=args.verbose,
-        overwrite=args.overwrite)
+        beh_col=args.beh_col, pd_ch_names=args.pd_ch_names,
+        max_len=args.max_len, exclude_shift=args.exclude_shift,
+        resync=args.resync, zscore=args.zscore, min_i=args.min_i,
+        baseline=args.baseline, add_events=args.add_events,
+        verbose=args.verbose, overwrite=args.overwrite)
 
 
-def add_pd_off_event():
+def add_pd_off_events():
     """Run add_pd_off command."""
     parser = argparse.ArgumentParser()
     parser.add_argument('fname', type=str,
@@ -117,11 +107,11 @@ def add_pd_off_event():
     parser.add_argument('--off_event_name', type=str, required=False,
                         default='StimOff',
                         help='The name of the photodiode event')
-    parser.add_argument('--chunk', type=float, required=False,
-                        default=2, help='The same chunk as used for '
-                        '`parse_pd`.')
+    parser.add_argument('--max_len', type=float, required=False,
+                        default=1, help='The length of the longest '
+                        'photodiode event')
     parser.add_argument('--zscore', type=float, required=False,
-                        default=20, help='The same zscore as used for '
+                        default=100, help='The same zscore as used for '
                         '`parse_pd`.')
     parser.add_argument('--min_i', type=int, required=False,
                         default=10, help='The same min_i as used for '
@@ -136,10 +126,9 @@ def add_pd_off_event():
                         required=False, help='Whether to overwrite')
     args = parser.parse_args()
     pd_parser.add_pd_off_event(
-        args.fname, off_event_name=args.off_event_name, chunk=args.chunk,
-        baseline=args.baseline,
-        zscore=args.zscore, min_i=args.min_i,
-        verbose=args.verbose, overwrite=args.overwrite)
+        args.fname, off_event_name=args.off_event_name,
+        max_len=args.max_len, zscore=args.zscore, min_i=args.min_i,
+        baseline=args.baseline, verbose=args.verbose, overwrite=args.overwrite)
 
 
 def add_pd_relative_events():

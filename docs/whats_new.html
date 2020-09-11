@@ -116,6 +116,7 @@
 <div class="section" id="changelog">
 <h3><a class="toc-backref" href="#id3">Changelog</a><a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
+<li><p>Fixed core parsing algorithm to be more strict about an uncorrupted baseline; previously the baseline could have noise &gt; zscore in the opposite direction of the deflection.</p></li>
 <li><p>Added vertical lines to plots to show the difference between expected and actual events.</p></li>
 </ul>
 </div>
@@ -128,7 +129,7 @@
 <div class="section" id="api">
 <h3><a class="toc-backref" href="#id5">API</a><a class="headerlink" href="#api" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li><p>Added <code class="docutils literal notranslate"><span class="pre">off_event</span></code> as a parameter for <code class="xref py py-func docutils literal notranslate"><span class="pre">pd_parser.parse_pd()</span></code> to make an event when the photodiode turns off.</p></li>
+<li><p>Added <code class="xref py py-func docutils literal notranslate"><span class="pre">pd_parser.add_pd_off_event()</span></code> to make an event when the photodiode turns off.</p></li>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">n_secs_on</span></code> as an array in <code class="xref py py-func docutils literal notranslate"><span class="pre">pd_parser.simulate_pd_data()</span></code>.</p></li>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">resync</span></code> parameter to <code class="xref py py-func docutils literal notranslate"><span class="pre">pd_parser.parse_pd()</span></code> so that events could be used to sychronize but then excluded.</p></li>
 </ul>
