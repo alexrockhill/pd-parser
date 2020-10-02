@@ -62,7 +62,7 @@ html_theme = 'bootstrap'
 html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
 
 html_theme_options = {
-    'navbar_title': f'{project}',
+    'navbar_title': f'{project} {release}',
     'bootswatch_theme': "flatly",
     'navbar_sidebarrel': False,  # no "previous / next" navigation
     'navbar_pagenav': False,  # no "Page" navigation in sidebar
