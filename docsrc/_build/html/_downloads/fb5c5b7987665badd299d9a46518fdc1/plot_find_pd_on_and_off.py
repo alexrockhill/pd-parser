@@ -77,7 +77,7 @@ pd_parser.parse_pd(fname, pd_event_name='Stim On', behf=behf,
 # Another piece of information in the photodiode channel is the cessation of
 # the events. Let's find those and add them to the events.
 
-pd_parser.add_pd_off_event(fname, off_event_name='Stim Off')
+pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
 
 ###############################################################################
 # Check recovered event lengths and compare to the simulation ground truth
@@ -86,7 +86,7 @@ pd_parser.add_pd_off_event(fname, off_event_name='Stim Off')
 # the ``n_secs_on`` event lengths we used to simulate.
 # The plot below show the differences between the simulated and recovered
 # deflection lengths. They completely overlap except where the photodiode was
-# corrupted, so it's a bit hard to see
+# corrupted, so it's a bit hard to see the two different lines.
 
 annot, pd_ch_names, beh_df = _load_pd_data(fname)
 raw.set_annotations(annot)

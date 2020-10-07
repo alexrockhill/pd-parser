@@ -51,7 +51,7 @@ Getting Started
     - Run ``pip install jupyter``
     - Point the terminal to the folder where the files you downloaded are by running ``cd /path/to/downloads/``
     - Run ``jupyter notebook`` in the terminal, this will pop up a webpage in your default browser.
-    - Don't run the first cell or change ``%matplotlib inline`` to just ``%matplotlib`` to pop the plots out interactively instead of below the cell in the notebook.
+    - Change ``%matplotlib inline`` to just ``%matplotlib`` to pop the plots out interactively instead of below the cell in the notebook.
     - Run each cell, change the parameters and explore the example.
 2) Try pd-parser on your photodiode data. You will likely need to modify your behavior tsv files so that they have
 	- One column corresponding to the expected event in seconds, called by default ``fix_onset_time``
