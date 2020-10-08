@@ -2,7 +2,7 @@
 =====================================
 02. Find Photodiode On and Off Events
 =====================================
-In this example, we use pd-parser to find photodiode events and
+In this example, we use ``pd-parser`` to find photodiode events and
 align both the onset of the deflection and the cessation to
 to behavior.
 """
@@ -14,9 +14,9 @@ to behavior.
 ###############################################################################
 # Simulate data and use it to make a raw object:
 #
-# We'll make an mne.io.Raw object so that we can save out some random
-# data with a photodiode event channel in it in fif format (a standard
-# electrophysiology format)
+# We'll make an `mne.io.Raw` object so that we can save out some random
+# data with a photodiode event channel in it in fif format (a commonly used
+# electrophysiology data format).
 import os.path as op
 import numpy as np
 
@@ -27,6 +27,7 @@ import pd_parser
 from pd_parser.parse_pd import _to_tsv, _load_pd_data
 
 import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 
 out_dir = _TempDir()
 
@@ -50,7 +51,7 @@ raw.add_channels([raw2])
 raw.info['dig'] = None
 raw.info['line_freq'] = 60
 
-# save to disk as required by pd-parser
+# save to disk as required by ``pd-parser``
 fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
 raw.save(fname)
 # add some offsets to the behavior so it's a bit more realistic
@@ -69,7 +70,8 @@ _to_tsv(behf, beh_df)
 # some were too far off from large offsets that we're going to exclude them.
 
 pd_parser.parse_pd(fname, pd_event_name='Stim On', behf=behf,
-                   pd_ch_names=['pd'], beh_col='time')
+                   pd_ch_names=['pd'], beh_col='time',
+                   max_len=1.5)  # none are on longer than 1.5 seconds
 
 ###############################################################################
 # Find cessations of the photodiode deflections
@@ -84,9 +86,12 @@ pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
 #
 # Let's load in the on and off events and plot their difference compared to
 # the ``n_secs_on`` event lengths we used to simulate.
-# The plot below show the differences between the simulated and recovered
-# deflection lengths. They completely overlap except where the photodiode was
-# corrupted, so it's a bit hard to see the two different lines.
+# The plot below show the differences between the simulated
+# deflection event lengths on the x axis scattered against the
+# recovered event lengths on the y axis. The identity line (the line with 1:1
+# correspondance) is not shown as it would occlude the plotted data; the
+# the lengths are recovered within 1 millisecond. Note that the colors are
+# arbitrary and are only used to increase contrast and ease of visualization.
 
 annot, pd_ch_names, beh_df = _load_pd_data(fname)
 raw.set_annotations(annot)
@@ -94,11 +99,17 @@ events, event_id = mne.events_from_annotations(raw)
 on_events = events[events[:, 2] == event_id['Stim On']]
 off_events = events[events[:, 2] == event_id['Stim Off']]
 
+recovered = (off_events[:, 0] - on_events[:, 0]) / raw.info['sfreq']
+not_corrupted = [s != 'n/a' for s in beh_df['pd_sample']]
+ground_truth_not_corrupted = n_secs_on[not_corrupted]
+
 fig, ax = plt.subplots()
-ax.plot([i for i, s in enumerate(beh_df['pd_sample']) if s != 'n/a'],
-        (off_events[:, 0] - on_events[:, 0]) / raw.info['sfreq'],
-        alpha=0.5, color='r', label='recovered')
-ax.plot(n_secs_on, alpha=0.5, color='k', label='ground truth')
-ax.set_xlabel('trial')
-ax.set_ylabel('deflection length (s)')
-fig.legend()
+ax.scatter(ground_truth_not_corrupted, recovered,
+           s=1, color=cm.rainbow(np.linspace(0, 1, len(recovered))))
+ax.set_title('Photodiode offset eventfidelity of recovery')
+ax.set_xlabel('ground truth duration (s)')
+ax.set_ylabel('recovered duration (s)')
+
+print('Mean difference in the recovered from simulated length is {:.3f} '
+      'milliseconds'.format(
+          1000 * abs(ground_truth_not_corrupted - recovered).mean()))

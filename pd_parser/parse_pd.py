@@ -422,9 +422,10 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
     import matplotlib.pyplot as plt
     raw = _read_raw(fname, verbose=verbose)
     pd, _ = _get_pd_data(raw, pd_ch_names)
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6, 6))
     fig.subplots_adjust(top=0.75, left=0.15)
     plot_data = dict()
+    recs = dict()
 
     def zoom(amount):
         ymin, ymax = ax.get_ylim()
@@ -434,20 +435,30 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
         ax.set_ylim([ymin, ymax])
         fig.canvas.draw()
 
+    def scale(amount):
+        xmin, xmax = ax.get_xlim()
+        # ymin < 0 and ymax > 0 because median subtracted
+        xmin -= amount
+        xmax += amount
+        if xmin < xmax:
+            ax.set_xlim([xmin, xmax])
+            fig.canvas.draw()
+
     def set_zscore(event):
         if event.key == 'enter':
             ymin, ymax = ax.get_ylim()
-            xmin, xmax = ax.get_xlim()
-            max_len = (xmax - xmin) / 2 * 1.1
+            xmin, xmax = plot_data['xlims']
             b = pd[raw.time_as_index(xmin)[0]: raw.time_as_index(
                 xmin + (xmax - xmin) * 0.25)[0]]  # 0.25 == default baseline
             zy = plot_data['zscore'].get_ydata()[0]
-            zscore = (zy - np.median(b)) / np.std(b)
-            ax.set_title('Recommendations\nmax_len: {:.2f}, zscore: {:.2f}\n'
-                         'You may now close the window\n'
-                         'Try using these parameters for `parse_pd` and\n'
-                         'please report to the developers if there are issues'
-                         ''.format(max_len, zscore))
+            recs['zscore'] = (zy - np.median(b)) / np.std(b)
+            recommendations = (
+                'Recommendations\nmax_len: {:.2f}, zscore: {:.2f}\n'
+                'Try using these parameters for `parse_pd` and\n'
+                'please report to the developers if there are issues\n'
+                ''.format(recs['max_len'], recs['zscore']))
+            ax.set_title(recommendations + 'You may now close the window')
+            print(recommendations)
             fig.canvas.draw()
         elif event.key in ('up', 'down'):
             ymin, ymax = ax.get_ylim()
@@ -460,9 +471,14 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
             plot_data['zscore_reflection'].set_ydata(
                 np.ones((pd.size)) * zy_ref)
             fig.canvas.draw()
+        elif event.key in ('-', '+', '='):
+            scale(1 if event.key == '-' else -1)
 
     def set_max_len(event):
         if event.key == 'enter':
+            xmin, xmax = ax.get_xlim()
+            plot_data['xlims'] = (xmin, xmax)
+            recs['max_len'] = (xmax - xmin) / 2 * 1.1
             eid = fig.canvas.mpl_connect('key_press_event', set_zscore)
             fig.canvas.mpl_disconnect(eid - 1)  # disconnect previous
             plot_data['zscore'] = ax.plot(
@@ -475,6 +491,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
                 'Scale\nUse the up/down arrows to set the horizontal line \n'
                 'at a level where the plateau of all the photodiode events \n'
                 'is above the green line nothing is below the red line\n'
+                'Use +/- to scale the time axis to see more events\n'
                 'press enter when finished')
             fig.canvas.draw()
         elif event.key in ('up', 'down'):
@@ -515,7 +532,7 @@ def find_pd_params(fname, pd_ch_names=None, verbose=True):
             fig.canvas.draw()
 
     ax.set_title(
-        'Align\nUse the left/right keys to find an uncorrupted photodiode'
+        'Align\nUse the left/right keys to find an uncorrupted photodiode '
         'event\nand align the onset to the center of the window\n'
         'use +/- to zoom the yaxis in and out (up/down to translate)\n'
         'press enter when finished')
