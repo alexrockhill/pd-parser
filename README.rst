@@ -57,6 +57,17 @@ Getting Started
 	- One column corresponding to the expected event in seconds, called by default ``fix_onset_time``
 	- *Optionally* Other columns with relative event times in seconds.
 
+Bug reports
+-----------
+
+Use the `GitHub issue tracker <https://github.com/alexrockhill/pd-parser/issues>`_
+to report bugs.
+
+Contributing
+------------
+
+Please see our `contributing guide <https://github.com/alexrockhill/pd-parser/blob/master/CONTRIBUTING.md>`_.
+
 
 Alex Rockhill
 Eugene, OR 2020

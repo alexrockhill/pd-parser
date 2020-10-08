@@ -2,6 +2,7 @@ include *.py
 include *.txt
 include *.xml
 include LICENSE
+include CONTRIBUTING.md
 include Makefile
 include paper.md
 include paper.bib
