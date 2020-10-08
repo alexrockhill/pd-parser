@@ -7,7 +7,7 @@ installation as shown below.
 
 ## Running tests
 
-### Install development version of MNE-BIDS 
+### Install development version of `pd-parser` 
 First, you should [fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo) the `pd-parser` repository. Then, clone the fork and install it in
 "editable" mode.
 
