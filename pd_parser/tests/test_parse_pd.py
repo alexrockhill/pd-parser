@@ -362,3 +362,14 @@ def test_cli():
     bids_dir = op.join(out_dir, 'bids_dir')
     assert call([f'pd_parser_save_to_bids {bids_dir} {fname} 1 test'],
                 shell=True, env=os.environ) == 0
+
+
+def test_examples():
+    if platform.system() == 'Windows':
+        return
+    examples_dir = op.join(op.dirname(op.dirname(pd_parser.__file__)),
+                           'examples')
+    examples = [op.join(examples_dir, f) for f in os.listdir(examples_dir)
+                if op.splitext(f)[-1] == '.py']
+    for example in examples:
+        assert call([f'python {example}'], shell=True, env=os.environ) == 0
