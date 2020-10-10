@@ -46,7 +46,7 @@ Getting Started
 ---------------
 
 1) Plot the examples in a Jupyter notebook
-    - In the 'Examples' page, click on 'Download all examples in Jupyter notebooks'
+    - In the `Examples page <https://alexrockhill.github.io/pd-parser/auto_examples/index.html>`_, click on 'Download all examples in Jupyter notebooks'
     - Unzip the downloaded file
     - Run ``pip install jupyter``
     - Point the terminal to the folder where the files you downloaded are by running ``cd /path/to/downloads/``
