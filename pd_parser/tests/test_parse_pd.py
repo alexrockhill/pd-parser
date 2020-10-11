@@ -377,3 +377,4 @@ def test_examples():
                 if op.splitext(f)[-1] == '.py']
     for example in examples:
         assert call([f'python {example}'], shell=True, env=os.environ) == 0
+        plt.close('all')

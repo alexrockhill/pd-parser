@@ -5,6 +5,7 @@ pybv
 matplotlib
 argparse
 tqdm
+mock
 pytest<5.4
 pytest-cov
 pytest-sugar
