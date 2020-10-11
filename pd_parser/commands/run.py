@@ -79,16 +79,18 @@ def parse_pd():
                         'photodiode event. Probably don\'t change but '
                         'increasing will reduce false-positives and '
                         'decreasing will reduce false-negatives.')
-    parser.add_argument('--add_events', type=bool, required=False,
-                        default=False, help='Whether to run the parser '
+    parser.add_argument('--add_events', action='store_true',
+                        help='Whether to run the parser '
                         'a second time to add more events from '
                         'deflections corresponding to multiple events '
                         'on the same channel')
+    parser.add_argument('--recover', action='store_true',
+                        help='Whether to recover corrupted events manually.')
     parser.add_argument('--verbose', default=True, type=bool,
                         required=False,
                         help='Set verbose output to True or False.')
-    parser.add_argument('--overwrite', default=False, type=bool,
-                        required=False, help='Whether to overwrite')
+    parser.add_argument('-o', '--overwrite', action='store_true',
+                        help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.parse_pd(
         args.fname, pd_event_name=args.pd_event_name, behf=args.behf,
@@ -96,7 +98,7 @@ def parse_pd():
         max_len=args.max_len, exclude_shift=args.exclude_shift,
         resync=args.resync, zscore=args.zscore, min_i=args.min_i,
         baseline=args.baseline, add_events=args.add_events,
-        verbose=args.verbose, overwrite=args.overwrite)
+        recover=args.recover, verbose=args.verbose, overwrite=args.overwrite)
 
 
 def add_pd_off_events():
@@ -122,8 +124,8 @@ def add_pd_off_events():
     parser.add_argument('--verbose', default=True, type=bool,
                         required=False,
                         help='Set verbose output to True or False.')
-    parser.add_argument('--overwrite', default=False, type=bool,
-                        required=False, help='Whether to overwrite')
+    parser.add_argument('-o', '--overwrite', action='store_true',
+                        help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.add_pd_off_events(
         args.fname, off_event_name=args.off_event_name,
@@ -152,8 +154,8 @@ def add_pd_relative_events():
     parser.add_argument('--verbose', default=True, type=bool,
                         required=False,
                         help='Set verbose output to True or False.')
-    parser.add_argument('--overwrite', default=False, type=bool,
-                        required=False, help='Whether to overwrite')
+    parser.add_argument('-o', '--overwrite', action='store_true',
+                        help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.add_pd_relative_events(
         args.fname, behf=args.behf,
@@ -176,8 +178,8 @@ def add_pd_events_to_raw():
     parser.add_argument('--verbose', default=True, type=bool,
                         required=False,
                         help='Set verbose output to True or False.')
-    parser.add_argument('--overwrite', default=False, type=bool,
-                        required=False, help='Whether to overwrite')
+    parser.add_argument('-o', '--overwrite', action='store_true',
+                        help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.add_pd_events_to_raw(
         args.fname, out_fname=args.out_fname,
@@ -214,8 +216,8 @@ def pd_parser_save_to_bids():
     parser.add_argument('--verbose', default=True, type=bool,
                         required=False,
                         help='Set verbose output to True or False.')
-    parser.add_argument('--overwrite', default=False, type=bool,
-                        required=False, help='Whether to overwrite')
+    parser.add_argument('-o', '--overwrite', action='store_true',
+                        help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.pd_parser_save_to_bids(
         args.bids_dir, args.fname, args.sub, args.task, ses=args.ses,

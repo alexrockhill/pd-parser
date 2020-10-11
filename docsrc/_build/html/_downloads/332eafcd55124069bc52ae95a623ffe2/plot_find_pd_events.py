@@ -1,7 +1,7 @@
 """
-==========================
-01. Find Photodiode Events
-==========================
+======================
+Find Photodiode Events
+======================
 In this example, we use ``pd-parser`` to find photodiode events and
 align them to behavior. Then, we save the data to BIDS format.
 """

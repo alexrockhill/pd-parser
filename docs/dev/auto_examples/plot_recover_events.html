@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manually Recover Events Not Found by the Algorithm &#8212; pd-parser 0.3.dev documentation</title>
+    <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/gallery-dataframe.css" />
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <link rel="shortcut icon" href="../_static/favicon.png"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../index.html">
+          pd-parser 0.3.dev</a>
+        <span class="navbar-text navbar-version pull-left"><b></b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+                <li><a href="index.html">Examples</a></li>
+                <li><a href="../api.html">API</a></li>
+                <li><a href="../generated/cli.html">CLI</a></li>
+                <li><a href="../whats_new.html">What's new</a></li>
+                <li><a href="https://github.com/alexrockhill/pd-parser">GitHub</a></li>
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"></ul>
+</li>
+              
+            
+            
+            
+            
+            
+              <li class="hidden-sm">
+<div id="sourcelink">
+  <a href="../_sources/auto_examples/plot_recover_events.rst.txt"
+     rel="nofollow">Source</a>
+</div></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-auto-examples-plot-recover-events-py"><span class="std std-ref">here</span></a>     to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="manually-recover-events-not-found-by-the-algorithm">
+<span id="sphx-glr-auto-examples-plot-recover-events-py"></span><h1>Manually Recover Events Not Found by the Algorithm<a class="headerlink" href="#manually-recover-events-not-found-by-the-algorithm" title="Permalink to this headline">¶</a></h1>
+<p>In this example, we use <code class="docutils literal notranslate"><span class="pre">pd-parser</span></code> to find photodiode events that
+have corrupted pre-event baselines, photodiode plateaus or post-event
+baselines but not corrupted onsets or offsets.
+Note that it might be a good idea not to recover these events
+as there might be noise in the data around this time.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Authors: Alex Rockhill &lt;aprockhill@mailbox.org&gt;</span>
+<span class="c1">#</span>
+<span class="c1"># License: BSD (3-clause)</span>
+</pre></div>
+</div>
+<p>Simulate data and use it to make a raw object:</p>
+<p>We’ll make an <cite>mne.io.Raw</cite> object so that we can save out some random
+data with a photodiode event channel in it in fif format (a commonly used
+electrophysiology data format).</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">mock</span>
+
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">_TempDir</span>
+
+<span class="kn">import</span> <span class="nn">pd_parser</span>
+<span class="kn">from</span> <span class="nn">pd_parser.parse_pd</span> <span class="kn">import</span> <span class="n">_to_tsv</span>
+
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">out_dir</span> <span class="o">=</span> <span class="n">_TempDir</span><span class="p">()</span>
+
+<span class="c1"># simulate photodiode data</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">29</span><span class="p">)</span>
+<span class="n">n_events</span> <span class="o">=</span> <span class="mi">300</span>
+<span class="c1"># let&#39;s make our photodiode events on random uniform from 0.25 to 0.75 seconds</span>
+<span class="n">n_secs_on</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">n_events</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.25</span>
+<span class="n">raw</span><span class="p">,</span> <span class="n">beh_df</span><span class="p">,</span> <span class="n">events</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> \
+    <span class="n">pd_parser</span><span class="o">.</span><span class="n">simulate_pd_data</span><span class="p">(</span><span class="n">n_events</span><span class="o">=</span><span class="n">n_events</span><span class="p">,</span> <span class="n">n_secs_on</span><span class="o">=</span><span class="n">n_secs_on</span><span class="p">,</span>
+                               <span class="n">prop_corrupted</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+<span class="n">sfreq</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+<span class="c1"># corrupt some events</span>
+<span class="n">corrupted_indices</span> <span class="o">=</span> <span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">144</span><span class="p">,</span> <span class="mi">234</span><span class="p">]</span>
+<span class="n">amount</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">corrupted_indices</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Corrupted Events&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;voltage&#39;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">events</span><span class="p">[</span><span class="n">corrupted_indices</span><span class="p">,</span> <span class="mi">0</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">sfreq</span> <span class="o">//</span> <span class="mi">3</span><span class="p">:</span> <span class="n">i</span> <span class="o">-</span> <span class="n">sfreq</span> <span class="o">//</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">amount</span>
+    <span class="k">elif</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="n">sfreq</span> <span class="o">//</span> <span class="mi">4</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">sfreq</span> <span class="o">//</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="n">amount</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sfreq</span> <span class="o">//</span> <span class="mi">3</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">sfreq</span> <span class="o">//</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">amount</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span> <span class="o">*</span> <span class="n">sfreq</span><span class="p">),</span>
+                 <span class="n">raw</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">sfreq</span><span class="p">:</span> <span class="n">i</span> <span class="o">+</span> <span class="n">sfreq</span> <span class="o">*</span> <span class="mi">2</span><span class="p">])</span>
+    <span class="n">axes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">)</span>
+
+
+<span class="c1"># make fake electrophysiology data</span>
+<span class="n">info</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">create_info</span><span class="p">([</span><span class="s1">&#39;ch1&#39;</span><span class="p">,</span> <span class="s1">&#39;ch2&#39;</span><span class="p">,</span> <span class="s1">&#39;ch3&#39;</span><span class="p">],</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;sfreq&#39;</span><span class="p">],</span>
+                       <span class="p">[</span><span class="s1">&#39;seeg&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">raw2</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">RawArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">raw</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">size</span><span class="p">))</span> <span class="o">*</span> <span class="mf">1e-6</span><span class="p">,</span> <span class="n">info</span><span class="p">)</span>
+<span class="n">raw2</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;lowpass&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;lowpass&#39;</span><span class="p">]</span>  <span class="c1"># these must match to combine</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">add_channels</span><span class="p">([</span><span class="n">raw2</span><span class="p">])</span>
+<span class="c1"># bids needs these data fields</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;dig&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s1">&#39;line_freq&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">60</span>
+
+<span class="c1"># save to disk as required by ``pd-parser``</span>
+<span class="n">fname</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;sub-1_task-mytask_raw.fif&#39;</span><span class="p">)</span>
+<span class="n">raw</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">fname</span><span class="p">)</span>
+<span class="c1"># add some offsets to the behavior so it&#39;s a bit more realistic</span>
+<span class="n">offsets</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">n_events</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.001</span>
+<span class="n">beh_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">beh_df</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">offsets</span>
+<span class="n">behf</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;sub-1_task-mytask_beh.tsv&#39;</span><span class="p">)</span>
+<span class="n">_to_tsv</span><span class="p">(</span><span class="n">behf</span><span class="p">,</span> <span class="n">beh_df</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_plot_recover_events_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_recover_events_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=1, n_times=2044106
+    Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
+Ready.
+Creating RawArray with float64 data, n_channels=3, n_times=2044106
+    Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
+Ready.
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zhxg4cq6/sub-1_task-mytask_raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zhxg4cq6/sub-1_task-mytask_raw.fif [done]
+</pre></div>
+</div>
+<p>Find the photodiode events relative to the behavioral timing of interest:</p>
+<p>This function will use the default parameters to find and align the
+photodiode events, recovering the events that we just corrupted.</p>
+<p>Note that the mock function mocks user input so when you run the example,
+you want to delete that line and unindent the next line, and then provide
+your own input depending on whether you want to keep the events or not.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s1">&#39;builtins.input&#39;</span><span class="p">,</span> <span class="n">return_value</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">):</span>
+    <span class="n">pd_parser</span><span class="o">.</span><span class="n">parse_pd</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">pd_event_name</span><span class="o">=</span><span class="s1">&#39;Stim On&#39;</span><span class="p">,</span> <span class="n">behf</span><span class="o">=</span><span class="n">behf</span><span class="p">,</span>
+                       <span class="n">pd_ch_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;pd&#39;</span><span class="p">],</span> <span class="n">beh_col</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">recover</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_plot_recover_events_002.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_recover_events_002.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_recover_events_003.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_recover_events_003.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_recover_events_004.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_recover_events_004.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_recover_events_005.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_recover_events_005.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_recover_events_006.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_recover_events_006.png" />
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zhxg4cq6/sub-1_task-mytask_raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zhxg4cq6/sub-1_task-mytask_raw.fif...
+Isotrak not found
+    Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
+Ready.
+Reading 0 ... 2044105  =      0.000 ...  2044.105 secs...
+Finding photodiode events
+
+  0%|          | 0/16341 [00:00&lt;?, ?it/s]
+  3%|3         | 506/16341 [00:00&lt;00:03, 5055.65it/s]
+  6%|6         | 1010/16341 [00:00&lt;00:03, 5048.99it/s]
+  9%|9         | 1511/16341 [00:00&lt;00:02, 5035.45it/s]
+ 12%|#2        | 2015/16341 [00:00&lt;00:02, 5036.36it/s]
+ 15%|#5        | 2512/16341 [00:00&lt;00:02, 5015.83it/s]
+ 18%|#8        | 3004/16341 [00:00&lt;00:02, 4984.75it/s]
+ 21%|##1       | 3502/16341 [00:00&lt;00:02, 4980.67it/s]
+ 24%|##4       | 3998/16341 [00:00&lt;00:02, 4973.78it/s]
+ 27%|##7       | 4467/16341 [00:00&lt;00:02, 4700.85it/s]
+ 30%|###       | 4920/16341 [00:01&lt;00:02, 3868.46it/s]
+ 33%|###2      | 5320/16341 [00:01&lt;00:03, 3555.36it/s]
+ 35%|###4      | 5697/16341 [00:01&lt;00:02, 3613.89it/s]
+ 38%|###7      | 6184/16341 [00:01&lt;00:02, 3915.75it/s]
+ 41%|####      | 6656/16341 [00:01&lt;00:02, 4126.70it/s]
+ 43%|####3     | 7082/16341 [00:01&lt;00:02, 3889.05it/s]
+ 46%|####5     | 7483/16341 [00:01&lt;00:02, 3772.03it/s]
+ 49%|####8     | 7971/16341 [00:01&lt;00:02, 4046.26it/s]
+ 52%|#####1    | 8432/16341 [00:01&lt;00:01, 4198.62it/s]
+ 54%|#####4    | 8904/16341 [00:02&lt;00:01, 4340.43it/s]
+ 57%|#####7    | 9377/16341 [00:02&lt;00:01, 4447.82it/s]
+ 60%|######    | 9856/16341 [00:02&lt;00:01, 4544.15it/s]
+ 63%|######3   | 10353/16341 [00:02&lt;00:01, 4663.55it/s]
+ 66%|######6   | 10841/16341 [00:02&lt;00:01, 4724.56it/s]
+ 69%|######9   | 11334/16341 [00:02&lt;00:01, 4782.70it/s]
+ 72%|#######2  | 11818/16341 [00:02&lt;00:00, 4796.63it/s]
+ 75%|#######5  | 12300/16341 [00:02&lt;00:00, 4723.65it/s]
+ 78%|#######8  | 12774/16341 [00:02&lt;00:00, 4690.08it/s]
+ 81%|########1 | 13245/16341 [00:02&lt;00:00, 4664.40it/s]
+ 84%|########4 | 13736/16341 [00:03&lt;00:00, 4733.57it/s]
+ 87%|########7 | 14218/16341 [00:03&lt;00:00, 4757.68it/s]
+ 90%|######### | 14717/16341 [00:03&lt;00:00, 4824.06it/s]
+ 93%|#########3| 15219/16341 [00:03&lt;00:00, 4878.70it/s]
+ 96%|#########6| 15718/16341 [00:03&lt;00:00, 4908.96it/s]
+ 99%|#########9| 16231/16341 [00:03&lt;00:00, 4972.48it/s]
+100%|##########| 16341/16341 [00:03&lt;00:00, 4557.76it/s]
+297 up-deflection photodiode candidate events found
+Checking best behavior-photodiode difference alignments
+
+  0%|          | 0/299 [00:00&lt;?, ?it/s]
+  3%|2         | 8/299 [00:00&lt;00:03, 76.29it/s]
+  7%|6         | 20/299 [00:00&lt;00:03, 84.72it/s]
+ 12%|#1        | 35/299 [00:00&lt;00:02, 94.18it/s]
+ 14%|#4        | 43/299 [00:00&lt;00:03, 80.78it/s]
+ 17%|#7        | 51/299 [00:00&lt;00:03, 76.82it/s]
+ 20%|##        | 60/299 [00:00&lt;00:03, 77.27it/s]
+ 23%|##3       | 69/299 [00:00&lt;00:03, 76.05it/s]
+ 26%|##5       | 77/299 [00:00&lt;00:03, 72.45it/s]
+ 28%|##8       | 85/299 [00:01&lt;00:03, 65.14it/s]
+ 31%|###       | 92/299 [00:01&lt;00:03, 59.45it/s]
+ 33%|###3      | 99/299 [00:01&lt;00:03, 53.12it/s]
+ 35%|###5      | 105/299 [00:01&lt;00:03, 51.41it/s]
+ 39%|###9      | 118/299 [00:01&lt;00:02, 62.65it/s]
+ 43%|####3     | 129/299 [00:01&lt;00:02, 69.39it/s]
+ 46%|####6     | 138/299 [00:01&lt;00:02, 70.59it/s]
+ 49%|####8     | 146/299 [00:01&lt;00:02, 72.93it/s]
+ 52%|#####1    | 154/299 [00:02&lt;00:02, 71.91it/s]
+ 55%|#####4    | 163/299 [00:02&lt;00:01, 75.87it/s]
+ 57%|#####7    | 171/299 [00:02&lt;00:02, 62.83it/s]
+ 60%|#####9    | 178/299 [00:02&lt;00:01, 62.24it/s]
+ 62%|######1   | 185/299 [00:02&lt;00:01, 62.46it/s]
+ 64%|######4   | 192/299 [00:02&lt;00:01, 63.16it/s]
+ 69%|######8   | 205/299 [00:02&lt;00:01, 72.73it/s]
+ 72%|#######1  | 215/299 [00:02&lt;00:01, 75.36it/s]
+ 75%|#######4  | 224/299 [00:03&lt;00:01, 66.04it/s]
+ 78%|#######7  | 232/299 [00:03&lt;00:01, 60.81it/s]
+ 80%|#######9  | 239/299 [00:03&lt;00:01, 57.69it/s]
+ 84%|########3 | 250/299 [00:03&lt;00:00, 64.18it/s]
+ 87%|########6 | 260/299 [00:03&lt;00:00, 71.65it/s]
+ 90%|########9 | 269/299 [00:03&lt;00:00, 75.68it/s]
+ 93%|#########2| 278/299 [00:03&lt;00:00, 70.87it/s]
+ 97%|#########6| 290/299 [00:03&lt;00:00, 78.94it/s]
+100%|##########| 299/299 [00:04&lt;00:00, 73.44it/s]
+Best alignment with the photodiode shifted 12 ms relative to the first behavior event
+errors: min -5, q1 -1, med 0, q3 1, max 75
+Excluding events that have zero close events or more than one photodiode event within `max_len` time
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:324: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+Event 8 recovered (not excluded)
+Event 144 recovered (not excluded)
+Event 234 recovered (not excluded)
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:364: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:371: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
+</pre></div>
+</div>
+<p>Find cessations of the photodiode deflections</p>
+<p>Since we manually intervened for the onsets, on those same trials, we’ll
+have to manually intervene for the offsets.</p>
+<p>On the documentation webpage, this is example is not interactive,
+but if you download it as a jupyter notebook and run it or copy the code
+into a console running python (ipython recommended), you can see how to
+interact with the photodiode data to pick reasonable parameters by
+following the instructions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">add_pd_off_events</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">off_event_name</span><span class="o">=</span><span class="s1">&#39;Stim Off&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img alt="../_images/sphx_glr_plot_recover_events_007.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_recover_events_007.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_recover_events_008.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_recover_events_008.png" />
+</li>
+<li><img alt="../_images/sphx_glr_plot_recover_events_009.png" class="sphx-glr-multi-img" src="../_images/sphx_glr_plot_recover_events_009.png" />
+</li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zhxg4cq6/sub-1_task-mytask_raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_zhxg4cq6/sub-1_task-mytask_raw.fif...
+Isotrak not found
+    Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
+Ready.
+Reading 0 ... 2044105  =      0.000 ...  2044.105 secs...
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:803: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  plt.show()
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  11.919 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-recover-events-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/3b9b6f3cd8645b6f7e8cdb8a4aee6517/plot_recover_events.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_recover_events.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../_downloads/5258f1bb54b38679ec8488158187b98c/plot_recover_events.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_recover_events.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+    </div>
+      
+  </div>
+</div>
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, Alex Rockhill.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+    </p>
+  </div>
+</footer>
+  </body>
+</html>

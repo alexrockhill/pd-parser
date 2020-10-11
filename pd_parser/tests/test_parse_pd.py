@@ -26,7 +26,8 @@ from pd_parser.parse_pd import (_read_tsv, _to_tsv, _read_raw,
                                 _find_pd_candidates, _pd_event_dist,
                                 _check_alignment, _find_best_alignment,
                                 _exclude_ambiguous_events,
-                                _save_pd_data, _load_pd_data)
+                                _save_pd_data, _load_pd_data,
+                                _recover_event)
 
 basepath = op.join(op.dirname(pd_parser.__file__), 'tests', 'data')
 
@@ -57,6 +58,7 @@ zscore = 100
 min_i = 10
 baseline = 0.25
 resync = 0.075
+recover = False
 verbose = True
 
 
@@ -164,7 +166,7 @@ def test_core():
     beh_events = {i: e for i, e in enumerate(beh_events)}
     pd_events = _exclude_ambiguous_events(
         beh_events, sorted_pds, best_alignment, pd, exclude_shift_i, max_len_i,
-        resync_i, raw.info['sfreq'], verbose=True)
+        resync_i, raw.info['sfreq'], zscore, recover, verbose=True)
     assert all([i not in pd_events for i in corrupted_indices])
     np.testing.assert_array_equal(list(pd_events.values()), events[2:, 0])
     # test i/o
@@ -235,9 +237,11 @@ def test_core():
     beh_events = {i: e for i, e in enumerate(beh_events)}
     pd_events = _exclude_ambiguous_events(
         beh_events, sorted_pds, best_alignment, pd, exclude_shift_i, max_len_i,
-        resync_i, raw.info['sfreq'], verbose=True)
+        resync_i, raw.info['sfreq'], zscore, recover, verbose=True)
     np.testing.assert_array_equal(list(pd_events.values()),
                                   np.delete(events[2:, 0], resync_exclusions))
+    assert _recover_event(pd, beh_events[0] + best_alignment,
+                          exclude_shift_i, zscore) == pd_events[0]
 
 
 def test_two_pd_alignment():

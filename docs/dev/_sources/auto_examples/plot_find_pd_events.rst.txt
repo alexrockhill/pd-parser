@@ -9,9 +9,9 @@
     .. _sphx_glr_auto_examples_plot_find_pd_events.py:
 
 
-==========================
-01. Find Photodiode Events
-==========================
+======================
+Find Photodiode Events
+======================
 In this example, we use ``pd-parser`` to find photodiode events and
 align them to behavior. Then, we save the data to BIDS format.
 
@@ -81,15 +81,15 @@ electrophysiology data format).
 
  .. code-block:: none
 
-    After running this example, you can find the data here: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl
+    After running this example, you can find the data here: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06
     Creating RawArray with float64 data, n_channels=1, n_times=2044106
         Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
     Ready.
     Creating RawArray with float64 data, n_channels=3, n_times=2044106
         Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
     Ready.
-    Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif
-    Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif [done]
+    Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif
+    Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif [done]
 
 
 
@@ -160,13 +160,13 @@ following the instructions.
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
     Ready.
     Reading 0 ... 2044105  =      0.000 ...  2044.105 secs...
-    /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:548: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:581: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       fig.show()
 
 
@@ -212,17 +212,17 @@ data structure (BIDS) standardized format before using it.
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
     Ready.
     Reading 0 ... 2044105  =      0.000 ...  2044.105 secs...
     Finding photodiode events
-      0%|          | 0/10920 [00:00<?, ?it/s]      2%|1         | 204/10920 [00:00<00:05, 2039.02it/s]      4%|4         | 438/10920 [00:00<00:04, 2120.16it/s]      6%|5         | 633/10920 [00:00<00:05, 1932.90it/s]      7%|6         | 761/10920 [00:00<00:08, 1226.96it/s]      8%|8         | 921/10920 [00:00<00:07, 1305.84it/s]     10%|#         | 1146/10920 [00:00<00:06, 1493.33it/s]     12%|#2        | 1326/10920 [00:00<00:06, 1572.68it/s]     14%|#3        | 1491/10920 [00:00<00:05, 1593.64it/s]     15%|#5        | 1654/10920 [00:01<00:06, 1468.35it/s]     18%|#8        | 1975/10920 [00:01<00:05, 1751.96it/s]     21%|##1       | 2304/10920 [00:01<00:04, 2037.66it/s]     23%|##3       | 2548/10920 [00:01<00:03, 2143.31it/s]     26%|##5       | 2789/10920 [00:01<00:05, 1443.22it/s]     27%|##7       | 2983/10920 [00:01<00:05, 1427.82it/s]     29%|##9       | 3176/10920 [00:01<00:05, 1539.85it/s]     31%|###       | 3357/10920 [00:02<00:06, 1171.26it/s]     33%|###2      | 3597/10920 [00:02<00:05, 1383.73it/s]     36%|###5      | 3890/10920 [00:02<00:04, 1643.98it/s]     38%|###7      | 4102/10920 [00:02<00:04, 1644.08it/s]     39%|###9      | 4300/10920 [00:02<00:05, 1235.40it/s]     41%|####      | 4462/10920 [00:02<00:04, 1293.33it/s]     42%|####2     | 4624/10920 [00:02<00:04, 1375.97it/s]     44%|####3     | 4783/10920 [00:03<00:05, 1051.46it/s]     45%|####5     | 4915/10920 [00:03<00:05, 1010.35it/s]     47%|####6     | 5092/10920 [00:03<00:05, 1143.91it/s]     48%|####7     | 5226/10920 [00:03<00:04, 1149.49it/s]     49%|####9     | 5367/10920 [00:03<00:04, 1216.85it/s]     50%|#####     | 5500/10920 [00:03<00:04, 1199.62it/s]     52%|#####1    | 5628/10920 [00:03<00:04, 1136.54it/s]     53%|#####2    | 5748/10920 [00:03<00:04, 1117.24it/s]     54%|#####3    | 5864/10920 [00:04<00:04, 1090.39it/s]     56%|#####5    | 6068/10920 [00:04<00:03, 1258.72it/s]     57%|#####7    | 6233/10920 [00:04<00:03, 1353.71it/s]     59%|#####8    | 6432/10920 [00:04<00:02, 1496.95it/s]     60%|######    | 6594/10920 [00:04<00:02, 1493.53it/s]     62%|######1   | 6752/10920 [00:04<00:03, 1140.30it/s]     64%|######3   | 6978/10920 [00:04<00:02, 1338.85it/s]     66%|######5   | 7202/10920 [00:04<00:02, 1522.56it/s]     68%|######8   | 7432/10920 [00:05<00:02, 1693.85it/s]     70%|######9   | 7627/10920 [00:05<00:02, 1217.16it/s]     71%|#######1  | 7786/10920 [00:05<00:03, 977.11it/s]      72%|#######2  | 7917/10920 [00:05<00:03, 778.31it/s]     73%|#######3  | 8025/10920 [00:05<00:03, 786.30it/s]     74%|#######4  | 8125/10920 [00:06<00:03, 745.26it/s]     75%|#######5  | 8223/10920 [00:06<00:03, 791.75it/s]     76%|#######6  | 8314/10920 [00:06<00:03, 782.50it/s]     77%|#######6  | 8401/10920 [00:06<00:03, 761.50it/s]     78%|#######8  | 8525/10920 [00:06<00:02, 860.80it/s]     79%|#######8  | 8620/10920 [00:06<00:02, 846.19it/s]     80%|########  | 8774/10920 [00:06<00:02, 978.24it/s]     82%|########2 | 8982/10920 [00:06<00:01, 1162.86it/s]     84%|########4 | 9206/10920 [00:06<00:01, 1357.60it/s]     86%|########6 | 9419/10920 [00:07<00:00, 1515.82it/s]     88%|########8 | 9614/10920 [00:07<00:00, 1623.67it/s]     91%|######### | 9908/10920 [00:07<00:00, 1875.50it/s]     93%|#########2| 10124/10920 [00:07<00:00, 1350.32it/s]     94%|#########4| 10300/10920 [00:07<00:00, 1092.82it/s]     96%|#########5| 10446/10920 [00:07<00:00, 994.01it/s]      97%|#########6| 10577/10920 [00:07<00:00, 1068.75it/s]     98%|#########8| 10705/10920 [00:08<00:00, 940.04it/s]      99%|#########9| 10853/10920 [00:08<00:00, 1055.12it/s]    100%|##########| 10920/10920 [00:08<00:00, 1308.67it/s]
+      0%|          | 0/10920 [00:00<?, ?it/s]      2%|2         | 227/10920 [00:00<00:04, 2243.73it/s]      3%|3         | 366/10920 [00:00<00:05, 1891.78it/s]      5%|5         | 579/10920 [00:00<00:05, 1946.99it/s]      7%|6         | 713/10920 [00:00<00:05, 1702.17it/s]      9%|8         | 978/10920 [00:00<00:05, 1906.31it/s]     12%|#2        | 1332/10920 [00:00<00:04, 2202.26it/s]     15%|#5        | 1644/10920 [00:00<00:03, 2415.02it/s]     19%|#8        | 2055/10920 [00:00<00:03, 2755.64it/s]     22%|##1       | 2377/10920 [00:00<00:02, 2876.68it/s]     25%|##4       | 2682/10920 [00:01<00:03, 2501.52it/s]     27%|##7       | 2953/10920 [00:01<00:04, 1802.36it/s]     31%|###       | 3348/10920 [00:01<00:03, 2153.29it/s]     35%|###4      | 3804/10920 [00:01<00:02, 2558.15it/s]     39%|###9      | 4261/10920 [00:01<00:02, 2946.53it/s]     43%|####3     | 4714/10920 [00:01<00:01, 3290.44it/s]     47%|####7     | 5178/10920 [00:01<00:01, 3604.28it/s]     52%|#####1    | 5643/10920 [00:01<00:01, 3863.39it/s]     56%|#####5    | 6093/10920 [00:02<00:01, 4032.86it/s]     60%|#####9    | 6542/10920 [00:02<00:01, 4159.48it/s]     64%|######4   | 7003/10920 [00:02<00:00, 4284.31it/s]     68%|######8   | 7449/10920 [00:02<00:00, 4265.60it/s]     72%|#######2  | 7888/10920 [00:02<00:00, 4139.06it/s]     76%|#######6  | 8312/10920 [00:02<00:00, 4123.64it/s]     80%|########  | 8749/10920 [00:02<00:00, 4194.54it/s]     84%|########4 | 9208/10920 [00:02<00:00, 4304.71it/s]     88%|########8 | 9643/10920 [00:02<00:00, 4261.88it/s]     92%|#########2| 10073/10920 [00:02<00:00, 4219.85it/s]     96%|#########6| 10498/10920 [00:03<00:00, 4200.05it/s]    100%|##########| 10920/10920 [00:03<00:00, 4145.68it/s]    100%|##########| 10920/10920 [00:03<00:00, 3459.96it/s]
     298 up-deflection photodiode candidate events found
     Checking best behavior-photodiode difference alignments
-      0%|          | 0/299 [00:00<?, ?it/s]      1%|1         | 3/299 [00:00<00:13, 21.89it/s]      1%|1         | 4/299 [00:00<00:20, 14.23it/s]      2%|2         | 6/299 [00:00<00:19, 15.21it/s]      3%|2         | 8/299 [00:00<00:20, 13.92it/s]      3%|3         | 10/299 [00:00<00:24, 11.58it/s]      4%|3         | 11/299 [00:00<00:30,  9.40it/s]      4%|4         | 12/299 [00:01<00:32,  8.85it/s]      5%|4         | 14/299 [00:01<00:28, 10.08it/s]      6%|5         | 17/299 [00:01<00:22, 12.31it/s]      7%|6         | 20/299 [00:01<00:19, 14.24it/s]      7%|7         | 22/299 [00:01<00:18, 14.88it/s]      8%|8         | 24/299 [00:01<00:17, 15.82it/s]      9%|8         | 26/299 [00:01<00:22, 11.90it/s]     10%|9         | 29/299 [00:02<00:19, 13.70it/s]     11%|#1        | 33/299 [00:02<00:16, 15.83it/s]     12%|#1        | 35/299 [00:02<00:30,  8.63it/s]     12%|#2        | 37/299 [00:02<00:27,  9.67it/s]     13%|#3        | 40/299 [00:03<00:22, 11.60it/s]     14%|#4        | 42/299 [00:03<00:19, 12.99it/s]     15%|#4        | 44/299 [00:03<00:20, 12.25it/s]     16%|#5        | 47/299 [00:03<00:17, 14.25it/s]     16%|#6        | 49/299 [00:03<00:19, 12.52it/s]     17%|#7        | 52/299 [00:03<00:22, 10.99it/s]     18%|#8        | 54/299 [00:04<00:26,  9.18it/s]     19%|#8        | 56/299 [00:04<00:26,  9.34it/s]     19%|#9        | 58/299 [00:04<00:26,  9.09it/s]     20%|##        | 60/299 [00:05<00:29,  8.22it/s]     21%|##1       | 63/299 [00:05<00:24,  9.73it/s]     22%|##1       | 65/299 [00:05<00:22, 10.31it/s]     23%|##2       | 68/299 [00:05<00:21, 10.90it/s]     23%|##3       | 70/299 [00:05<00:18, 12.56it/s]     24%|##4       | 72/299 [00:05<00:18, 11.96it/s]     25%|##4       | 74/299 [00:06<00:22, 10.03it/s]     26%|##5       | 77/299 [00:06<00:18, 11.98it/s]     26%|##6       | 79/299 [00:06<00:16, 13.45it/s]     27%|##7       | 82/299 [00:06<00:13, 15.54it/s]     28%|##8       | 84/299 [00:06<00:14, 14.48it/s]     29%|##8       | 86/299 [00:06<00:18, 11.52it/s]     29%|##9       | 88/299 [00:07<00:19, 10.97it/s]     30%|###       | 91/299 [00:07<00:16, 12.90it/s]     31%|###1      | 93/299 [00:07<00:16, 12.50it/s]     32%|###2      | 96/299 [00:07<00:13, 14.55it/s]     33%|###2      | 98/299 [00:07<00:13, 15.36it/s]     33%|###3      | 100/299 [00:07<00:12, 16.20it/s]     34%|###4      | 103/299 [00:07<00:11, 16.96it/s]     35%|###5      | 105/299 [00:08<00:17, 10.81it/s]     36%|###5      | 107/299 [00:08<00:17, 10.83it/s]     37%|###6      | 110/299 [00:08<00:16, 11.15it/s]     37%|###7      | 112/299 [00:08<00:15, 12.06it/s]     38%|###8      | 114/299 [00:09<00:14, 12.98it/s]     39%|###9      | 117/299 [00:09<00:12, 14.62it/s]     40%|###9      | 119/299 [00:09<00:11, 15.24it/s]     40%|####      | 121/299 [00:09<00:12, 13.87it/s]     41%|####1     | 123/299 [00:09<00:13, 12.59it/s]     42%|####1     | 125/299 [00:09<00:13, 12.94it/s]     42%|####2     | 127/299 [00:09<00:12, 13.92it/s]     43%|####3     | 130/299 [00:10<00:10, 16.46it/s]     44%|####4     | 133/299 [00:10<00:08, 18.65it/s]     45%|####5     | 136/299 [00:10<00:07, 20.46it/s]     46%|####6     | 139/299 [00:10<00:14, 11.00it/s]     47%|####7     | 141/299 [00:11<00:21,  7.49it/s]     48%|####7     | 143/299 [00:11<00:18,  8.60it/s]     48%|####8     | 145/299 [00:11<00:17,  8.66it/s]     49%|####9     | 148/299 [00:11<00:14, 10.25it/s]     50%|#####     | 150/299 [00:11<00:14, 10.54it/s]     51%|#####1    | 153/299 [00:12<00:11, 12.57it/s]     52%|#####1    | 155/299 [00:12<00:10, 13.91it/s]     53%|#####2    | 157/299 [00:12<00:09, 14.99it/s]     54%|#####3    | 160/299 [00:12<00:08, 15.99it/s]     54%|#####4    | 162/299 [00:12<00:09, 15.19it/s]     55%|#####4    | 164/299 [00:12<00:12, 10.65it/s]     56%|#####5    | 166/299 [00:13<00:12, 10.93it/s]     56%|#####6    | 168/299 [00:13<00:12, 10.74it/s]     57%|#####6    | 170/299 [00:13<00:13,  9.73it/s]     58%|#####7    | 172/299 [00:13<00:13,  9.43it/s]     58%|#####8    | 174/299 [00:13<00:11, 10.50it/s]     59%|#####8    | 176/299 [00:14<00:13,  9.02it/s]     60%|#####9    | 178/299 [00:14<00:14,  8.33it/s]     61%|######    | 181/299 [00:14<00:11, 10.22it/s]     61%|######1   | 183/299 [00:14<00:12,  9.16it/s]     62%|######1   | 185/299 [00:15<00:11,  9.64it/s]     63%|######2   | 187/299 [00:15<00:13,  8.53it/s]     63%|######2   | 188/299 [00:15<00:15,  7.22it/s]     64%|######3   | 190/299 [00:15<00:14,  7.69it/s]     64%|######3   | 191/299 [00:16<00:17,  6.07it/s]     64%|######4   | 192/299 [00:16<00:18,  5.82it/s]     65%|######4   | 193/299 [00:16<00:17,  6.08it/s]     65%|######4   | 194/299 [00:16<00:16,  6.45it/s]     65%|######5   | 195/299 [00:16<00:15,  6.52it/s]     66%|######5   | 196/299 [00:16<00:15,  6.61it/s]     66%|######6   | 198/299 [00:16<00:12,  8.18it/s]     67%|######6   | 200/299 [00:17<00:11,  8.46it/s]     68%|######7   | 202/299 [00:17<00:10,  9.05it/s]     68%|######8   | 204/299 [00:17<00:09, 10.34it/s]     69%|######8   | 206/299 [00:17<00:08, 11.47it/s]     70%|######9   | 209/299 [00:17<00:07, 11.83it/s]     71%|#######   | 212/299 [00:17<00:06, 13.40it/s]     72%|#######1  | 215/299 [00:18<00:05, 15.35it/s]     73%|#######2  | 217/299 [00:18<00:06, 13.30it/s]     74%|#######3  | 220/299 [00:18<00:05, 14.44it/s]     74%|#######4  | 222/299 [00:18<00:06, 11.78it/s]     75%|#######4  | 224/299 [00:18<00:06, 11.56it/s]     76%|#######5  | 226/299 [00:19<00:05, 12.96it/s]     77%|#######6  | 229/299 [00:19<00:04, 15.03it/s]     77%|#######7  | 231/299 [00:19<00:05, 13.04it/s]     78%|#######7  | 233/299 [00:19<00:04, 14.41it/s]     79%|#######8  | 235/299 [00:19<00:05, 12.69it/s]     79%|#######9  | 237/299 [00:19<00:04, 12.72it/s]     80%|#######9  | 239/299 [00:19<00:04, 13.76it/s]     81%|########  | 242/299 [00:20<00:03, 15.43it/s]     82%|########1 | 245/299 [00:20<00:03, 17.50it/s]     83%|########2 | 247/299 [00:20<00:03, 13.76it/s]     83%|########3 | 249/299 [00:20<00:03, 14.14it/s]     84%|########3 | 251/299 [00:20<00:03, 13.17it/s]     85%|########4 | 253/299 [00:20<00:03, 12.71it/s]     86%|########5 | 257/299 [00:21<00:02, 14.30it/s]     87%|########6 | 259/299 [00:21<00:02, 14.65it/s]     88%|########7 | 262/299 [00:21<00:02, 15.17it/s]     89%|########8 | 266/299 [00:21<00:01, 18.37it/s]     90%|########9 | 269/299 [00:21<00:01, 18.57it/s]     91%|######### | 272/299 [00:21<00:01, 20.15it/s]     92%|#########1| 275/299 [00:21<00:01, 19.46it/s]     93%|#########2| 278/299 [00:22<00:01, 20.86it/s]     94%|#########3| 281/299 [00:22<00:00, 22.83it/s]     95%|#########4| 284/299 [00:22<00:00, 22.30it/s]     96%|#########5| 287/299 [00:22<00:00, 19.94it/s]     97%|#########6| 290/299 [00:22<00:00, 18.48it/s]     98%|#########7| 292/299 [00:22<00:00, 17.08it/s]     98%|#########8| 294/299 [00:22<00:00, 17.61it/s]     99%|#########8| 296/299 [00:23<00:00, 14.23it/s]    100%|#########9| 298/299 [00:23<00:00, 15.47it/s]    100%|##########| 299/299 [00:23<00:00, 12.85it/s]
+      0%|          | 0/299 [00:00<?, ?it/s]      1%|1         | 4/299 [00:00<00:08, 34.15it/s]      3%|3         | 10/299 [00:00<00:07, 37.01it/s]      5%|5         | 15/299 [00:00<00:07, 39.16it/s]      7%|7         | 21/299 [00:00<00:07, 39.60it/s]      9%|8         | 26/299 [00:00<00:06, 39.90it/s]     10%|#         | 30/299 [00:00<00:07, 38.41it/s]     12%|#1        | 35/299 [00:00<00:07, 37.51it/s]     13%|#3        | 40/299 [00:01<00:06, 38.59it/s]     15%|#4        | 44/299 [00:01<00:07, 34.61it/s]     16%|#6        | 49/299 [00:01<00:07, 35.26it/s]     18%|#8        | 54/299 [00:01<00:06, 36.07it/s]     20%|#9        | 59/299 [00:01<00:06, 37.39it/s]     21%|##1       | 63/299 [00:01<00:06, 35.35it/s]     22%|##2       | 67/299 [00:01<00:06, 34.36it/s]     24%|##3       | 71/299 [00:01<00:07, 32.19it/s]     25%|##5       | 75/299 [00:02<00:06, 33.81it/s]     26%|##6       | 79/299 [00:02<00:06, 33.29it/s]     28%|##7       | 83/299 [00:02<00:06, 33.62it/s]     29%|##9       | 87/299 [00:02<00:06, 33.58it/s]     31%|###1      | 93/299 [00:02<00:05, 36.98it/s]     33%|###2      | 98/299 [00:02<00:05, 37.31it/s]     34%|###4      | 102/299 [00:02<00:05, 37.26it/s]     35%|###5      | 106/299 [00:02<00:05, 35.24it/s]     37%|###6      | 110/299 [00:02<00:05, 35.99it/s]     38%|###8      | 114/299 [00:03<00:05, 36.96it/s]     39%|###9      | 118/299 [00:03<00:05, 35.96it/s]     41%|####      | 122/299 [00:03<00:05, 32.35it/s]     42%|####2     | 126/299 [00:03<00:05, 30.69it/s]     43%|####3     | 130/299 [00:03<00:05, 32.23it/s]     45%|####4     | 134/299 [00:03<00:05, 32.80it/s]     46%|####6     | 138/299 [00:03<00:04, 34.18it/s]     47%|####7     | 142/299 [00:03<00:04, 32.98it/s]     49%|####8     | 146/299 [00:04<00:04, 34.01it/s]     50%|#####     | 150/299 [00:04<00:04, 33.83it/s]     52%|#####1    | 154/299 [00:04<00:04, 33.94it/s]     53%|#####2    | 158/299 [00:04<00:04, 32.65it/s]     55%|#####4    | 163/299 [00:04<00:03, 34.40it/s]     56%|#####5    | 167/299 [00:04<00:04, 32.25it/s]     57%|#####7    | 171/299 [00:04<00:04, 29.14it/s]     59%|#####8    | 175/299 [00:05<00:04, 30.60it/s]     60%|#####9    | 179/299 [00:05<00:03, 30.74it/s]     61%|######1   | 183/299 [00:05<00:03, 31.37it/s]     63%|######2   | 187/299 [00:05<00:03, 31.96it/s]     64%|######3   | 191/299 [00:05<00:03, 32.75it/s]     65%|######5   | 195/299 [00:05<00:03, 31.92it/s]     67%|######6   | 199/299 [00:05<00:03, 33.02it/s]     68%|######7   | 203/299 [00:05<00:02, 33.17it/s]     69%|######9   | 207/299 [00:05<00:02, 32.72it/s]     71%|#######1  | 213/299 [00:06<00:02, 35.90it/s]     73%|#######2  | 217/299 [00:06<00:02, 36.21it/s]     74%|#######3  | 221/299 [00:06<00:02, 36.06it/s]     75%|#######5  | 225/299 [00:06<00:02, 35.36it/s]     77%|#######6  | 230/299 [00:06<00:01, 37.17it/s]     79%|#######8  | 235/299 [00:06<00:01, 36.85it/s]     80%|#######9  | 239/299 [00:06<00:01, 34.30it/s]     81%|########1 | 243/299 [00:06<00:01, 34.95it/s]     83%|########2 | 247/299 [00:07<00:01, 31.66it/s]     84%|########3 | 251/299 [00:07<00:01, 31.98it/s]     86%|########5 | 257/299 [00:07<00:01, 34.57it/s]     88%|########8 | 264/299 [00:07<00:00, 40.09it/s]     90%|########9 | 269/299 [00:07<00:00, 41.83it/s]     92%|#########1| 274/299 [00:07<00:00, 42.10it/s]     94%|#########3| 281/299 [00:07<00:00, 47.25it/s]     96%|#########5| 287/299 [00:07<00:00, 44.97it/s]     98%|#########7| 292/299 [00:08<00:00, 42.86it/s]     99%|#########9| 297/299 [00:08<00:00, 41.72it/s]    100%|##########| 299/299 [00:08<00:00, 36.31it/s]
     Best alignment with the photodiode shifted 12 ms relative to the first behavior event
     errors: min -32, q1 -10, med 0, q3 10, max 75
     Excluding events that have zero close events or more than one photodiode event within `max_len` time
@@ -238,9 +238,9 @@ data structure (BIDS) standardized format before using it.
     Excluding event 235, no event found
     Excluding event 279, off by 31 ms
     Excluding event 289, off by -30 ms
-    /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:331: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:364: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       fig.show()
-    /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:338: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+    /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:371: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
       fig.show()
 
 
@@ -279,8 +279,8 @@ used for each event separately using the keyword `add_event=True`.
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
     Ready.
@@ -313,21 +313,21 @@ https://mne.tools/mne-bids/ for more information about BIDS.
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
     Ready.
     Used Annotations descriptions: ['Fixation', 'Go Cue', 'Response']
-    /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:896: RuntimeWarning: The unit for channel(s) pd has changed from V to NA.
+    /Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:981: RuntimeWarning: The unit for channel(s) pd has changed from V to NA.
       raw.set_channel_types({ch: 'stim' for ch in pd_channels
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/sub-1_task-mytask_raw.fif...
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/sub-1_task-mytask_raw.fif...
     Isotrak not found
         Range : 0 ... 2044105 =      0.000 ...  2044.105 secs
     Ready.
-    Creating folder: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/sub-1/ieeg
+    Creating folder: /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/sub-1/ieeg
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/README'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/README'...
 
     References
     ----------
@@ -336,12 +336,12 @@ https://mne.tools/mne-bids/ for more information about BIDS.
     Holdgraf, C., Appelhoff, S., Bickel, S., Bouchard, K., D'Ambrosio, S., David, O., … Hermes, D. (2019). iEEG-BIDS, extending the Brain Imaging Data Structure specification to human intracranial electrophysiology. Scientific Data, 6, 102. https://doi.org/10.1038/s41597-019-0105-7
 
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/participants.tsv'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/participants.tsv'...
 
     participant_id  age     sex     hand
     sub-1   n/a     n/a     n/a
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/participants.json'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/participants.json'...
 
     {
         "participant_id": {
@@ -368,7 +368,7 @@ https://mne.tools/mne-bids/ for more information about BIDS.
         }
     }
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/sub-1/ieeg/sub-1_task-mytask_events.tsv'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/sub-1/ieeg/sub-1_task-mytask_events.tsv'...
 
     onset   duration        trial_type      value   sample
     12.27   0.0     Fixation        1       12270
@@ -377,7 +377,7 @@ https://mne.tools/mne-bids/ for more information about BIDS.
     18.299  0.0     Fixation        1       18299
     18.999  0.0     Go Cue  2       18999
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/dataset_description.json'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/dataset_description.json'...
 
     {
         "Name": " ",
@@ -388,7 +388,7 @@ https://mne.tools/mne-bids/ for more information about BIDS.
         ]
     }
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/sub-1/ieeg/sub-1_task-mytask_ieeg.json'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/sub-1/ieeg/sub-1_task-mytask_ieeg.json'...
 
     {
         "TaskName": "mytask",
@@ -409,7 +409,7 @@ https://mne.tools/mne-bids/ for more information about BIDS.
         "TriggerChannelCount": 1
     }
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/sub-1/ieeg/sub-1_task-mytask_channels.tsv'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/sub-1/ieeg/sub-1_task-mytask_channels.tsv'...
 
     name    type    units   low_cutoff      high_cutoff     description     sampling_frequency      status  status_description
     pd      TRIG    n/a     0.0     500.0   Trigger 1000.0  good    n/a
@@ -419,11 +419,11 @@ https://mne.tools/mne-bids/ for more information about BIDS.
     /Users/alexrockhill/software/mne-bids/mne_bids/write.py:1115: RuntimeWarning: Converting data files to BrainVision format
       warn('Converting data files to BrainVision format')
 
-    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/sub-1/sub-1_scans.tsv'...
+    Writing '/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/sub-1/sub-1_scans.tsv'...
 
     filename        acq_time
     ieeg/sub-1_task-mytask_ieeg.vhdr        n/a
-    Wrote /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_eo5srhbl/bids_dir/sub-1/sub-1_scans.tsv entry with ieeg/sub-1_task-mytask_ieeg.vhdr.
+    Wrote /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_87musw06/bids_dir/sub-1/sub-1_scans.tsv entry with ieeg/sub-1_task-mytask_ieeg.vhdr.
 
 
 
@@ -431,7 +431,7 @@ https://mne.tools/mne-bids/ for more information about BIDS.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  43.053 seconds)
+   **Total running time of the script:** ( 0 minutes  20.175 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_find_pd_events.py:

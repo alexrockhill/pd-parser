@@ -253,15 +253,27 @@ def _find_best_alignment(beh_events, sorted_pds, max_i, sfreq,
     return best_alignment
 
 
+def _recover_event(pd, b_event, exclude_shift_i, zscore):
+    """Recover with a corrupted baseline or plateau but not on/offset."""
+    b_event_i = np.round(b_event).astype(int)
+    section = pd[b_event_i - exclude_shift_i:
+                 b_event_i + exclude_shift_i].copy()
+    baseline = pd[b_event_i - 2 * exclude_shift_i: b_event_i - exclude_shift_i]
+    section = (section - np.median(baseline)) / baseline.std()
+    event = np.where(abs(section) > zscore)[0]
+    return b_event_i - exclude_shift_i + event[0]if event.size > 0 else None
+
+
 def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
                               exclude_shift_i, max_len_i, resync_i, sfreq,
-                              verbose=True):
+                              zscore, recover, verbose=True):
     """Exclude all events that are outside the given shift compared to beh."""
     if verbose:
         import matplotlib.pyplot as plt
         pd_section_data = dict(b_event=list(), title=list())
         print('Excluding events that have zero close events or more than '
               'one photodiode event within `max_len` time')
+    sfreq_i = np.round(sfreq).astype(int)
     events = dict()
     errors = dict()
     pd_candidates = set(sorted_pds)
@@ -295,7 +307,28 @@ def _exclude_ambiguous_events(beh_events, sorted_pds, best_alignment, pd,
                     j_ms = int(j / sfreq * 1000)
                     text = f'Excluding event {i},\noff by {j_ms} ms'
                 else:  # if off by more than max_len, just say missing
-                    text = f'Excluding event {i},\nno event found'
+                    if recover:
+                        event = _recover_event(pd, b_event, exclude_shift_i,
+                                               zscore)
+                        if event is None:
+                            text = f'No event found to recover\nfor event {i}'
+                        else:
+                            fig, ax = plt.subplots()
+                            section = \
+                                pd[event - 2 * sfreq_i: event + 2 * sfreq_i]
+                            ax.plot(np.linspace(-2, 2, 4 * sfreq_i), section)
+                            ax.plot([0, 0], [section.min(), section.max()])
+                            ax.set_title(f'Corrupted Event {i}')
+                            ax.set_xlabel('time (s)')
+                            ax.set_ylabel('voltage')
+                            fig.show()
+                            if input('Recover event? (y/N) ').lower() == 'y':
+                                events[i] = event
+                                text = f'Event {i} recovered\n(not excluded)'
+                            else:
+                                text = f'Recovered event {i}\ndiscarded'
+                    else:
+                        text = f'Excluding event {i},\nno event found'
                 print(text.replace('\n', ' '))
                 pd_section_data['b_event'].append(b_event)
                 pd_section_data['title'].append(text)
@@ -552,7 +585,7 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
              beh_col='fix_onset_time', pd_ch_names=None,
              exclude_shift=0.03, resync=0.075,
              max_len=1., zscore=100, min_i=10, baseline=0.25,
-             add_events=False, overwrite=False, verbose=True):
+             add_events=False, recover=False, overwrite=False, verbose=True):
     """Parse photodiode events.
 
     Parses photodiode events from a likely very corrupted channel
@@ -611,6 +644,8 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         `pd_event_name='Response'`.
         Note: `pd_parser.add_pd_relative_events` will be relative to the
         first event added.
+    recover : bool
+        Whether to recover corrupted events manually.
     verbose : bool
         Whether to display or supress text output on the progress
         of the function.
@@ -671,7 +706,7 @@ def parse_pd(fname, pd_event_name='Fixation', behf=None,
         beh_events=beh_events, sorted_pds=sorted_pds,
         best_alignment=best_alignment, pd=pd, exclude_shift_i=exclude_shift_i,
         max_len_i=max_len_i, resync_i=resync_i, sfreq=raw.info['sfreq'],
-        verbose=verbose)
+        zscore=zscore, recover=recover, verbose=verbose)
     _save_pd_data(fname, raw=raw, events=events, event_id=pd_event_name,
                   pd_ch_names=pd_ch_names, beh_df=beh_df,
                   add_events=add_events, overwrite=overwrite)
@@ -707,6 +742,34 @@ def add_pd_off_events(fname, off_event_name='Stim Off', max_len=1.,
         Whether to overwrite existing data if it exists.
 
     """
+    recover_data = dict(event=None)
+    recovered_events = list()
+
+    def align_keypress(event):
+        if event.key in ('enter', 'e'):
+            if event.key == 'enter':
+                recover_data['event'] = recover_data['line'].get_xdata()[0]
+            else:
+                recover_data['event'] = None
+            plt.close(fig)
+        elif event.key in ('left', 'right'):
+            xmin, xmax = ax.get_xlim()
+            linex = recover_data['line'].get_xdata()[0]
+            linex += 1 if event.key == 'right' else -1
+            if linex >= xmin and linex <= xmax:
+                recover_data['line'].set_xdata([linex, linex])
+                fig.canvas.draw()
+        elif event.key in ('-', '+', '='):
+            xmin, xmax = ax.get_xlim()
+            linex = recover_data['line'].get_xdata()[0]
+            xmin = np.round(max([0, xmin - (linex - xmin)]) if event.key == '-'
+                            else np.mean([linex, xmin])).astype(int)
+            xmax = np.round(xmax + (xmax - linex) if event.key == '-' else
+                            np.mean([linex, xmax])).astype(int)
+            ax.set_xlim([xmin, xmax])
+            ax.set_ylim([section[xmin: xmax].min(), section[xmin: xmax].max()])
+            fig.canvas.draw()
+
     raw = _read_raw(fname, verbose=verbose)
     annot, pd_ch_names, beh_df = _load_pd_data(fname)
     pd = _get_pd_channel_data(raw, pd_ch_names)
@@ -719,12 +782,34 @@ def add_pd_off_events(fname, off_event_name='Stim Off', max_len=1.,
         i -= baseline_i  # move back one baseline avoid ramp up
         direction, pd_start, pd_end = _check_if_pd_event(
             pd, i, max_len_i, zscore, min_i, baseline_i)
-        assert abs(pd_start - events[event_idx]) < min_i
-        off_events[direction][event_idx] = pd_end
+        if pd_start is None:  # event added manually, get offset manually
+            import matplotlib.pyplot as plt
+            sfreq_i = np.round(raw.info['sfreq']).astype(int)
+            section = pd[i: i + np.round(max_len * sfreq_i).astype(int)]
+            fig, ax = plt.subplots(figsize=(6, 6))
+            fig.subplots_adjust(top=0.75)
+            ax.set_title('Use the left/right keys to find the event offset\n'
+                         '+/- to scale the x axis\npress enter when finished\n'
+                         'or `e` to exclude the event')
+            ax.set_xlabel('time (s)')
+            ax.set_ylabel('voltage')
+            ax.plot(section, color='b')
+            ax.set_xticks([0, section.size])
+            ax.set_xticklabels([0, max_len])
+            recover_data['line'] = ax.plot(
+                [section.size - 1, section.size - 1],
+                [section.min(), section.max()], color='k')[0]
+            fig.canvas.mpl_connect('key_press_event', align_keypress)
+            plt.show()
+            if recover_data['event'] is not None:
+                recovered_events.append(recover_data['event'] + i)
+        else:
+            assert abs(pd_start - events[event_idx]) < min_i
+            off_events[direction][event_idx] = pd_end
     pd_direction = 'down' if \
         len(off_events['down']) > len(off_events['up']) else 'up'
     off_events = off_events[pd_direction]
-    onsets = np.array(list(off_events.values()))
+    onsets = np.array(list(off_events.values()) + recovered_events)
     annot += mne.Annotations(
         onset=raw.times[onsets], duration=np.repeat(0.1, onsets.size),
         description=np.repeat(off_event_name, onsets.size))
