@@ -369,7 +369,8 @@ def test_cli():
 
 
 def test_examples():
-    if platform.system() == 'Windows':
+    # mac and windows tests run into issues with interactive elements
+    if platform.system() != 'Linux':
         return
     examples_dir = op.join(op.dirname(op.dirname(pd_parser.__file__)),
                            'examples')
