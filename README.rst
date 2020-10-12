@@ -53,15 +53,13 @@ Getting Started
     - Run ``jupyter notebook`` in the terminal, this will pop up a webpage in your default browser.
     - Change ``%matplotlib inline`` to just ``%matplotlib`` to pop the plots out interactively instead of below the cell in the notebook.
     - Run each cell, change the parameters and explore the example.
-2) Try pd-parser on your photodiode data. You wil need:
+2) Try pd-parser on your photodiode data. You will need:
     - **Time series data** in ``.fif``, ``.edf``, ``.bdf``, ``.vhdr``, or ``.set`` format like the data from the first cell of `this example <https://alexrockhill.github.io/pd-parser/dev/auto_examples/plot_find_pd_events.html#sphx-glr-auto-examples-plot-find-pd-events-py>`_. If you do not know the name of the photodiode channel, the data will be plotted and you will be asked to find it so it is not necessary to pass the name.
     - **A behavior file** in tab-separated value (tsv) format like the one created in the second cell of `this example <https://alexrockhill.github.io/pd-parser/dev/auto_examples/plot_find_pd_events.html#sphx-glr-auto-examples-plot-find-pd-events-py>`_. The file needs to have:
         - One column corresponding to the expected event in seconds, called by default ``fix_onset_time``
         - *Optionally* Other columns with relative event times in seconds.
-
-How to run:
-
-See the example notebooks for extracting parameters for `pd_parser`, using these to detect events, and saving to BIDS compatible format.
+    - How to run:
+        - See the `example notebooks <https://alexrockhill.github.io/pd-parser/dev/auto_examples/index.html>`_ for information on how to extract parameters for ``pd_parser``, use the parameters to detect events, and saving the events and data in a BIDS-compatible format.
 
 Bug reports
 -----------
