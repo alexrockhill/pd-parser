@@ -146,14 +146,23 @@
 </dl>
 </li>
 <li><dl class="simple">
-<dt>Try pd-parser on your photodiode data. You will likely need to modify your behavior tsv files so that they have</dt><dd><ul class="simple">
+<dt>Try pd-parser on your photodiode data. You wil need:</dt><dd><ul class="simple">
+<li><p><strong>Time series data</strong> in <code class="docutils literal notranslate"><span class="pre">.fif</span></code>, <code class="docutils literal notranslate"><span class="pre">.edf</span></code>, <code class="docutils literal notranslate"><span class="pre">.bdf</span></code>, <code class="docutils literal notranslate"><span class="pre">.vhdr</span></code>, or <code class="docutils literal notranslate"><span class="pre">.set</span></code> format like the data from the first cell of <a class="reference external" href="https://alexrockhill.github.io/pd-parser/dev/auto_examples/plot_find_pd_events.html#sphx-glr-auto-examples-plot-find-pd-events-py">this example</a>. If you do not know the name of the photodiode channel, the data will be plotted and you will be asked to find it so it is not necessary to pass the name.</p></li>
+<li><dl class="simple">
+<dt><strong>A behavior file</strong> in tab-separated value (tsv) format like the one created in the second cell of <a class="reference external" href="https://alexrockhill.github.io/pd-parser/dev/auto_examples/plot_find_pd_events.html#sphx-glr-auto-examples-plot-find-pd-events-py">this example</a>. The file needs to have:</dt><dd><ul>
 <li><p>One column corresponding to the expected event in seconds, called by default <code class="docutils literal notranslate"><span class="pre">fix_onset_time</span></code></p></li>
 <li><p><em>Optionally</em> Other columns with relative event times in seconds.</p></li>
 </ul>
 </dd>
 </dl>
 </li>
+</ul>
+</dd>
+</dl>
+</li>
 </ol>
+<p>How to run:</p>
+<p>See the example notebooks for extracting parameters for <cite>pd_parser</cite>, using these to detect events, and saving to BIDS compatible format.</p>
 </div>
 <div class="section" id="bug-reports">
 <h2>Bug reports<a class="headerlink" href="#bug-reports" title="Permalink to this headline">¶</a></h2>
