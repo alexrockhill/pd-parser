@@ -21,7 +21,7 @@ add_pd_events_to_raw
 
 .. rst-class:: callout
 
-usage: ``add_pd_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--drop_pd_channels DROP_PD_CHANNELS] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``add_pd_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--drop_pd_channels DROP_PD_CHANNELS] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
@@ -44,7 +44,7 @@ optional arguments
 --verbose VERBOSE		Set verbose output to True or False.
 
 
---overwrite OVERWRITE		Whether to overwrite
+-o, --overwrite		Pass this flag to overwrite an existing file
 
 
 
@@ -59,7 +59,7 @@ add_pd_off_events
 
 .. rst-class:: callout
 
-usage: ``add_pd_off_events fname [-h] [--off_event_name OFF_EVENT_NAME] [--max_len MAX_LEN] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``add_pd_off_events fname [-h] [--off_event_name OFF_EVENT_NAME] [--max_len MAX_LEN] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
@@ -91,7 +91,7 @@ optional arguments
 --verbose VERBOSE		Set verbose output to True or False.
 
 
---overwrite OVERWRITE		Whether to overwrite
+-o, --overwrite		Pass this flag to overwrite an existing file
 
 
 
@@ -106,7 +106,7 @@ add_pd_relative_events
 
 .. rst-class:: callout
 
-usage: ``add_pd_relative_events fname [-h] [--behf BEHF] [--relative_event_cols LIST_OF_RELATIVE_EVENT_COLS] [--relative_event_names LIST_OF_RELATIVE_EVENT_NAMES] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``add_pd_relative_events fname [-h] [--behf BEHF] [--relative_event_cols LIST_OF_RELATIVE_EVENT_COLS] [--relative_event_names LIST_OF_RELATIVE_EVENT_NAMES] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
@@ -132,7 +132,7 @@ optional arguments
 --verbose VERBOSE		Set verbose output to True or False.
 
 
---overwrite OVERWRITE		Whether to overwrite
+-o, --overwrite		Pass this flag to overwrite an existing file
 
 
 
@@ -179,7 +179,7 @@ parse_pd
 
 .. rst-class:: callout
 
-usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--add_events ADD_EVENTS] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--add_events] [--recover] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
@@ -223,13 +223,16 @@ optional arguments
 --baseline BASELINE		How much relative to the max_lento use to idenify the time before the photodiode event. Probably don't change but increasing will reduce false-positives and decreasing will reduce false-negatives.
 
 
---add_events ADD_EVENTS		Whether to run the parser a second time to add more events from deflections corresponding to multiple events on the same channel
+--add_events		Whether to run the parser a second time to add more events from deflections corresponding to multiple events on the same channel
+
+
+--recover		Whether to recover corrupted events manually.
 
 
 --verbose VERBOSE		Set verbose output to True or False.
 
 
---overwrite OVERWRITE		Whether to overwrite
+-o, --overwrite		Pass this flag to overwrite an existing file
 
 
 
@@ -244,7 +247,7 @@ pd_parser_save_to_bids
 
 .. rst-class:: callout
 
-usage: ``pd_parser_save_to_bids bids_dir fname sub task [-h] [--ses SES] [--run RUN] [--data_type DATA_TYPE] [--eogs LIST_OF_EOGS] [--ecgs LIST_OF_ECGS] [--emgs LIST_OF_EMGS] [--verbose VERBOSE] [--overwrite OVERWRITE]``
+usage: ``pd_parser_save_to_bids bids_dir fname sub task [-h] [--ses SES] [--run RUN] [--data_type DATA_TYPE] [--eogs LIST_OF_EOGS] [--ecgs LIST_OF_ECGS] [--emgs LIST_OF_EMGS] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
@@ -285,7 +288,7 @@ optional arguments
 --verbose VERBOSE		Set verbose output to True or False.
 
 
---overwrite OVERWRITE		Whether to overwrite
+-o, --overwrite		Pass this flag to overwrite an existing file
 
 
 

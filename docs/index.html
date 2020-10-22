@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pd-parser &#8212; pd-parser 0.2 documentation</title>
+    <title>pd-parser &#8212; pd-parser 0.3 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
@@ -39,7 +39,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#">
-          pd-parser 0.2</a>
+          pd-parser 0.3</a>
         <span class="navbar-text navbar-version pull-left"><b></b></span>
       </div>
 
@@ -126,7 +126,7 @@
 </li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">pip</span></code> in a terminal, and then ensure that when you run <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">pip</span></code> in a terminal it points to the where the anaconda or python you just installed is.</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pd-parser</span></code> in a terminal.</p></li>
-<li><p>Install mne-bids bleeding edge: run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/mne-tools/mne-bids.git</span></code></p></li>
+<li><p>Install the bleeding edge <code class="docutils literal notranslate"><span class="pre">mne-bids</span></code>: run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">git+https://github.com/mne-tools/mne-bids.git</span></code></p></li>
 </ol>
 </div>
 <div class="section" id="getting-started">
@@ -134,7 +134,7 @@
 <ol class="arabic simple">
 <li><dl class="simple">
 <dt>Plot the examples in a Jupyter notebook</dt><dd><ul class="simple">
-<li><p>In the <a class="reference external" href="https://alexrockhill.github.io/pd-parser/auto_examples/index.html">Examples page</a>, click on ‘Download all examples in Jupyter notebooks’</p></li>
+<li><p>In the <a class="reference external" href="https://alexrockhill.github.io/pd-parser/dev/auto_examples/index.html">Examples page</a>, click on ‘Download all examples in Jupyter notebooks’</p></li>
 <li><p>Unzip the downloaded file</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">jupyter</span></code></p></li>
 <li><p>Point the terminal to the folder where the files you downloaded are by running <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">/path/to/downloads/</span></code></p></li>
@@ -146,9 +146,23 @@
 </dl>
 </li>
 <li><dl class="simple">
-<dt>Try pd-parser on your photodiode data. You will likely need to modify your behavior tsv files so that they have</dt><dd><ul class="simple">
+<dt>Try pd-parser on your photodiode data. You will need:</dt><dd><ul class="simple">
+<li><p><strong>Time series data</strong> in <code class="docutils literal notranslate"><span class="pre">.fif</span></code>, <code class="docutils literal notranslate"><span class="pre">.edf</span></code>, <code class="docutils literal notranslate"><span class="pre">.bdf</span></code>, <code class="docutils literal notranslate"><span class="pre">.vhdr</span></code>, or <code class="docutils literal notranslate"><span class="pre">.set</span></code> format like the data from the first cell of <a class="reference external" href="https://alexrockhill.github.io/pd-parser/dev/auto_examples/plot_find_pd_events.html#sphx-glr-auto-examples-plot-find-pd-events-py">this example</a>. If you do not know the name of the photodiode channel, the data will be plotted and you will be asked to find it so it is not necessary to pass the name.</p></li>
+<li><dl class="simple">
+<dt><strong>A behavior file</strong> in tab-separated value (tsv) format like the one created in the second cell of <a class="reference external" href="https://alexrockhill.github.io/pd-parser/dev/auto_examples/plot_find_pd_events.html#sphx-glr-auto-examples-plot-find-pd-events-py">this example</a>. The file needs to have:</dt><dd><ul>
 <li><p>One column corresponding to the expected event in seconds, called by default <code class="docutils literal notranslate"><span class="pre">fix_onset_time</span></code></p></li>
 <li><p><em>Optionally</em> Other columns with relative event times in seconds.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>How to run:</dt><dd><ul>
+<li><p>See the <a class="reference external" href="https://alexrockhill.github.io/pd-parser/dev/auto_examples/index.html">example notebooks</a> for information on how to extract parameters for <code class="docutils literal notranslate"><span class="pre">pd_parser</span></code>, use the parameters to detect events, and saving the events and data in a BIDS-compatible format.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </dd>
 </dl>

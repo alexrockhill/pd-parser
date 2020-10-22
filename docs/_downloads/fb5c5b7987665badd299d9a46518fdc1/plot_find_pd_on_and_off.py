@@ -1,7 +1,7 @@
 """
-=====================================
-02. Find Photodiode On and Off Events
-=====================================
+=================================
+Find Photodiode On and Off Events
+=================================
 In this example, we use ``pd-parser`` to find photodiode events and
 align both the onset of the deflection and the cessation to
 to behavior.

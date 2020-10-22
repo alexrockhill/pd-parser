@@ -39,7 +39,7 @@ Installation Instructions
 
 4) Run ``pip install pd-parser`` in a terminal.
 
-5) Install mne-bids bleeding edge: run ``pip install git+https://github.com/mne-tools/mne-bids.git``
+5) Install the bleeding edge ``mne-bids``: run ``pip install git+https://github.com/mne-tools/mne-bids.git``
 
 
 Getting Started
