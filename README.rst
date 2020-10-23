@@ -1,9 +1,12 @@
 .. pd-parser's documentation
 
+.. image:: https://zenodo.org/badge/287045175.svg
+   :target: https://zenodo.org/badge/latestdoi/287045175
+
 |icon| pd-parser
 ================
 
-The stable version of the documentation can be found `here <https://alexrockhill.github.io/pd-parser/>`_.
+The development version of the documentation can be found `here <https://alexrockhill.github.io/pd-parser/dev/>`_.
 
 .. |icon| image:: https://alexrockhill.github.io/pd-parser/_images/favicon.png
   :width: 25
