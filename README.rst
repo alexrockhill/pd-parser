@@ -3,6 +3,9 @@
 .. image:: https://zenodo.org/badge/287045175.svg
    :target: https://zenodo.org/badge/latestdoi/287045175
 
+.. image:: https://joss.theoj.org/papers/10.21105/joss.02674/status.svg
+   :target: https://doi.org/10.21105/joss.02674
+
 |icon| pd-parser
 ================
 
