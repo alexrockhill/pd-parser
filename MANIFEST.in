@@ -13,6 +13,9 @@ include pd_parser/parse_pd.py
 include pd_parser/tests/test_parse_pd.py
 include pd_parser/tests/data/pd_data.tsv
 include pd_parser/tests/data/events.tsv
+include pd_parser/tests/data/test_video.mp4
+include pd_parser/tests/data/test_video.wav
+include pd_parser/tests/data/test_video_beh.tsv
 include examples/README.txt
 include examples/plot_find_pd_events.py
 include examples/plot_find_pd_on_and_off.py

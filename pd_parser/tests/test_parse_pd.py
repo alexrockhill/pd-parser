@@ -382,7 +382,7 @@ def test_parse_audio():
          8093410, 9099765, 10145123, 12010012, 13040741, 14022720,
          15038656, 16021487]
     # test cli
-    if platform.system() == 'Windows':
+    if platform.system() != 'Windows':
         assert call([f'parse_audio {fname} --behf {behf} '
                      '--audio_ch_names audio --zscore 10 -o'],
                     shell=True, env=os.environ) == 0
