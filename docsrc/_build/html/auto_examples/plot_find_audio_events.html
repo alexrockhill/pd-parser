@@ -120,10 +120,12 @@ allows good precision in synchronizing events.</p>
 <p>Note that the commands that require ffmpeg are pre-computed and commented
 out because ffmpeg must be installed to use them and it is not required by
 <code class="docutils literal notranslate"><span class="pre">pd-parser</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">os.path</span> <span class="k">as</span> <span class="nn">op</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">wavfile</span>
-<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">run</span>  <span class="c1"># , PIPE, STDOUT</span>
+<span class="kn">from</span> <span class="nn">subprocess</span> <span class="kn">import</span> <span class="n">call</span>
+<span class="c1"># from subprocess import run , PIPE, STDOUT</span>
 <span class="c1"># import datetime</span>
 
 <span class="kn">import</span> <span class="nn">mne</span>
@@ -134,15 +136,16 @@ out because ffmpeg must be installed to use them and it is not required by
 
 <span class="c1"># get the data</span>
 <span class="n">out_dir</span> <span class="o">=</span> <span class="n">_TempDir</span><span class="p">()</span>
-<span class="n">run</span><span class="p">([</span><span class="s1">&#39;curl&#39;</span><span class="p">,</span> <span class="s1">&#39;-L&#39;</span><span class="p">,</span> <span class="s1">&#39;https://github.com/alexrockhill/pd-parser/&#39;</span>
-                   <span class="s1">&#39;blob/master/pd_parser/tests/data/test_video.mp4&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;test_video.mp4&#39;</span><span class="p">)])</span>
-<span class="n">run</span><span class="p">([</span><span class="s1">&#39;curl&#39;</span><span class="p">,</span> <span class="s1">&#39;-L&#39;</span><span class="p">,</span> <span class="s1">&#39;https://github.com/alexrockhill/pd-parser/&#39;</span>
-                   <span class="s1">&#39;blob/master/pd_parser/tests/data/test_video.wav&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;test_video.wav&#39;</span><span class="p">)])</span>
-<span class="n">run</span><span class="p">([</span><span class="s1">&#39;curl&#39;</span><span class="p">,</span> <span class="s1">&#39;-L&#39;</span><span class="p">,</span> <span class="s1">&#39;https://github.com/alexrockhill/pd-parser/&#39;</span>
-                   <span class="s1">&#39;blob/master/pd_parser/tests/data/test_video_beh.tsv&#39;</span><span class="p">,</span>
-     <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;test_video_beh.tsv&#39;</span><span class="p">)])</span>
+<span class="n">call</span><span class="p">([</span><span class="s1">&#39;curl -L https://raw.githubusercontent.com/alexrockhill/pd-parser/&#39;</span>
+      <span class="s1">&#39;master/pd_parser/tests/data/test_video.mp4 &#39;</span>
+      <span class="s1">&#39;-o &#39;</span> <span class="o">+</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;test_video.mp4&#39;</span><span class="p">)],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+<span class="n">call</span><span class="p">([</span><span class="s1">&#39;curl -L https://raw.githubusercontent.com/alexrockhill/pd-parser/&#39;</span>
+      <span class="s1">&#39;master/pd_parser/tests/data/test_video.wav &#39;</span>
+      <span class="s1">&#39;-o &#39;</span> <span class="o">+</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;test_video.wav&#39;</span><span class="p">)],</span> <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
+<span class="n">call</span><span class="p">([</span><span class="s1">&#39;curl -L https://raw.githubusercontent.com/alexrockhill/pd-parser/&#39;</span>
+      <span class="s1">&#39;master/pd_parser/tests/data/test_video_beh.tsv &#39;</span>
+      <span class="s1">&#39;-o &#39;</span> <span class="o">+</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;test_video_beh.tsv&#39;</span><span class="p">)],</span>
+     <span class="n">shell</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">env</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">)</span>
 
 <span class="c1"># navigate to the example video</span>
 <span class="n">video_fname</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;test_video.mp4&#39;</span><span class="p">)</span>
@@ -175,24 +178,41 @@ out because ffmpeg must be installed to use them and it is not required by
 <span class="n">behf</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">out_dir</span><span class="p">,</span> <span class="s1">&#39;test_video_beh.tsv&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-pytb notranslate"><div class="highlight"><pre><span></span><span class="gt">Traceback (most recent call last):</span>
-  File <span class="nb">&quot;/Users/alexrockhill/software/anaconda3/envs/swannlab/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">460</span>, in <span class="n">_memory_usage</span>
-    <span class="n">out</span> <span class="o">=</span> <span class="n">func</span><span class="p">()</span>
-  File <span class="nb">&quot;/Users/alexrockhill/software/anaconda3/envs/swannlab/lib/python3.7/site-packages/sphinx_gallery/gen_rst.py&quot;</span>, line <span class="m">442</span>, in <span class="n">__call__</span>
-    <span class="n">exec</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fake_main</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>
-  File <span class="nb">&quot;/Users/alexrockhill/projects/pd-parser/examples/plot_find_audio_events.py&quot;</span>, line <span class="m">59</span>, in <span class="n">&lt;module&gt;</span>
-    <span class="n">fs</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">wavfile</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">audio_fname</span><span class="p">)</span>
-  File <span class="nb">&quot;/Users/alexrockhill/software/anaconda3/envs/swannlab/lib/python3.7/site-packages/scipy/io/wavfile.py&quot;</span>, line <span class="m">547</span>, in <span class="n">read</span>
-    <span class="n">file_size</span><span class="p">,</span> <span class="n">is_big_endian</span> <span class="o">=</span> <span class="n">_read_riff_chunk</span><span class="p">(</span><span class="n">fid</span><span class="p">)</span>
-  File <span class="nb">&quot;/Users/alexrockhill/software/anaconda3/envs/swannlab/lib/python3.7/site-packages/scipy/io/wavfile.py&quot;</span>, line <span class="m">446</span>, in <span class="n">_read_riff_chunk</span>
-    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File format </span><span class="si">{</span><span class="nb">repr</span><span class="p">(</span><span class="n">str1</span><span class="p">)</span><span class="si">}</span><span class="s2"> not understood. Only &quot;</span>
-<span class="gr">ValueError</span>: <span class="n">File format b&#39;\n\n\n\n&#39; not understood. Only &#39;RIFF&#39; and &#39;RIFX&#39; supported.</span>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=1, n_times=16464896
+    Range : 0 ... 16464895 =      0.000 ...   343.019 secs
+Ready.
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_n3u0s07t/test_video-raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_n3u0s07t/test_video-raw.fif [done]
 </pre></div>
 </div>
 <p>Run the parser:</p>
 <p>Now we’ll call the main function to automatically parse the audio events.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">parse_audio</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">behf</span><span class="o">=</span><span class="n">behf</span><span class="p">,</span> <span class="n">beh_col</span><span class="o">=</span><span class="s1">&#39;tone_onset_time&#39;</span><span class="p">,</span>
                       <span class="n">audio_ch_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;audio&#39;</span><span class="p">],</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="../_images/sphx_glr_plot_find_audio_events_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_find_audio_events_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_n3u0s07t/test_video-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_n3u0s07t/test_video-raw.fif...
+Isotrak not found
+    Range : 0 ... 16464895 =      0.000 ...   343.019 secs
+Ready.
+Reading 0 ... 16464895  =      0.000 ...   343.019 secs...
+Finding points where the audio is above `zscore` threshold...
+17 audio candidate events found
+Checking best alignments
+
+  0%|          | 0/14 [00:00&lt;?, ?it/s]
+ 43%|####2     | 6/14 [00:00&lt;00:00, 43.38it/s]
+ 86%|########5 | 12/14 [00:00&lt;00:00, 45.70it/s]
+100%|##########| 14/14 [00:00&lt;00:00, 51.68it/s]
+Best alignment with the events shifted 19 ms relative to the first behavior event
+errors: min -517, q1 -388, med -35, q3 246, max 485
+Excluding events that have zero close events or more than one photodiode event within `max_len` time
+/Users/alexrockhill/projects/pd-parser/pd_parser/parse_pd.py:443: UserWarning: Matplotlib is currently using agg, which is a non-GUI backend, so cannot show the figure.
+  fig.show()
 </pre></div>
 </div>
 <p>Load the results:</p>
@@ -214,7 +234,15 @@ requires ffmpeg so it is commented out.</p>
 <span class="sd">&#39;&#39;&#39;</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  1.428 seconds)</p>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Here are the event times:  [ 19.05112457  39.9129982   61.88574982  83.54243469 104.41456604
+ 126.07720947 147.5539856  168.61270142 189.57843018 211.35673523
+ 250.20858765 271.68209839 292.14001465 313.30532837 333.78097534]
+
+&quot;\nfor i in range(annot.onset.size):  # skip the first video\n    action_time = (beh_df[&#39;tone_onset&#39;][i] - beh_df[&#39;action_onset&#39;][i]) / 1000\n    run([&#39;ffmpeg&#39;, &#39;-i&#39;, f&#39;{video_fname}&#39;, &#39;-ss&#39;,\n         str(datetime.timedelta(\n             seconds=annot.onset[i] - action_time - offset)),\n         &#39;-to&#39;, str(datetime.timedelta(seconds=annot.onset[i] - offset)),\n         op.join(out_dir, &#39;movement-{}+action_type-{}.mp4&#39;.format(\n             beh_df[&#39;movement&#39;][i], beh_df[&#39;action_type&#39;][i]))])\n&quot;
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  32.427 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-find-audio-events-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/81406c451e497331ddbbb284a4d8eb5b/plot_find_audio_events.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_find_audio_events.py</span></code></a></p>

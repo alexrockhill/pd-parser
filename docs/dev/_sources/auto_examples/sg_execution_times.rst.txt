@@ -5,10 +5,10 @@
 
 Computation times
 =================
-**00:03.183** total execution time for **auto_examples** files:
+**00:32.427** total execution time for **auto_examples** files:
 
 +-------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_auto_examples_plot_find_audio_events.py` (``plot_find_audio_events.py``)   | 00:03.183 | 0.0 MB |
+| :ref:`sphx_glr_auto_examples_plot_find_audio_events.py` (``plot_find_audio_events.py``)   | 00:32.427 | 0.0 MB |
 +-------------------------------------------------------------------------------------------+-----------+--------+
 | :ref:`sphx_glr_auto_examples_plot_find_pd_events.py` (``plot_find_pd_events.py``)         | 00:00.000 | 0.0 MB |
 +-------------------------------------------------------------------------------------------+-----------+--------+
