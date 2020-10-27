@@ -4,7 +4,7 @@ Use Audio to Align Video Data
 =============================
 In this example, we use ``pd-parser`` to find audio events using the same
 algorithm for matching with time-stamps and rejecting misaligned
-audio, but applied using correlation with a .wav file instead of detecting
+audio, but applied using the onset of an audio deflection instead of detecting
 photodiode events based on their square wave shape.
 """
 

@@ -14,7 +14,7 @@ Use Audio to Align Video Data
 =============================
 In this example, we use ``pd-parser`` to find audio events using the same
 algorithm for matching with time-stamps and rejecting misaligned
-audio, but applied using correlation with a .wav file instead of detecting
+audio, but applied using the onset of an audio deflection instead of detecting
 photodiode events based on their square wave shape.
 
 
@@ -106,8 +106,8 @@ out because ffmpeg must be installed to use them and it is not required by
     Creating RawArray with float64 data, n_channels=1, n_times=16464896
         Range : 0 ... 16464895 =      0.000 ...   343.019 secs
     Ready.
-    Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_84p42qs4/test_video-raw.fif
-    Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_84p42qs4/test_video-raw.fif [done]
+    Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_3ky26orn/test_video-raw.fif
+    Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_3ky26orn/test_video-raw.fif [done]
 
 
 
@@ -135,8 +135,8 @@ Now we'll call the main function to automatically parse the audio events.
 
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_84p42qs4/test_video-raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_84p42qs4/test_video-raw.fif...
+    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_3ky26orn/test_video-raw.fif
+    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_3ky26orn/test_video-raw.fif...
     Isotrak not found
         Range : 0 ... 16464895 =      0.000 ...   343.019 secs
     Ready.
@@ -144,7 +144,7 @@ Now we'll call the main function to automatically parse the audio events.
     Finding points where the audio is above `zscore` threshold...
     17 audio candidate events found
     Checking best alignments
-      0%|          | 0/14 [00:00<?, ?it/s]     43%|####2     | 6/14 [00:00<00:00, 42.26it/s]     86%|########5 | 12/14 [00:00<00:00, 44.60it/s]    100%|##########| 14/14 [00:00<00:00, 50.35it/s]
+      0%|          | 0/14 [00:00<?, ?it/s]     43%|####2     | 6/14 [00:00<00:00, 41.10it/s]     86%|########5 | 12/14 [00:00<00:00, 42.34it/s]    100%|##########| 14/14 [00:00<00:00, 47.27it/s]
     Best alignment with the events shifted 19 ms relative to the first behavior event
     errors: min -517, q1 -388, med -35, q3 246, max 485
     Excluding events that have zero close events or more than one photodiode event within `max_len` time
@@ -197,7 +197,7 @@ requires ffmpeg so it is commented out.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.722 seconds)
+   **Total running time of the script:** ( 0 minutes  3.183 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_find_audio_events.py:
