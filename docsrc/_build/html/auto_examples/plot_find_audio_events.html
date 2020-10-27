@@ -132,11 +132,11 @@ out because ffmpeg must be installed to use them and it is not required by
 <span class="kn">import</span> <span class="nn">pd_parser</span>
 <span class="kn">from</span> <span class="nn">pd_parser.parse_pd</span> <span class="kn">import</span> <span class="n">_load_data</span>
 
+<span class="n">examples_dir</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pd_parser</span><span class="o">.</span><span class="vm">__file__</span><span class="p">)),</span> <span class="s1">&#39;examples&#39;</span><span class="p">)</span>
 <span class="n">out_dir</span> <span class="o">=</span> <span class="n">_TempDir</span><span class="p">()</span>
 
 <span class="c1"># navigate to the example video</span>
-<span class="n">video_fname</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pd_parser</span><span class="o">.</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
-                      <span class="s1">&#39;test_video.mp4&#39;</span><span class="p">)</span>
+<span class="n">video_fname</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">examples_dir</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;test_video.mp4&#39;</span><span class="p">)</span>
 
 <span class="n">audio_fname</span> <span class="o">=</span> <span class="n">video_fname</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;mp4&#39;</span><span class="p">,</span> <span class="s1">&#39;wav&#39;</span><span class="p">)</span>  <span class="c1"># pre-computed</span>
 <span class="c1"># extract audio (requires ffmpeg)</span>
@@ -163,16 +163,15 @@ out because ffmpeg must be installed to use them and it is not required by
 <span class="sd">&#39;&#39;&#39;</span>
 
 <span class="c1"># navigate to corresponding behavior</span>
-<span class="n">behf</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">pd_parser</span><span class="o">.</span><span class="vm">__file__</span><span class="p">),</span> <span class="s1">&#39;tests&#39;</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span>
-               <span class="s1">&#39;test_video_beh.tsv&#39;</span><span class="p">)</span>
+<span class="n">behf</span> <span class="o">=</span> <span class="n">op</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">examples_dir</span><span class="p">,</span> <span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="s1">&#39;test_video_beh.tsv&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=1, n_times=16464896
     Range : 0 ... 16464895 =      0.000 ...   343.019 secs
 Ready.
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_esqhc47m/test_video-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_esqhc47m/test_video-raw.fif [done]
+Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_84p42qs4/test_video-raw.fif
+Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_84p42qs4/test_video-raw.fif [done]
 </pre></div>
 </div>
 <p>Run the parser:</p>
@@ -183,8 +182,8 @@ Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir
 </div>
 <img alt="../_images/sphx_glr_plot_find_audio_events_001.png" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_find_audio_events_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_esqhc47m/test_video-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_esqhc47m/test_video-raw.fif...
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_84p42qs4/test_video-raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_84p42qs4/test_video-raw.fif...
 Isotrak not found
     Range : 0 ... 16464895 =      0.000 ...   343.019 secs
 Ready.
@@ -194,10 +193,9 @@ Finding points where the audio is above `zscore` threshold...
 Checking best alignments
 
   0%|          | 0/14 [00:00&lt;?, ?it/s]
- 29%|##8       | 4/14 [00:00&lt;00:00, 36.08it/s]
- 57%|#####7    | 8/14 [00:00&lt;00:00, 36.74it/s]
- 86%|########5 | 12/14 [00:00&lt;00:00, 33.53it/s]
-100%|##########| 14/14 [00:00&lt;00:00, 36.80it/s]
+ 43%|####2     | 6/14 [00:00&lt;00:00, 42.26it/s]
+ 86%|########5 | 12/14 [00:00&lt;00:00, 44.60it/s]
+100%|##########| 14/14 [00:00&lt;00:00, 50.35it/s]
 Best alignment with the events shifted 19 ms relative to the first behavior event
 errors: min -517, q1 -388, med -35, q3 246, max 485
 Excluding events that have zero close events or more than one photodiode event within `max_len` time
@@ -232,7 +230,7 @@ requires ffmpeg so it is commented out.</p>
 &quot;\nfor i in range(annot.onset.size):  # skip the first video\n    action_time = (beh_df[&#39;tone_onset&#39;][i] - beh_df[&#39;action_onset&#39;][i]) / 1000\n    run([&#39;ffmpeg&#39;, &#39;-i&#39;, f&#39;{video_fname}&#39;, &#39;-ss&#39;,\n         str(datetime.timedelta(\n             seconds=annot.onset[i] - action_time - offset)),\n         &#39;-to&#39;, str(datetime.timedelta(seconds=annot.onset[i] - offset)),\n         op.join(out_dir, &#39;movement-{}+action_type-{}.mp4&#39;.format(\n             beh_df[&#39;movement&#39;][i], beh_df[&#39;action_type&#39;][i]))])\n&quot;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  4.128 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  3.722 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-find-audio-events-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/81406c451e497331ddbbb284a4d8eb5b/plot_find_audio_events.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_find_audio_events.py</span></code></a></p>

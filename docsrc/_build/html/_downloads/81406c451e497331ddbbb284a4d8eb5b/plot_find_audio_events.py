@@ -37,11 +37,11 @@ from mne.utils import _TempDir
 import pd_parser
 from pd_parser.parse_pd import _load_data
 
+examples_dir = op.join(op.dirname(op.dirname(pd_parser.__file__)), 'examples')
 out_dir = _TempDir()
 
 # navigate to the example video
-video_fname = op.join(op.dirname(pd_parser.__file__), 'tests', 'data',
-                      'test_video.mp4')
+video_fname = op.join(examples_dir, 'data', 'test_video.mp4')
 
 audio_fname = video_fname.replace('mp4', 'wav')  # pre-computed
 # extract audio (requires ffmpeg)
@@ -68,8 +68,7 @@ offset = float(output[0].strip('stream|codec_type=video|start_time')) - \
 '''
 
 # navigate to corresponding behavior
-behf = op.join(op.dirname(pd_parser.__file__), 'tests', 'data',
-               'test_video_beh.tsv')
+behf = op.join(examples_dir, 'data', 'test_video_beh.tsv')
 
 ###############################################################################
 # Run the parser:
