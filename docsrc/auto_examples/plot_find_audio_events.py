@@ -28,7 +28,7 @@ photodiode events based on their square wave shape.
 import os.path as op
 import numpy as np
 from scipy.io import wavfile
-# from subprocess import run, PIPE, STDOUT
+from subprocess import run  # , PIPE, STDOUT
 # import datetime
 
 import mne
@@ -37,11 +37,20 @@ from mne.utils import _TempDir
 import pd_parser
 from pd_parser.parse_pd import _load_data
 
-examples_dir = op.join(op.dirname(op.dirname(pd_parser.__file__)), 'examples')
+# get the data
 out_dir = _TempDir()
+run(['curl', '-L', 'https://github.com/alexrockhill/pd-parser/'
+                   'blob/master/pd_parser/tests/data/test_video.mp4',
+     '-o', op.join(out_dir, 'test_video.mp4')])
+run(['curl', '-L', 'https://github.com/alexrockhill/pd-parser/'
+                   'blob/master/pd_parser/tests/data/test_video.wav',
+     '-o', op.join(out_dir, 'test_video.wav')])
+run(['curl', '-L', 'https://github.com/alexrockhill/pd-parser/'
+                   'blob/master/pd_parser/tests/data/test_video_beh.tsv',
+     '-o', op.join(out_dir, 'test_video_beh.tsv')])
 
 # navigate to the example video
-video_fname = op.join(examples_dir, 'data', 'test_video.mp4')
+video_fname = op.join(out_dir, 'test_video.mp4')
 
 audio_fname = video_fname.replace('mp4', 'wav')  # pre-computed
 # extract audio (requires ffmpeg)
@@ -68,7 +77,7 @@ offset = float(output[0].strip('stream|codec_type=video|start_time')) - \
 '''
 
 # navigate to corresponding behavior
-behf = op.join(examples_dir, 'data', 'test_video_beh.tsv')
+behf = op.join(out_dir, 'test_video_beh.tsv')
 
 ###############################################################################
 # Run the parser:

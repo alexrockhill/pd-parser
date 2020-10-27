@@ -348,12 +348,10 @@ def test_parse_pd(_bids_validate):
 
 
 def test_parse_audio():
-    examples_dir = op.join(op.dirname(op.dirname(pd_parser.__file__)),
-                           'examples')
     out_dir = _TempDir()
     max_len = 0.25
     zscore = 10
-    audio_fname = op.join(examples_dir, 'data', 'test_video.wav')
+    audio_fname = op.join(basepath, 'test_video.wav')
     fs, data = wavfile.read(audio_fname)
     data = data.mean(axis=1)  # stereo audio but only need one source
     info = mne.create_info(['audio'], fs, ['stim'])
@@ -369,7 +367,7 @@ def test_parse_audio():
         [914454, 1915824, 2210042, 2970516, 4010037, 5011899,
          6051706, 7082591, 7651608, 8093410, 9099765, 10145123,
          12010012, 13040741, 14022720, 15038656, 16021487]))
-    behf = op.join(examples_dir, 'data', 'test_video_beh.tsv')
+    behf = op.join(basepath, 'test_video_beh.tsv')
     pd_parser.parse_audio(fname, behf=behf, audio_ch_names=['audio'],
                           zscore=10)
     annot, audio_ch_names, beh_df = _load_data(fname)
