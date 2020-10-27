@@ -3,6 +3,7 @@ mne>=0.19.1
 git+https://github.com/mne-tools/mne-bids.git
 pybv
 matplotlib
+scipy
 argparse
 tqdm
 mock

@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API Documentation &#8212; pd-parser 0.3 documentation</title>
+    <title>API Documentation &#8212; pd-parser v0.4dev0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
@@ -39,7 +39,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="index.html">
-          pd-parser 0.3</a>
+          pd-parser v0.4dev0</a>
         <span class="navbar-text navbar-version pull-left"><b></b></span>
       </div>
 
@@ -105,8 +105,8 @@
 <p>Take a potentially corrupted photodiode channel and find
 the event time samples at which it turned on.</p>
 <dl class="py function">
-<dt id="parse_pd.add_pd_events_to_raw">
-<code class="sig-name descname">add_pd_events_to_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">out_fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_pd_channels</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_pd_events_to_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_pd_events_to_raw" title="Permalink to this definition">¶</a></dt>
+<dt id="parse_pd.add_events_to_raw">
+<code class="sig-name descname">add_events_to_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">out_fname</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">drop_pd_channels</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_events_to_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_events_to_raw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save out a new raw file with photodiode events.</p>
 <p>Note: this function is not recommended, rather just skip it and
 use <cite>save_to_bids</cite> which doesn’t modify the underlying raw data
@@ -122,10 +122,10 @@ information, it’s only stored in the sidecar.</p>
 </dd>
 <dt><strong>drop_pd_channels</strong><span class="classifier">bool</span></dt><dd><p>Whether to drop the channel(s) the photodiode data was on.</p>
 </dd>
-<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+<dt><strong>verbose: bool</strong></dt><dd><p>Whether to display or supress text output on the progress
 of the function.</p>
 </dd>
-<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+<dt><strong>overwrite: bool</strong></dt><dd><p>Whether to overwrite existing data if it exists.</p>
 </dd>
 </dl>
 </dd>
@@ -172,8 +172,8 @@ of the function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="parse_pd.add_pd_relative_events">
-<code class="sig-name descname">add_pd_relative_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">behf</span></em>, <em class="sig-param"><span class="n">relative_event_cols</span></em>, <em class="sig-param"><span class="n">relative_event_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_pd_relative_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_pd_relative_events" title="Permalink to this definition">¶</a></dt>
+<dt id="parse_pd.add_relative_events">
+<code class="sig-name descname">add_relative_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">behf</span></em>, <em class="sig-param"><span class="n">relative_event_cols</span></em>, <em class="sig-param"><span class="n">relative_event_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_relative_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_relative_events" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add events relative to those determined from the photodiode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -187,10 +187,10 @@ relative to the photodiode event</p>
 </dd>
 <dt><strong>relative_event_names</strong><span class="classifier">list</span></dt><dd><p>The names of the events in <cite>relative_event_cols</cite>.</p>
 </dd>
-<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+<dt><strong>verbose: bool</strong></dt><dd><p>Whether to display or supress text output on the progress
 of the function.</p>
 </dd>
-<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+<dt><strong>overwrite: bool</strong></dt><dd><p>Whether to overwrite existing data if it exists.</p>
 </dd>
 </dl>
 </dd>
@@ -222,6 +222,74 @@ of the function.</p>
 </dd></dl>
 
 <dl class="py function">
+<dt id="parse_pd.parse_audio">
+<code class="sig-name descname">parse_audio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">audio_event_name</span><span class="o">=</span><span class="default_value">'Tone'</span></em>, <em class="sig-param"><span class="n">behf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_col</span><span class="o">=</span><span class="default_value">'tone_onset_time'</span></em>, <em class="sig-param"><span class="n">audio_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.03</span></em>, <em class="sig-param"><span class="n">resync</span><span class="o">=</span><span class="default_value">0.075</span></em>, <em class="sig-param"><span class="n">max_len</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">recover</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_audio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_audio" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse audio events.</p>
+<p>Parses photodiode events from a likely very corrupted channel
+using behavioral data to sync events to determine which
+behavioral events don’t have a match and are thus corrupted
+and should be excluded (while ignoring events that look like
+photodiode events but don’t match behavior)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>fname: str</strong></dt><dd><p>The filepath to the time-series data file (e.g. meg, eeg, ieeg).</p>
+</dd>
+<dt><strong>sound_fname: str</strong></dt><dd><p>The filepath to the .wav file that the computer played to
+match the events to.</p>
+</dd>
+<dt><strong>audio_event_name: str</strong></dt><dd><p>The name of the event corresponding to the audio.</p>
+</dd>
+<dt><strong>behf: str</strong></dt><dd><p>The filepath to a tsv file with the behavioral timing.</p>
+</dd>
+<dt><strong>beh_col: str</strong></dt><dd><p>The column of the behf tsv that corresponds to the events.</p>
+</dd>
+<dt><strong>audio_ch_names: list</strong></dt><dd><p>Names of the channel(s) containing the audio data.
+One channel is to be given for a common reference and
+two for a bipolar reference. If no channels are provided,
+the data will be plotted and the user will provide them.</p>
+</dd>
+<dt><strong>exclude_shift: float</strong></dt><dd><p>How many seconds different than expected from the behavior events
+to exclude that event.</p>
+</dd>
+<dt><strong>resync: float</strong></dt><dd><p>The number of seconds to difference allowed to still use an audio event
+event to resynchronize with time-stamped events. See
+<code class="xref py py-func docutils literal notranslate"><span class="pre">pd_parser.parse_pd()</span></code> for more information.</p>
+</dd>
+<dt><strong>max_len: float</strong></dt><dd><p>The longest audio event can be.</p>
+</dd>
+<dt><strong>zscore: float</strong></dt><dd><p>How large of a z-score difference to use to threshold the correlation
+of the audio with the sound. If None is passed a plot will be shown to
+pick a reasonable zscore. 25 is a typical value that works.</p>
+</dd>
+<dt><strong>add_events: bool</strong></dt><dd><p>Whether to add the events found from the current call of <cite>parse_pd</cite>
+to a events found previously (e.g. first parse with
+<cite>pd_event_name=’Fixation’</cite> and then parse with
+<cite>pd_event_name=’Response’</cite>.
+Note: <cite>pd_parser.add_relative_events</cite> will be relative to the
+first event added.</p>
+</dd>
+<dt><strong>recover: bool</strong></dt><dd><p>Whether to recover corrupted events manually.</p>
+</dd>
+<dt><strong>verbose: bool</strong></dt><dd><p>Whether to display or supress text output on the progress
+of the function.</p>
+</dd>
+<dt><strong>overwrite: bool</strong></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><dl class="simple">
+<dt>events: DataFrame</dt><dd><p>A DataFrame that has a column for to the (zero)
+indexed behavioral events and another column corresponding
+to the time stamp of the eeg file.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="parse_pd.parse_pd">
 <code class="sig-name descname">parse_pd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fname</span></em>, <em class="sig-param"><span class="n">pd_event_name</span><span class="o">=</span><span class="default_value">'Fixation'</span></em>, <em class="sig-param"><span class="n">behf</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_col</span><span class="o">=</span><span class="default_value">'fix_onset_time'</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.03</span></em>, <em class="sig-param"><span class="n">resync</span><span class="o">=</span><span class="default_value">0.075</span></em>, <em class="sig-param"><span class="n">max_len</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">min_i</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">recover</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse photodiode events.</p>
@@ -233,13 +301,13 @@ photodiode events but don’t match behavior)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>fname: str</strong></dt><dd><p>The filepath to the electrophysiology file (meg/eeg/ieeg).</p>
+<dt><strong>fname: str</strong></dt><dd><p>The filepath to the time-series data file (e.g. meg, eeg, ieeg).</p>
 </dd>
 <dt><strong>pd_event_name: str</strong></dt><dd><p>The name of the event corresponding to the photodiode.</p>
 </dd>
-<dt><strong>behf</strong><span class="classifier">str</span></dt><dd><p>The filepath to a tsv file with the behavioral timing.</p>
+<dt><strong>behf: str</strong></dt><dd><p>The filepath to a tsv file with the behavioral timing.</p>
 </dd>
-<dt><strong>beh_col</strong><span class="classifier">str</span></dt><dd><p>The column of the behf tsv that corresponds to the events.</p>
+<dt><strong>beh_col: str</strong></dt><dd><p>The column of the behf tsv that corresponds to the events.</p>
 </dd>
 <dt><strong>pd_ch_names</strong><span class="classifier">list</span></dt><dd><p>Names of the channel(s) containing the photodiode data.
 One channel is to be given for a common reference and
@@ -249,7 +317,7 @@ the data will be plotted and the user will provide them.</p>
 <dt><strong>exclude_shift: float</strong></dt><dd><p>How many seconds different than expected from the behavior events
 to exclude that event. Use <cite>find_pd_params</cite> to determine if unsure.</p>
 </dd>
-<dt><strong>resync</strong><span class="classifier">float</span></dt><dd><p>The number of seconds to difference allowed to still use a photodiode
+<dt><strong>resync: float</strong></dt><dd><p>The number of seconds to difference allowed to still use a photodiode
 event to resynchronize with time-stamped events. Events with
 differences between <cite>resync</cite> and <cite>exclude_shift</cite> will still be
 used for alignment but will be excluded from the events. When
@@ -274,19 +342,19 @@ This should not be changed unless the event is shorter.</p>
 the photodiode event. This should not be changed most likely
 unless there is a specific reason/issue.</p>
 </dd>
-<dt><strong>add_events</strong><span class="classifier">bool</span></dt><dd><p>Whether to add the events found from the current call of <cite>parse_pd</cite>
+<dt><strong>add_events: bool</strong></dt><dd><p>Whether to add the events found from the current call of <cite>parse_pd</cite>
 to a events found previously (e.g. first parse with
 <cite>pd_event_name=’Fixation’</cite> and then parse with
 <cite>pd_event_name=’Response’</cite>.
-Note: <cite>pd_parser.add_pd_relative_events</cite> will be relative to the
+Note: <cite>pd_parser.add_relative_events</cite> will be relative to the
 first event added.</p>
 </dd>
-<dt><strong>recover</strong><span class="classifier">bool</span></dt><dd><p>Whether to recover corrupted events manually.</p>
+<dt><strong>recover: bool</strong></dt><dd><p>Whether to recover corrupted events manually.</p>
 </dd>
-<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+<dt><strong>verbose: bool</strong></dt><dd><p>Whether to display or supress text output on the progress
 of the function.</p>
 </dd>
-<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+<dt><strong>overwrite: bool</strong></dt><dd><p>Whether to overwrite existing data if it exists.</p>
 </dd>
 </dl>
 </dd>
@@ -308,18 +376,18 @@ to the time stamp of the eeg file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>bids_dir</strong><span class="classifier">str</span></dt><dd><p>The subject directory in the bids directory where the data
+<dt><strong>bids_dir: str</strong></dt><dd><p>The subject directory in the bids directory where the data
 should be saved.</p>
 </dd>
-<dt><strong>fname</strong><span class="classifier">str</span></dt><dd><p>The filepath to the electrophysiology file (meg/eeg/ieeg).</p>
+<dt><strong>fname: str</strong></dt><dd><p>The filepath to the electrophysiology file (meg/eeg/ieeg).</p>
 </dd>
-<dt><strong>sub</strong><span class="classifier">str</span></dt><dd><p>The name of the subject.</p>
+<dt><strong>sub: str</strong></dt><dd><p>The name of the subject.</p>
 </dd>
-<dt><strong>task</strong><span class="classifier">str</span></dt><dd><p>The name of the task.</p>
+<dt><strong>task: str</strong></dt><dd><p>The name of the task.</p>
 </dd>
-<dt><strong>ses</strong><span class="classifier">str</span></dt><dd><p>The name of the session (optional).</p>
+<dt><strong>ses: str</strong></dt><dd><p>The name of the session (optional).</p>
 </dd>
-<dt><strong>run</strong><span class="classifier">str</span></dt><dd><p>The name of the run (optional).</p>
+<dt><strong>run: str</strong></dt><dd><p>The name of the run (optional).</p>
 </dd>
 <dt><strong>data_type: str</strong></dt><dd><p>The type of the channels containing data, i.e. ‘eeg’ or ‘seeg’.</p>
 </dd>
@@ -329,10 +397,10 @@ should be saved.</p>
 </dd>
 <dt><strong>emgs: list | None</strong></dt><dd><p>The channels recording muscle electrophysiology.</p>
 </dd>
-<dt><strong>verbose</strong><span class="classifier">bool</span></dt><dd><p>Whether to display or supress text output on the progress
+<dt><strong>verbose: bool</strong></dt><dd><p>Whether to display or supress text output on the progress
 of the function.</p>
 </dd>
-<dt><strong>overwrite</strong><span class="classifier">bool</span></dt><dd><p>Whether to overwrite existing data if it exists.</p>
+<dt><strong>overwrite: bool</strong></dt><dd><p>Whether to overwrite existing data if it exists.</p>
 </dd>
 </dl>
 </dd>
@@ -349,34 +417,34 @@ photodiodes tend to do. Some events are also corrupted.</p>
 <dl class="field-list">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>n_events</strong><span class="classifier">float</span></dt><dd><p>The number of events to simulate.</p>
+<dt><strong>n_events: float</strong></dt><dd><p>The number of events to simulate.</p>
 </dd>
-<dt><strong>n_secs_on</strong><span class="classifier">float | np.array</span></dt><dd><p>The number of seconds each event is on. If a float is provided, the
+<dt><strong>n_secs_on: float | np.array</strong></dt><dd><p>The number of seconds each event is on. If a float is provided, the
 time is the same for each event. If an array is provided, it must be
 the length of the number of events, and it determines the length of
 each event respectively.</p>
 </dd>
-<dt><strong>amp</strong><span class="classifier">float</span></dt><dd><p>The amplitude of the photodiode in standard deviations above baseline.</p>
+<dt><strong>amp: float</strong></dt><dd><p>The amplitude of the photodiode in standard deviations above baseline.</p>
 </dd>
-<dt><strong>iti</strong><span class="classifier">float</span></dt><dd><p>The interval in between events.</p>
+<dt><strong>iti: float</strong></dt><dd><p>The interval in between events.</p>
 </dd>
-<dt><strong>iti_jitter</strong><span class="classifier">float</span></dt><dd><p>The jitter displacing the events from exactly <cite>iti</cite> distance
+<dt><strong>iti_jitter: float</strong></dt><dd><p>The jitter displacing the events from exactly <cite>iti</cite> distance
 away from each other.</p>
 </dd>
-<dt><strong>drift</strong><span class="classifier">float</span></dt><dd><p>The factor controlling how much the photodiode changes value
+<dt><strong>drift: float</strong></dt><dd><p>The factor controlling how much the photodiode changes value
 over time with no external simulus (0. == perfect square wave).</p>
 </dd>
-<dt><strong>sfreq</strong><span class="classifier">float</span></dt><dd><p>The sampling frequency of the data.</p>
+<dt><strong>sfreq: float</strong></dt><dd><p>The sampling frequency of the data.</p>
 </dd>
-<dt><strong>show</strong><span class="classifier">bool</span></dt><dd><p>Whether to plot the data.</p>
+<dt><strong>show: bool</strong></dt><dd><p>Whether to plot the data.</p>
 </dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl>
-<dt><strong>raw</strong><span class="classifier">mne.io.Raw</span></dt><dd><p>The raw object containing the photodiode data</p>
+<dt>raw: mne.io.Raw</dt><dd><p>The raw object containing the photodiode data</p>
 </dd>
-<dt><strong>beh_df</strong><span class="classifier">dict</span></dt><dd><p>A dictionary with columns:</p>
+<dt>beh_df: dict</dt><dd><p>A dictionary with columns:</p>
 <blockquote>
 <div><dl class="simple">
 <dt><cite>trial</cite><span class="classifier">int</span></dt><dd><p>The index of the event.</p>
@@ -387,11 +455,11 @@ occurred in seconds.</p>
 </dl>
 </div></blockquote>
 </dd>
-<dt><strong>events</strong><span class="classifier">np.array</span></dt><dd><p>The uncorrupted events where the first column is the time stamp,
+<dt>events: np.array</dt><dd><p>The uncorrupted events where the first column is the time stamp,
 the second column is unused (zero) and the third column is the
 event identifier.</p>
 </dd>
-<dt><strong>corrupted_indices</strong><span class="classifier">np.array</span></dt><dd><p>The indices of the events which were corrupted in the simulation.</p>
+<dt>corrupted_indices: np.array</dt><dd><p>The indices of the events which were corrupted in the simulation.</p>
 </dd>
 </dl>
 </dd>

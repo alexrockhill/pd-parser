@@ -9,7 +9,7 @@
 |icon| pd-parser
 ================
 
-The development version of the documentation can be found `here <https://alexrockhill.github.io/pd-parser/dev/>`_.
+The stable version of the documentation can be found `here <https://alexrockhill.github.io/pd-parser/>`_.
 
 .. |icon| image:: https://alexrockhill.github.io/pd-parser/_images/favicon.png
   :width: 25

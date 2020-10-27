@@ -101,6 +101,59 @@ def parse_pd():
         recover=args.recover, verbose=args.verbose, overwrite=args.overwrite)
 
 
+def parse_audio():
+    """Run parse_audio command."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument('fname', type=str,
+                        help='The electrophysiology filepath')
+    parser.add_argument('--audio_event_name', type=str, required=False,
+                        default='Tone', help='The name of the audio event')
+    parser.add_argument('--behf', type=str, required=False,
+                        help='The behavioral tsv filepath')
+    parser.add_argument('--beh_col', type=str, required=False,
+                        default='tone_onset_time',
+                        help='The name of the behavioral column '
+                        'corresponding to the audio event timing')
+    parser.add_argument('--audio_ch_names', type=str, nargs='*',
+                        required=False, default=None,
+                        help='The name(s) of the channels '
+                        'with the audio data. Note that they will be if there'
+                        'are two channels they will be bipolar referenced')
+    parser.add_argument('--exclude_shift', type=float, required=False,
+                        default=0.03, help='How many seconds off to exclude '
+                        'an audio-behavioral event difference')
+    parser.add_argument('--resync', type=float, required=False,
+                        default=0.075, help='How large of a difference '
+                        'to use to resynchronize events. '
+                        'See `pd_parser.parse_pd` for more information')
+    parser.add_argument('--max_len', type=float, required=False,
+                        default=0.25, help='The length of the longest '
+                        'audio event')
+    parser.add_argument('--zscore', type=float, required=False,
+                        default=None, help='How many standard deviations '
+                        'larger than the baseline the correlation of the '
+                        'audio is. If None, zscore is found interactively.')
+    parser.add_argument('--add_events', action='store_true',
+                        help='Whether to run the parser '
+                        'a second time to add more events from '
+                        'deflections corresponding to multiple events '
+                        'on the same channel')
+    parser.add_argument('--recover', action='store_true',
+                        help='Whether to recover corrupted events manually.')
+    parser.add_argument('--verbose', default=True, type=bool,
+                        required=False,
+                        help='Set verbose output to True or False.')
+    parser.add_argument('-o', '--overwrite', action='store_true',
+                        help='Pass this flag to overwrite an existing file')
+    args = parser.parse_args()
+    pd_parser.parse_audio(
+        args.fname, audio_event_name=args.audio_event_name, behf=args.behf,
+        beh_col=args.beh_col, audio_ch_names=args.audio_ch_names,
+        exclude_shift=args.exclude_shift, resync=args.resync,
+        max_len=args.max_len, zscore=args.zscore, add_events=args.add_events,
+        recover=args.recover, verbose=args.verbose, overwrite=args.overwrite)
+
+
 def add_pd_off_events():
     """Run add_pd_off command."""
     parser = argparse.ArgumentParser()
@@ -133,7 +186,7 @@ def add_pd_off_events():
         baseline=args.baseline, verbose=args.verbose, overwrite=args.overwrite)
 
 
-def add_pd_relative_events():
+def add_relative_events():
     """Run add_relative_events command."""
     parser = argparse.ArgumentParser()
     parser.add_argument('fname', type=str,
@@ -157,14 +210,14 @@ def add_pd_relative_events():
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
-    pd_parser.add_pd_relative_events(
+    pd_parser.add_relative_events(
         args.fname, behf=args.behf,
         relative_event_cols=args.relative_event_cols,
         relative_event_names=args.relative_event_names,
         verbose=args.verbose, overwrite=args.overwrite)
 
 
-def add_pd_events_to_raw():
+def add_events_to_raw():
     """Run add_relative_events command."""
     parser = argparse.ArgumentParser()
     parser.add_argument('fname', type=str,
@@ -181,7 +234,7 @@ def add_pd_events_to_raw():
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
-    pd_parser.add_pd_events_to_raw(
+    pd_parser.add_events_to_raw(
         args.fname, out_fname=args.out_fname,
         drop_pd_channels=args.drop_pd_channels,
         verbose=args.verbose, overwrite=args.overwrite)

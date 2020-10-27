@@ -116,7 +116,7 @@ pd_parser.parse_pd(fname, behf=behf, pd_ch_names=['pd'], max_len=1.5)
 # Note: if more than one photodiode event is used, the parser can be
 # used for each event separately using the keyword `add_event=True`.
 
-pd_parser.add_pd_relative_events(
+pd_parser.add_relative_events(
     fname, behf,
     relative_event_cols=['go_time', 'response_time'],
     relative_event_names=['Go Cue', 'Response'])

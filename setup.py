@@ -58,11 +58,11 @@ if __name__ == "__main__":
           entry_points={'console_scripts': [
               'find_pd_params = pd_parser.commands.run:find_pd_params',
               'parse_pd = pd_parser.commands.run:parse_pd',
+              'parse_audio = pd_parser.commands.run:parse_audio',
               'add_pd_off_events = pd_parser.commands.run:add_pd_off_events',
-              'add_pd_relative_events = '
-              'pd_parser.commands.run:add_pd_relative_events',
-              'add_pd_events_to_raw = '
-              'pd_parser.commands.run:add_pd_events_to_raw',
+              'add_relative_events = '
+              'pd_parser.commands.run:add_relative_events',
+              'add_events_to_raw = pd_parser.commands.run:add_events_to_raw',
               'pd_parser_save_to_bids = '
               'pd_parser.commands.run:pd_parser_save_to_bids'
           ]},
@@ -75,6 +75,7 @@ if __name__ == "__main__":
               'numpy>=1.19.0',
               'mne>=0.19.1',
               'mne-bids',
+              'scipy',
               'pybv',
               'matplotlib',
               'argparse',

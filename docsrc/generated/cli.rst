@@ -14,14 +14,14 @@ Here we list the pd_parser tools that you can use from the command line.
 
 
 
-.. _gen_add_pd_events_to_raw:
+.. _gen_add_events_to_raw:
 
-add_pd_events_to_raw
-====================
+add_events_to_raw
+=================
 
 .. rst-class:: callout
 
-usage: ``add_pd_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--drop_pd_channels DROP_PD_CHANNELS] [--verbose VERBOSE] [-o]``
+usage: ``add_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--drop_pd_channels DROP_PD_CHANNELS] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
@@ -99,14 +99,14 @@ optional arguments
 
 
 
-.. _gen_add_pd_relative_events:
+.. _gen_add_relative_events:
 
-add_pd_relative_events
-======================
+add_relative_events
+===================
 
 .. rst-class:: callout
 
-usage: ``add_pd_relative_events fname [-h] [--behf BEHF] [--relative_event_cols LIST_OF_RELATIVE_EVENT_COLS] [--relative_event_names LIST_OF_RELATIVE_EVENT_NAMES] [--verbose VERBOSE] [-o]``
+usage: ``add_relative_events fname [-h] [--behf BEHF] [--relative_event_cols LIST_OF_RELATIVE_EVENT_COLS] [--relative_event_names LIST_OF_RELATIVE_EVENT_NAMES] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
@@ -165,6 +165,68 @@ optional arguments
 
 
 --verbose VERBOSE		Set verbose output to True or False.
+
+
+
+
+
+
+
+.. _gen_parse_audio:
+
+parse_audio
+===========
+
+.. rst-class:: callout
+
+usage: ``parse_audio fname [-h] [--audio_event_name AUDIO_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--audio_ch_names LIST_OF_AUDIO_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--add_events] [--recover] [--verbose VERBOSE] [-o]``
+
+positional arguments
+--------------------
+fname
+	The electrophysiology filepath
+
+
+
+optional arguments
+------------------
+-h, --help		show this help message and exit
+
+
+--audio_event_name AUDIO_EVENT_NAME		The name of the audio event
+
+
+--behf BEHF		The behavioral tsv filepath
+
+
+--beh_col BEH_COL		The name of the behavioral column corresponding to the audio event timing
+
+
+--audio_ch_names LIST_OF_AUDIO_CH_NAMES		The name(s) of the channels with the audio data. Note that they will be if thereare two channels they will be bipolar referenced
+
+
+--exclude_shift EXCLUDE_SHIFT		How many seconds off to exclude an audio-behavioral event difference
+
+
+--resync RESYNC		How large of a difference to use to resynchronize events. See `pd_parser.parse_pd` for more information
+
+
+--max_len MAX_LEN		The length of the longest audio event
+
+
+--zscore ZSCORE		How many standard deviations larger than the baseline the correlation of the audio is. If None, zscore is found interactively.
+
+
+--add_events		Whether to run the parser a second time to add more events from deflections corresponding to multiple events on the same channel
+
+
+--recover		Whether to recover corrupted events manually.
+
+
+--verbose VERBOSE		Set verbose output to True or False.
+
+
+-o, --overwrite		Pass this flag to overwrite an existing file
 
 
 

@@ -24,7 +24,7 @@ import mne
 from mne.utils import _TempDir
 
 import pd_parser
-from pd_parser.parse_pd import _to_tsv, _load_pd_data
+from pd_parser.parse_pd import _to_tsv, _load_data
 
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -93,14 +93,14 @@ pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
 # the lengths are recovered within 1 millisecond. Note that the colors are
 # arbitrary and are only used to increase contrast and ease of visualization.
 
-annot, pd_ch_names, beh_df = _load_pd_data(fname)
+annot, pd_ch_names, beh_df = _load_data(fname)
 raw.set_annotations(annot)
 events, event_id = mne.events_from_annotations(raw)
 on_events = events[events[:, 2] == event_id['Stim On']]
 off_events = events[events[:, 2] == event_id['Stim Off']]
 
 recovered = (off_events[:, 0] - on_events[:, 0]) / raw.info['sfreq']
-not_corrupted = [s != 'n/a' for s in beh_df['pd_sample']]
+not_corrupted = [s != 'n/a' for s in beh_df['pd_parser_sample']]
 ground_truth_not_corrupted = n_secs_on[not_corrupted]
 
 fig, ax = plt.subplots()
