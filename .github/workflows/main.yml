@@ -47,16 +47,13 @@ jobs:
       if: "matrix.os != 'ubuntu-latest'"
       run: |
         npm install -g bids-validator
-    - name: Install BIDS validator (master)
+    - name: Install BIDS validator (main)
       if: "matrix.os == 'ubuntu-latest'"
       run: |
-        cd ..
+        pushd ..
         git clone --depth 1 https://github.com/bids-standard/bids-validator
-        cd bids-validator
-        git checkout master
-        yarn
-        echo "::add-path::$(pwd)/bids-validator/bin"
-        cd ../pd-parser
+        npm install -g bids-validator/bids-validator
+        popd
     - name: Install pd-parser
       run: pip install --no-deps .
     - name: Run pytest
