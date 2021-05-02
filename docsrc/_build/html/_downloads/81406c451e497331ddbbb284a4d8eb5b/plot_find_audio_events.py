@@ -30,14 +30,14 @@ import os.path as op
 import numpy as np
 from scipy.io import wavfile
 from subprocess import call
-# from subprocess import run , PIPE, STDOUT
+# from subprocess import run, PIPE, STDOUT
 # import datetime
 
 import mne
 from mne.utils import _TempDir
 
 import pd_parser
-from pd_parser.parse_pd import _load_data
+from pd_parser.parse_pd import _load_data  # , _read_tsv
 
 # get the data
 out_dir = _TempDir()
@@ -64,10 +64,6 @@ data = data.mean(axis=1)  # stereo audio but only need one source
 info = mne.create_info(['audio'], fs, ['stim'])
 raw = mne.io.RawArray(data[np.newaxis], info)
 
-# save out data file
-fname = op.join(out_dir, 'test_video-raw.fif')
-raw.save(fname, overwrite=True)
-
 # find audio-visual time offset
 offset = 0  # pre-computed value for this video
 '''
@@ -79,6 +75,10 @@ offset = float(output[0].strip('stream|codec_type=video|start_time')) - \
     float(output[1].strip('stream|codec_type=audio|start_time'))
 '''
 
+# save to disk as required by ``pd-parser``, raw needs a filename
+fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
+raw.save(fname)
+
 # navigate to corresponding behavior
 behf = op.join(out_dir, 'test_video_beh.tsv')
 
@@ -86,7 +86,7 @@ behf = op.join(out_dir, 'test_video_beh.tsv')
 # Run the parser:
 #
 # Now we'll call the main function to automatically parse the audio events.
-pd_parser.parse_audio(fname, behf=behf, beh_col='tone_onset_time',
+pd_parser.parse_audio(fname, beh=behf, beh_key='tone_onset_time',
                       audio_ch_names=['audio'], zscore=10)
 
 ###############################################################################
@@ -94,17 +94,18 @@ pd_parser.parse_audio(fname, behf=behf, beh_col='tone_onset_time',
 #
 # Finally, we'll load the events and use them to crop the video although it
 # requires ffmpeg so it is commented out.
-annot, _, beh_df = _load_data(fname)
+annot = _load_data(fname)[0]
 print('Here are the event times: ', annot.onset)
 
 # Crop the videos with ffmpeg
 '''
+beh = _read_tsv(behf)
 for i in range(annot.onset.size):  # skip the first video
-    action_time = (beh_df['tone_onset'][i] - beh_df['action_onset'][i]) / 1000
+    action_time = (beh['tone_onset'][i] - beh['action_onset'][i]) / 1000
     run(['ffmpeg', '-i', f'{video_fname}', '-ss',
          str(datetime.timedelta(
              seconds=annot.onset[i] - action_time - offset)),
          '-to', str(datetime.timedelta(seconds=annot.onset[i] - offset)),
          op.join(out_dir, 'movement-{}+action_type-{}.mp4'.format(
-             beh_df['movement'][i], beh_df['action_type'][i]))])
+             beh['movement'][i], beh['action_type'][i]))])
 '''

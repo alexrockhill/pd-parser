@@ -27,7 +27,7 @@ import mne
 from mne.utils import _TempDir
 
 import pd_parser
-from pd_parser.parse_pd import _to_tsv
+from pd_parser.parse_pd import _load_data
 
 import matplotlib.pyplot as plt
 
@@ -38,7 +38,7 @@ np.random.seed(29)
 n_events = 300
 # let's make our photodiode events on random uniform from 0.25 to 0.75 seconds
 n_secs_on = np.random.random(n_events) * 0.5 + 0.25
-raw, beh_df, events, _ = \
+raw, beh, events, _ = \
     pd_parser.simulate_pd_data(n_events=n_events, n_secs_on=n_secs_on,
                                prop_corrupted=0.0)
 sfreq = np.round(raw.info['sfreq']).astype(int)
@@ -51,15 +51,18 @@ fig.suptitle('Corrupted Events')
 axes[0].set_ylabel('voltage')
 for j, i in enumerate(events[corrupted_indices, 0]):
     if j == 0:
-        raw._data[0, i - sfreq // 3: i - sfreq // 4] = -amount
+        raw._data[0, i - sfreq // 5: i - sfreq // 10] = -amount
     elif j == 1:
         raw._data[0, i + sfreq // 4: i + sfreq // 3] = -amount
     else:
-        raw._data[0, i + 2 * sfreq // 3: i + 4 * sfreq // 4] = amount
+        raw._data[0, i + 3 * sfreq // 4: i + 5 * sfreq // 6] = amount
     axes[j].plot(np.linspace(-1, 2, 3 * sfreq),
                  raw._data[0, i - sfreq: i + sfreq * 2])
     axes[j].set_xlabel('time (s)')
 
+
+# make figure nicer
+fig.tight_layout()
 
 # make fake electrophysiology data
 info = mne.create_info(['ch1', 'ch2', 'ch3'], raw.info['sfreq'],
@@ -71,15 +74,13 @@ raw.add_channels([raw2])
 raw.info['dig'] = None
 raw.info['line_freq'] = 60
 
-# save to disk as required by ``pd-parser``
-fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
-raw.save(fname)
 # add some offsets to the behavior so it's a bit more realistic
 offsets = np.random.randn(n_events) * 0.001
-beh_df['time'] = np.array(beh_df['time']) + offsets
-behf = op.join(out_dir, 'sub-1_task-mytask_beh.tsv')
-_to_tsv(behf, beh_df)
+beh['time'] = np.array(beh['time']) + offsets
 
+# save to disk as required by ``pd-parser``, raw needs to have a filename
+fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
+raw.save(fname)
 
 ###############################################################################
 # Find the photodiode events relative to the behavioral timing of interest:
@@ -92,8 +93,8 @@ _to_tsv(behf, beh_df)
 # your own input depending on whether you want to keep the events or not.
 
 with mock.patch('builtins.input', return_value='y'):
-    pd_parser.parse_pd(fname, pd_event_name='Stim On', behf=behf,
-                       pd_ch_names=['pd'], beh_col='time', recover=True)
+    pd_parser.parse_pd(fname, pd_event_name='Stim On', beh=beh,
+                       pd_ch_names=['pd'], beh_key='time', recover=True)
 
 ###############################################################################
 # Find cessations of the photodiode deflections
@@ -108,3 +109,25 @@ with mock.patch('builtins.input', return_value='y'):
 # following the instructions.
 
 pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
+
+###############################################################################
+# Check the results:
+#
+# Finally, we'll check that the recovered events and the original events match.
+
+annot = _load_data(fname)[0]
+raw.set_annotations(annot)
+events2, event_id = mne.events_from_annotations(raw)
+on_events = events2[events2[:, 2] == event_id['Stim On']]
+print(f'Original: {events[corrupted_indices, 0]}\n'
+      f'Recovered: {on_events[corrupted_indices, 0]}')
+
+'''
+# uncomment when using interactively, this section doesn't work
+# for the non-interactive documentation
+off_events = events2[events2[:, 2] == event_id['Stim Off']]
+original_off = events[corrupted_indices, 0] + \
+  np.round(n_secs_on[corrupted_indices] * raw.info['sfreq']).astype(int)
+print(f'Original off: {original_off}\n'
+      f'Recovered off: {on_events[corrupted_indices, 0]}')
+'''

@@ -21,11 +21,11 @@ add_events_to_raw
 
 .. rst-class:: callout
 
-usage: ``add_events_to_raw fname [-h] [--out_fname OUT_FNAME] [--drop_pd_channels DROP_PD_CHANNELS] [--verbose VERBOSE] [-o]``
+usage: ``add_events_to_raw raw [-h] [--out_fname OUT_FNAME] [--drop_pd_channels DROP_PD_CHANNELS] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
-fname
+raw
 	The electrophysiology filepath
 
 
@@ -59,12 +59,12 @@ add_pd_off_events
 
 .. rst-class:: callout
 
-usage: ``add_pd_off_events fname [-h] [--off_event_name OFF_EVENT_NAME] [--max_len MAX_LEN] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--verbose VERBOSE] [-o]``
+usage: ``add_pd_off_events raw [-h] [--off_event_name OFF_EVENT_NAME] [--max_len MAX_LEN] [--zscore ZSCORE] [--max_flip_i MAX_FLIP_I] [--baseline BASELINE] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
-fname
-	The electrophysiology filepath
+raw
+	The electrophysiology raw object or filepath
 
 
 
@@ -82,7 +82,7 @@ optional arguments
 --zscore ZSCORE		The same zscore as used for `parse_pd`.
 
 
---min_i MIN_I		The same min_i as used for `parse_pd`.
+--max_flip_i MAX_FLIP_I		The same max_flip_i as used for `parse_pd`.
 
 
 --baseline BASELINE		The same baseline as used for `parse_pd`.
@@ -106,12 +106,12 @@ add_relative_events
 
 .. rst-class:: callout
 
-usage: ``add_relative_events fname [-h] [--behf BEHF] [--relative_event_cols LIST_OF_RELATIVE_EVENT_COLS] [--relative_event_names LIST_OF_RELATIVE_EVENT_NAMES] [--verbose VERBOSE] [-o]``
+usage: ``add_relative_events raw [-h] [--beh BEH] [--relative_event_keys [RELATIVE_EVENT_KEYS ...]] [--relative_event_names [RELATIVE_EVENT_NAMES ...]] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
-fname
-	The electrophysiology filepath
+raw
+	The electrophysiology raw object or filepath
 
 
 
@@ -120,13 +120,13 @@ optional arguments
 -h, --help		show this help message and exit
 
 
---behf BEHF		The behavioral tsv filepath
+--beh BEH		The behavioral tsv filepath
 
 
---relative_event_cols LIST_OF_RELATIVE_EVENT_COLS		A behavioral column in the tsv file that has the time relative to the photodiode events on the same trial as in the `beh_col` event.
+--relative_event_keys [RELATIVE_EVENT_KEYS ...]		A behavioral key (column) in the tsv file that has the time relative to the photodiode events on the same trial as in the `beh_key` event.
 
 
---relative_event_names LIST_OF_RELATIVE_EVENT_NAMES		The name of the corresponding `relative_event_cols` events
+--relative_event_names [RELATIVE_EVENT_NAMES ...]		The name of the corresponding `relative_event_keys` events
 
 
 --verbose VERBOSE		Set verbose output to True or False.
@@ -147,12 +147,12 @@ find_pd_params
 
 .. rst-class:: callout
 
-usage: ``find_pd_params fname [-h] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--verbose VERBOSE]``
+usage: ``find_pd_params raw [-h] [--pd_ch_names [PD_CH_NAMES ...]] [--verbose VERBOSE]``
 
 positional arguments
 --------------------
-fname
-	The electrophysiology filepath
+raw
+	The electrophysiology raw object or filepath
 
 
 
@@ -161,7 +161,7 @@ optional arguments
 -h, --help		show this help message and exit
 
 
---pd_ch_names LIST_OF_PD_CH_NAMES		The name(s) of the channels with the photodiode data. Can be one channel for common referenced recording or two for a bipolar recording. If not provided, the data will be plotted for the user to pick
+--pd_ch_names [PD_CH_NAMES ...]		The name(s) of the channels with the photodiode data. Can be one channel for common referenced recording or two for a bipolar recording. If not provided, the data will be plotted for the user to pick
 
 
 --verbose VERBOSE		Set verbose output to True or False.
@@ -179,12 +179,12 @@ parse_audio
 
 .. rst-class:: callout
 
-usage: ``parse_audio fname [-h] [--audio_event_name AUDIO_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--audio_ch_names LIST_OF_AUDIO_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--add_events] [--recover] [--verbose VERBOSE] [-o]``
+usage: ``parse_audio raw [-h] [--audio_event_name AUDIO_EVENT_NAME] [--beh BEH] [--beh_key BEH_KEY] [--audio_ch_names [AUDIO_CH_NAMES ...]] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--add_events] [--recover] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
-fname
-	The electrophysiology filepath
+raw
+	TThe electrophysiology raw object or filepath
 
 
 
@@ -196,13 +196,13 @@ optional arguments
 --audio_event_name AUDIO_EVENT_NAME		The name of the audio event
 
 
---behf BEHF		The behavioral tsv filepath
+--beh BEH		The behavioral dictionary or tsv filepath
 
 
---beh_col BEH_COL		The name of the behavioral column corresponding to the audio event timing
+--beh_key BEH_KEY		The name of the behavioral key (column) corresponding to the audio event timing
 
 
---audio_ch_names LIST_OF_AUDIO_CH_NAMES		The name(s) of the channels with the audio data. Note that they will be if thereare two channels they will be bipolar referenced
+--audio_ch_names [AUDIO_CH_NAMES ...]		The name(s) of the channels with the audio data. Note that they will be if thereare two channels they will be bipolar referenced
 
 
 --exclude_shift EXCLUDE_SHIFT		How many seconds off to exclude an audio-behavioral event difference
@@ -241,12 +241,12 @@ parse_pd
 
 .. rst-class:: callout
 
-usage: ``parse_pd fname [-h] [--pd_event_name PD_EVENT_NAME] [--behf BEHF] [--beh_col BEH_COL] [--pd_ch_names LIST_OF_PD_CH_NAMES] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--min_i MIN_I] [--baseline BASELINE] [--add_events] [--recover] [--verbose VERBOSE] [-o]``
+usage: ``parse_pd raw [-h] [--pd_event_name PD_EVENT_NAME] [--beh BEH] [--beh_key BEH_KEY] [--pd_ch_names [PD_CH_NAMES ...]] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--max_flip_i MAX_FLIP_I] [--baseline BASELINE] [--add_events] [--recover] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
-fname
-	The electrophysiology filepath
+raw
+	The electrophysiology raw object or filepath
 
 
 
@@ -258,13 +258,13 @@ optional arguments
 --pd_event_name PD_EVENT_NAME		The name of the photodiode event
 
 
---behf BEHF		The behavioral tsv filepath
+--beh BEH		The behavioral dictionary or tsv filepath
 
 
---beh_col BEH_COL		The name of the behavioral column corresponding to the photodiode event timing
+--beh_key BEH_KEY		The name of the behavioral key (column) corresponding to the photodiode event timing
 
 
---pd_ch_names LIST_OF_PD_CH_NAMES		The name(s) of the channels with the photodiode data. Can be one channel for common referenced recording or two for a bipolar recording. If not provided, the data will be plotted for the user to pick
+--pd_ch_names [PD_CH_NAMES ...]		The name(s) of the channels with the photodiode data. Can be one channel for common referenced recording or two for a bipolar recording. If not provided, the data will be plotted for the user to pick
 
 
 --exclude_shift EXCLUDE_SHIFT		How many seconds off to exclude a photodiode- behavioral event difference
@@ -279,7 +279,7 @@ optional arguments
 --zscore ZSCORE		How many standard deviations larger than the baseline the photodiode event is. Decrease if too many events are being found and increase if too few. Use `find_pd_params` to determine if unsure.
 
 
---min_i MIN_I		The minimum number of samples to qualify as a pd event. Increase for fewer false-positives, decrease if your photodiode is on for fewer samples.
+--max_flip_i MAX_FLIP_I		The maximum number of samples the photodiode event takes to transition. Increase if the transitions are not being found, decrease for fewer false positives.
 
 
 --baseline BASELINE		How much relative to the max_lento use to idenify the time before the photodiode event. Probably don't change but increasing will reduce false-positives and decreasing will reduce false-negatives.
@@ -309,14 +309,14 @@ pd_parser_save_to_bids
 
 .. rst-class:: callout
 
-usage: ``pd_parser_save_to_bids bids_dir fname sub task [-h] [--ses SES] [--run RUN] [--data_type DATA_TYPE] [--eogs LIST_OF_EOGS] [--ecgs LIST_OF_ECGS] [--emgs LIST_OF_EMGS] [--verbose VERBOSE] [-o]``
+usage: ``pd_parser_save_to_bids bids_dir raw sub task [-h] [--ses SES] [--run RUN] [--data_type DATA_TYPE] [--eogs [EOGS ...]] [--ecgs [ECGS ...]] [--emgs [EMGS ...]] [--verbose VERBOSE] [-o]``
 
 positional arguments
 --------------------
 bids_dir
 	Filepath of the BIDS directory to save to
-fname
-	The electrophysiology filepath
+raw
+	The electrophysiology raw object or filepath
 sub
 	The subject identifier
 task
@@ -338,13 +338,13 @@ optional arguments
 --data_type DATA_TYPE		The type of data if not set correctly already (ieeg is often set as eeg for instance)
 
 
---eogs LIST_OF_EOGS		The eogs if not set correctly already
+--eogs [EOGS ...]		The eogs if not set correctly already
 
 
---ecgs LIST_OF_ECGS		The ecgs if not set correctly already
+--ecgs [ECGS ...]		The ecgs if not set correctly already
 
 
---emgs LIST_OF_EMGS		The emgs if not set correctly already
+--emgs [EMGS ...]		The emgs if not set correctly already
 
 
 --verbose VERBOSE		Set verbose output to True or False.

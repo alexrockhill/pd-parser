@@ -24,7 +24,7 @@ import mne
 from mne.utils import _TempDir
 
 import pd_parser
-from pd_parser.parse_pd import _to_tsv, _load_data
+from pd_parser.parse_pd import _load_data
 
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -37,7 +37,7 @@ n_events = 300
 # let's make our photodiode events on random uniform from 0.5 to 1 second
 n_secs_on = np.random.random(n_events) * 0.5 + 0.5
 prop_corrupted = 0.01
-raw, beh_df, events, corrupted_indices = \
+raw, beh, events, corrupted_indices = \
     pd_parser.simulate_pd_data(n_events=n_events, n_secs_on=n_secs_on,
                                prop_corrupted=prop_corrupted)
 
@@ -51,15 +51,13 @@ raw.add_channels([raw2])
 raw.info['dig'] = None
 raw.info['line_freq'] = 60
 
+# add some offsets to the behavior so it's a bit more realistic
+offsets = np.random.randn(n_events) * 0.01
+beh['time'] = np.array(beh['time']) + offsets
+
 # save to disk as required by ``pd-parser``
 fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
 raw.save(fname)
-# add some offsets to the behavior so it's a bit more realistic
-offsets = np.random.randn(n_events) * 0.01
-beh_df['time'] = np.array(beh_df['time']) + offsets
-behf = op.join(out_dir, 'sub-1_task-mytask_beh.tsv')
-_to_tsv(behf, beh_df)
-
 
 ###############################################################################
 # Find the photodiode events relative to the behavioral timing of interest:
@@ -69,8 +67,8 @@ _to_tsv(behf, beh_df)
 # One percent of the 300 events (3) were corrupted as shown in the plots and
 # some were too far off from large offsets that we're going to exclude them.
 
-pd_parser.parse_pd(fname, pd_event_name='Stim On', behf=behf,
-                   pd_ch_names=['pd'], beh_col='time',
+pd_parser.parse_pd(fname, pd_event_name='Stim On', beh=beh,
+                   pd_ch_names=['pd'], beh_key='time',
                    max_len=1.5)  # none are on longer than 1.5 seconds
 
 ###############################################################################
@@ -93,14 +91,14 @@ pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
 # the lengths are recovered within 1 millisecond. Note that the colors are
 # arbitrary and are only used to increase contrast and ease of visualization.
 
-annot, pd_ch_names, beh_df = _load_data(fname)
+annot, pd_ch_names, beh = _load_data(fname)
 raw.set_annotations(annot)
 events, event_id = mne.events_from_annotations(raw)
 on_events = events[events[:, 2] == event_id['Stim On']]
 off_events = events[events[:, 2] == event_id['Stim Off']]
 
 recovered = (off_events[:, 0] - on_events[:, 0]) / raw.info['sfreq']
-not_corrupted = [s != 'n/a' for s in beh_df['pd_parser_sample']]
+not_corrupted = [s != 'n/a' for s in beh['pd_parser_sample']]
 ground_truth_not_corrupted = n_secs_on[not_corrupted]
 
 fig, ax = plt.subplots()

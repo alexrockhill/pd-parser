@@ -11,8 +11,8 @@ def find_pd_params():
     """Plot the photodiode channel to find parameters for the parser."""
     import matplotlib.pyplot as plt
     parser = argparse.ArgumentParser()
-    parser.add_argument('fname', type=str,
-                        help='The electrophysiology filepath')
+    parser.add_argument('raw', type=str,
+                        help='The electrophysiology raw object or filepath')
     parser.add_argument('--pd_ch_names', type=str, nargs='*', required=False,
                         default=None, help='The name(s) of the channels '
                         'with the photodiode data. Can be one channel '
@@ -23,7 +23,7 @@ def find_pd_params():
                         required=False,
                         help='Set verbose output to True or False.')
     args = parser.parse_args()
-    pd_parser.find_pd_params(args.fname, pd_ch_names=args.pd_ch_names,
+    pd_parser.find_pd_params(args.raw, pd_ch_names=args.pd_ch_names,
                              verbose=args.verbose)
     plt.show()
 
@@ -31,16 +31,16 @@ def find_pd_params():
 def parse_pd():
     """Run parse_pd command."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('fname', type=str,
-                        help='The electrophysiology filepath')
+    parser.add_argument('raw', type=str,
+                        help='The electrophysiology raw object or filepath')
     parser.add_argument('--pd_event_name', type=str, required=False,
                         default='Fixation',
                         help='The name of the photodiode event')
-    parser.add_argument('--behf', type=str, required=False,
-                        help='The behavioral tsv filepath')
-    parser.add_argument('--beh_col', type=str, required=False,
+    parser.add_argument('--beh', type=str, required=False,
+                        help='The behavioral dictionary or tsv filepath')
+    parser.add_argument('--beh_key', type=str, required=False,
                         default='fix_onset_time',
-                        help='The name of the behavioral column '
+                        help='The name of the behavioral key (column) '
                         'corresponding to the photodiode event timing')
     parser.add_argument('--pd_ch_names', type=str, nargs='*', required=False,
                         default=None, help='The name(s) of the channels '
@@ -63,16 +63,16 @@ def parse_pd():
                         default=1, help='The length of the longest '
                         'photodiode event')
     parser.add_argument('--zscore', type=float, required=False,
-                        default=100, help='How many standard deviations '
+                        default=10, help='How many standard deviations '
                         'larger than the baseline the photodiode event is. '
                         'Decrease if too many events are being found '
                         'and increase if too few. Use `find_pd_params` '
                         'to determine if unsure.')
-    parser.add_argument('--min_i', type=int, required=False,
-                        default=10, help='The minimum number of samples '
-                        'to qualify as a pd event. Increase for fewer '
-                        'false-positives, decrease if your photodiode '
-                        'is on for fewer samples.')
+    parser.add_argument('--max_flip_i', type=int, required=False,
+                        default=40, help='The maximum number of samples '
+                        'the photodiode event takes to transition. Increase '
+                        'if the transitions are not being found, decrease for '
+                        'fewer false positives.')
     parser.add_argument('--baseline', type=float, required=False,
                         default=0.25, help='How much relative to the max_len'
                         'to use to idenify the time before the '
@@ -93,10 +93,10 @@ def parse_pd():
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.parse_pd(
-        args.fname, pd_event_name=args.pd_event_name, behf=args.behf,
-        beh_col=args.beh_col, pd_ch_names=args.pd_ch_names,
+        args.raw, pd_event_name=args.pd_event_name, beh=args.beh,
+        beh_key=args.beh_key, pd_ch_names=args.pd_ch_names,
         max_len=args.max_len, exclude_shift=args.exclude_shift,
-        resync=args.resync, zscore=args.zscore, min_i=args.min_i,
+        resync=args.resync, zscore=args.zscore, max_flip_i=args.max_flip_i,
         baseline=args.baseline, add_events=args.add_events,
         recover=args.recover, verbose=args.verbose, overwrite=args.overwrite)
 
@@ -104,15 +104,15 @@ def parse_pd():
 def parse_audio():
     """Run parse_audio command."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('fname', type=str,
-                        help='The electrophysiology filepath')
+    parser.add_argument('raw', type=str,
+                        help='TThe electrophysiology raw object or filepath')
     parser.add_argument('--audio_event_name', type=str, required=False,
                         default='Tone', help='The name of the audio event')
-    parser.add_argument('--behf', type=str, required=False,
-                        help='The behavioral tsv filepath')
-    parser.add_argument('--beh_col', type=str, required=False,
+    parser.add_argument('--beh', type=str, required=False,
+                        help='The behavioral dictionary or tsv filepath')
+    parser.add_argument('--beh_key', type=str, required=False,
                         default='tone_onset_time',
-                        help='The name of the behavioral column '
+                        help='The name of the behavioral key (column) '
                         'corresponding to the audio event timing')
     parser.add_argument('--audio_ch_names', type=str, nargs='*',
                         required=False, default=None,
@@ -147,8 +147,8 @@ def parse_audio():
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.parse_audio(
-        args.fname, audio_event_name=args.audio_event_name, behf=args.behf,
-        beh_col=args.beh_col, audio_ch_names=args.audio_ch_names,
+        args.raw, audio_event_name=args.audio_event_name, beh=args.beh,
+        beh_key=args.beh_key, audio_ch_names=args.audio_ch_names,
         exclude_shift=args.exclude_shift, resync=args.resync,
         max_len=args.max_len, zscore=args.zscore, add_events=args.add_events,
         recover=args.recover, verbose=args.verbose, overwrite=args.overwrite)
@@ -157,8 +157,8 @@ def parse_audio():
 def add_pd_off_events():
     """Run add_pd_off command."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('fname', type=str,
-                        help='The electrophysiology filepath')
+    parser.add_argument('raw', type=str,
+                        help='The electrophysiology raw object or filepath')
     parser.add_argument('--off_event_name', type=str, required=False,
                         default='StimOff',
                         help='The name of the photodiode event')
@@ -166,10 +166,10 @@ def add_pd_off_events():
                         default=1, help='The length of the longest '
                         'photodiode event')
     parser.add_argument('--zscore', type=float, required=False,
-                        default=100, help='The same zscore as used for '
+                        default=10, help='The same zscore as used for '
                         '`parse_pd`.')
-    parser.add_argument('--min_i', type=int, required=False,
-                        default=10, help='The same min_i as used for '
+    parser.add_argument('--max_flip_i', type=int, required=False,
+                        default=40, help='The same max_flip_i as used for '
                         '`parse_pd`.')
     parser.add_argument('--baseline', type=float, required=False,
                         default=0.25, help='The same baseline as used '
@@ -181,29 +181,29 @@ def add_pd_off_events():
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.add_pd_off_events(
-        args.fname, off_event_name=args.off_event_name,
-        max_len=args.max_len, zscore=args.zscore, min_i=args.min_i,
+        args.raw, off_event_name=args.off_event_name,
+        max_len=args.max_len, zscore=args.zscore, max_flip_i=args.max_flip_i,
         baseline=args.baseline, verbose=args.verbose, overwrite=args.overwrite)
 
 
 def add_relative_events():
     """Run add_relative_events command."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('fname', type=str,
-                        help='The electrophysiology filepath')
-    parser.add_argument('--behf', type=str, required=False,
+    parser.add_argument('raw', type=str,
+                        help='The electrophysiology raw object or filepath')
+    parser.add_argument('--beh', type=str, required=False,
                         help='The behavioral tsv filepath')
-    parser.add_argument('--relative_event_cols', type=str, nargs='*',
+    parser.add_argument('--relative_event_keys', type=str, nargs='*',
                         required=False,
                         default=['fix_duration', 'go_time', 'response_time'],
-                        help='A behavioral column in the tsv file that has '
-                        'the time relative to the photodiode events on the '
-                        'same trial as in the `beh_col` event.')
+                        help='A behavioral key (column) in the tsv file that '
+                        'has the time relative to the photodiode events on '
+                        'the same trial as in the `beh_key` event.')
     parser.add_argument('--relative_event_names', type=str, nargs='*',
                         required=False,
                         default=['ISI Onset', 'Go Cue', 'Response'],
                         help='The name of the corresponding '
-                        '`relative_event_cols` events')
+                        '`relative_event_keys` events')
     parser.add_argument('--verbose', default=True, type=bool,
                         required=False,
                         help='Set verbose output to True or False.')
@@ -211,8 +211,8 @@ def add_relative_events():
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.add_relative_events(
-        args.fname, behf=args.behf,
-        relative_event_cols=args.relative_event_cols,
+        args.raw, beh=args.beh,
+        relative_event_keys=args.relative_event_keys,
         relative_event_names=args.relative_event_names,
         verbose=args.verbose, overwrite=args.overwrite)
 
@@ -220,7 +220,7 @@ def add_relative_events():
 def add_events_to_raw():
     """Run add_relative_events command."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('fname', type=str,
+    parser.add_argument('raw', type=str,
                         help='The electrophysiology filepath')
     parser.add_argument('--out_fname', type=str, required=False,
                         help='The name to save out the new '
@@ -234,10 +234,11 @@ def add_events_to_raw():
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
-    pd_parser.add_events_to_raw(
-        args.fname, out_fname=args.out_fname,
-        drop_pd_channels=args.drop_pd_channels,
-        verbose=args.verbose, overwrite=args.overwrite)
+    raw = pd_parser.add_events_to_raw(
+        args.raw, drop_pd_channels=args.drop_pd_channels,
+        verbose=args.verbose)
+    raw.save(args.raw if args.out_fname is None else args.out_fname,
+             overwrite=args.overwrite)
 
 
 def pd_parser_save_to_bids():
@@ -245,8 +246,8 @@ def pd_parser_save_to_bids():
     parser = argparse.ArgumentParser()
     parser.add_argument('bids_dir', type=str,
                         help='Filepath of the BIDS directory to save to')
-    parser.add_argument('fname', type=str,
-                        help='The electrophysiology filepath')
+    parser.add_argument('raw', type=str,
+                        help='The electrophysiology raw object or filepath')
     parser.add_argument('sub', type=str, help='The subject identifier')
     parser.add_argument('task', type=str, help='The task identifier')
     parser.add_argument('--ses', type=str, help='The session identifier',
@@ -273,7 +274,7 @@ def pd_parser_save_to_bids():
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     pd_parser.pd_parser_save_to_bids(
-        args.bids_dir, args.fname, args.sub, args.task, ses=args.ses,
+        args.bids_dir, args.raw, args.sub, args.task, ses=args.ses,
         run=args.run, data_type=args.data_type, eogs=args.eogs,
         ecgs=args.ecgs, emgs=args.emgs, verbose=args.verbose,
         overwrite=args.overwrite)

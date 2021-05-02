@@ -1,21 +1,1 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite errors="0" failures="0" hostname="Alexs-MacBook-Pro.local" name="pytest" skipped="0" tests="1" time="6.770" timestamp="2020-10-27T13:10:08.152978"><testcase classname="pd_parser.tests.test_parse_pd" file="pd_parser/tests/test_parse_pd.py" line="349" name="test_parse_audio" time="4.704"><system-out>Creating RawArray with float64 data, n_channels=1, n_times=16464896
-    Range : 0 ... 16464895 =      0.000 ...   343.019 secs
-Ready.
-Writing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cgo_nvic/test_video-raw.fif
-Closing /private/var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cgo_nvic/test_video-raw.fif [done]
-Finding points where the audio is above `zscore` threshold...
-17 audio candidate events found
-Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cgo_nvic/test_video-raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_cgo_nvic/test_video-raw.fif...
-Isotrak not found
-    Range : 0 ... 16464895 =      0.000 ...   343.019 secs
-Ready.
-Reading 0 ... 16464895  =      0.000 ...   343.019 secs...
-Finding points where the audio is above `zscore` threshold...
-17 audio candidate events found
-Checking best alignments
-Best alignment with the events shifted 19 ms relative to the first behavior event
-errors: min -517, q1 -388, med -35, q3 246, max 485
-Excluding events that have zero close events or more than one photodiode event within `max_len` time
-</system-out><system-err>  0%|          | 0/14 [00:00&lt;?, ?it/s] 43%|████▎     | 6/14 [00:00&lt;00:00, 40.72it/s] 86%|████████▌ | 12/14 [00:00&lt;00:00, 42.02it/s]100%|██████████| 14/14 [00:00&lt;00:00, 47.03it/s]
-</system-err></testcase></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="6" time="81.364" timestamp="2021-05-02T00:30:46.666372" hostname="Alexs-MacBook-Pro.local"><testcase classname="pd_parser.tests.test_parse_pd" name="test_core" time="1.753" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_two_pd_alignment" time="0.594" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_parse_pd" time="26.469" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_parse_audio" time="8.435" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_cli" time="42.495" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_examples" time="0.001" /></testsuite></testsuites>
