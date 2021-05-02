@@ -40,7 +40,7 @@ jobs:
     - name: Install pd-parser
       run: pip install --no-deps .
     - name: Set up Node.js
-      uses: actions/setup-node@v1.4.2
+      uses: actions/setup-node@v1
       with:
         node-version: 12
     - name: Install BIDS validator (stable)
