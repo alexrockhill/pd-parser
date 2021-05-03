@@ -201,7 +201,7 @@ def _find_pd_candidates(pd, max_len_i, baseline_i, zscore, max_flip_i,
         len(pd_candidates['down']) > len(pd_candidates['up']) else 'up'
     pd_candidates = pd_candidates[pd_direction]
     if len(pd_candidates) == 0:
-        raise ValueError('No photodiode candidates found, please raise an'
+        raise ValueError('No photodiode candidates found, please raise an '
                          'issue with code to reproduce the error on GitHub')
     if verbose:
         print(f'{len(pd_candidates)} {pd_direction}-deflection photodiode '
