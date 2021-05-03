@@ -27,7 +27,7 @@ from pd_parser.parse_pd import (_read_tsv, _to_tsv, _read_raw,
                                 _find_pd_candidates, _event_dist,
                                 _check_alignment, _find_best_alignment,
                                 _exclude_ambiguous_events,
-                                _save_data, _load_data,
+                                _save_data, _load_data, _check_overwrite,
                                 _recover_event, _find_audio_candidates)
 
 basepath = op.join(op.dirname(pd_parser.__file__), 'tests', 'data')
@@ -251,6 +251,10 @@ def test_core():
                                   np.delete(events[2:, 0], resync_exclusions))
     assert _recover_event(pd, beh_events[0] + best_alignment,
                           exclude_shift_i, zscore) == pd_events[0]
+    # test overwrite
+    raw = _read_raw(fname)
+    with pytest.raises(ValueError, match='data directory already exists'):
+        _check_overwrite(raw, add_events=False, overwrite=False)
 
 
 def test_two_pd_alignment():
