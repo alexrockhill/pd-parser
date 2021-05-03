@@ -112,7 +112,7 @@ def _get_channel_data(raw, ch_names):
         raise ValueError(f'Not all pd_ch_names, {ch_names}, '
                          'in raw channel names')
     if len(ch_names) == 2:
-        ch_data = raw._data[raw.ch_names.index(ch_names[0])]
+        ch_data = raw._data[raw.ch_names.index(ch_names[0])].copy()
         ch_data -= raw._data[raw.ch_names.index(ch_names[1])]
     else:
         ch_data = raw._data[raw.ch_names.index(ch_names[0])]
