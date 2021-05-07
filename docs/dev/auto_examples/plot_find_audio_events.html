@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Use Audio to Align Video Data &#8212; pd-parser v0.5dev0 documentation</title>
+    <title>Use Audio to Align Video Data &#8212; pd-parser v0.6dev0 documentation</title>
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/gallery.css" />
@@ -40,7 +40,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="../index.html">
-          pd-parser v0.5dev0</a>
+          pd-parser v0.6dev0</a>
         <span class="navbar-text navbar-version pull-left"><b></b></span>
       </div>
 
@@ -112,7 +112,7 @@ photodiode events based on their square wave shape.</p>
 <span class="c1"># License: BSD (3-clause)</span>
 </pre></div>
 </div>
-<p>Load in a video with audio:</p>
+<p>Load in a video with audio</p>
 <p>In this example, we’ll use audio and instead of aligning electrophysiology
 data, we’ll align a video. This example data is from a task where movements
 are played on a monitor for the participant to mirror and the video recording
@@ -134,7 +134,6 @@ out because ffmpeg must be installed to use them and it is not required by
 <span class="kn">from</span> <span class="nn">mne.utils</span> <span class="kn">import</span> <span class="n">_TempDir</span>
 
 <span class="kn">import</span> <span class="nn">pd_parser</span>
-<span class="kn">from</span> <span class="nn">pd_parser.parse_pd</span> <span class="kn">import</span> <span class="n">_load_data</span>  <span class="c1"># , _read_tsv</span>
 
 <span class="c1"># get the data</span>
 <span class="n">out_dir</span> <span class="o">=</span> <span class="n">_TempDir</span><span class="p">()</span>
@@ -184,21 +183,22 @@ out because ffmpeg must be installed to use them and it is not required by
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Creating RawArray with float64 data, n_channels=1, n_times=16464896
     Range : 0 ... 16464895 =      0.000 ...   343.019 secs
 Ready.
-Writing /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_xku3l1yp/sub-1_task-mytask_raw.fif
-Closing /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_xku3l1yp/sub-1_task-mytask_raw.fif
+Writing /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ran50pv8/sub-1_task-mytask_raw.fif
+Closing /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ran50pv8/sub-1_task-mytask_raw.fif
 [done]
 </pre></div>
 </div>
-<p>Run the parser:</p>
+<p>Run the parser</p>
 <p>Now we’ll call the main function to automatically parse the audio events.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pd_parser</span><span class="o">.</span><span class="n">parse_audio</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">beh</span><span class="o">=</span><span class="n">behf</span><span class="p">,</span> <span class="n">beh_key</span><span class="o">=</span><span class="s1">&#39;tone_onset_time&#39;</span><span class="p">,</span>
-                      <span class="n">audio_ch_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;audio&#39;</span><span class="p">],</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">annot</span><span class="p">,</span> <span class="n">samples</span> <span class="o">=</span> <span class="n">pd_parser</span><span class="o">.</span><span class="n">parse_audio</span><span class="p">(</span><span class="n">fname</span><span class="p">,</span> <span class="n">beh</span><span class="o">=</span><span class="n">behf</span><span class="p">,</span>
+                                       <span class="n">beh_key</span><span class="o">=</span><span class="s1">&#39;tone_onset_time&#39;</span><span class="p">,</span>
+                                       <span class="n">audio_ch_names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;audio&#39;</span><span class="p">],</span> <span class="n">zscore</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
 </pre></div>
 </div>
 <img alt="Synchronization Events Compared to Behavior Events" class="sphx-glr-single-img" src="../_images/sphx_glr_plot_find_audio_events_001.png" />
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_xku3l1yp/sub-1_task-mytask_raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_xku3l1yp/sub-1_task-mytask_raw.fif...
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ran50pv8/sub-1_task-mytask_raw.fif
+Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_ran50pv8/sub-1_task-mytask_raw.fif...
 Isotrak not found
     Range : 0 ... 16464895 =      0.000 ...   343.019 secs
 Ready.
@@ -207,26 +207,21 @@ Finding points where the audio is above `zscore` threshold...
 17 audio candidate events found
 Checking best alignments
 
-  0%|          | 0/14 [00:00&lt;?, ?it/s]
- 21%|##1       | 3/14 [00:00&lt;00:00, 23.71it/s]
- 71%|#######1  | 10/14 [00:00&lt;00:00, 29.34it/s]
-100%|##########| 14/14 [00:00&lt;00:00, 31.55it/s]
-100%|##########| 14/14 [00:00&lt;00:00, 41.45it/s]
-Best alignment with the events shifted 19 ms relative to the first behavior event
-errors: min -517, q1 -388, med -35, q3 246, max 485
-Excluding events that have zero close events or more than one photodiode event within `max_len` time
-
-&lt;Annotations | 15 segments: Tone (15)&gt;
+  0%|          | 0/15 [00:00&lt;?, ?it/s]
+ 53%|#####3    | 8/15 [00:00&lt;00:00, 76.93it/s]
+100%|##########| 15/15 [00:00&lt;00:00, 82.61it/s]
+Best alignment is with the first behavioral event shifted 0.01 s relative to the first synchronization event and has errors: min -6.65 ms, q1 -3.27 ms, med -0.58 ms, q3 3.99 ms, max 11.60 ms, 0 missed events
+Excluding events that have zero close synchronization events or more than one synchronization event within `max_len` time
 </pre></div>
 </div>
-<p>Load the results:</p>
+<p>Load the results</p>
 <p>Finally, we’ll load the events and use them to crop the video although it
 requires ffmpeg so it is commented out.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">annot</span> <span class="o">=</span> <span class="n">_load_data</span><span class="p">(</span><span class="n">fname</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Here are the event times: &#39;</span><span class="p">,</span> <span class="n">annot</span><span class="o">.</span><span class="n">onset</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Here are the event times: &#39;</span><span class="p">,</span> <span class="n">annot</span><span class="o">.</span><span class="n">onset</span><span class="p">)</span>
 
 <span class="c1"># Crop the videos with ffmpeg</span>
 <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">from pd_parser.parse_pd import _read_tsv</span>
 <span class="sd">beh = _read_tsv(behf)</span>
 <span class="sd">for i in range(annot.onset.size):  # skip the first video</span>
 <span class="sd">    action_time = (beh[&#39;tone_onset&#39;][i] - beh[&#39;action_onset&#39;][i]) / 1000</span>
@@ -240,19 +235,14 @@ requires ffmpeg so it is commented out.</p>
 </pre></div>
 </div>
 <p class="sphx-glr-script-out">Out:</p>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_xku3l1yp/sub-1_task-mytask_raw.fif
-Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_xku3l1yp/sub-1_task-mytask_raw.fif...
-Isotrak not found
-    Range : 0 ... 16464895 =      0.000 ...   343.019 secs
-Ready.
-Here are the event times:  [ 19.05112457  39.9129982   61.88574982  83.54243469 104.41456604
- 126.07720947 147.5539856  168.61270142 189.57843018 211.35673523
- 250.20858765 271.68209839 292.14001465 313.30532837 333.78097534]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Here are the event times:  [ 19.051125    39.913       61.88575     83.5424375  104.4145625
+ 126.07720833 147.55397917 168.61270833 189.5784375  211.35672917
+ 250.20858333 271.68210417 292.14       313.30533333 333.78097917]
 
-&quot;\nbeh = _read_tsv(behf)\nfor i in range(annot.onset.size):  # skip the first video\n    action_time = (beh[&#39;tone_onset&#39;][i] - beh[&#39;action_onset&#39;][i]) / 1000\n    run([&#39;ffmpeg&#39;, &#39;-i&#39;, f&#39;{video_fname}&#39;, &#39;-ss&#39;,\n         str(datetime.timedelta(\n             seconds=annot.onset[i] - action_time - offset)),\n         &#39;-to&#39;, str(datetime.timedelta(seconds=annot.onset[i] - offset)),\n         op.join(out_dir, &#39;movement-{}+action_type-{}.mp4&#39;.format(\n             beh[&#39;movement&#39;][i], beh[&#39;action_type&#39;][i]))])\n&quot;
+&quot;\nfrom pd_parser.parse_pd import _read_tsv\nbeh = _read_tsv(behf)\nfor i in range(annot.onset.size):  # skip the first video\n    action_time = (beh[&#39;tone_onset&#39;][i] - beh[&#39;action_onset&#39;][i]) / 1000\n    run([&#39;ffmpeg&#39;, &#39;-i&#39;, f&#39;{video_fname}&#39;, &#39;-ss&#39;,\n         str(datetime.timedelta(\n             seconds=annot.onset[i] - action_time - offset)),\n         &#39;-to&#39;, str(datetime.timedelta(seconds=annot.onset[i] - offset)),\n         op.join(out_dir, &#39;movement-{}+action_type-{}.mp4&#39;.format(\n             beh[&#39;movement&#39;][i], beh[&#39;action_type&#39;][i]))])\n&quot;
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  28.131 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  24.390 seconds)</p>
 <div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-auto-examples-plot-find-audio-events-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../_downloads/81406c451e497331ddbbb284a4d8eb5b/plot_find_audio_events.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_find_audio_events.py</span></code></a></p>

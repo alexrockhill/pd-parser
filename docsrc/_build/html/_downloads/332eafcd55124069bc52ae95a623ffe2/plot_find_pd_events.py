@@ -11,7 +11,7 @@ align them to behavior. Then, we save the data to BIDS format.
 # License: BSD (3-clause)
 
 ###############################################################################
-# Simulate data and use it to make a raw object:
+# Simulate data and use it to make a raw object
 #
 # We'll make an `mne.io.Raw object` so that we can save out some random
 # data with a photodiode event channel in it in `fif` format (a commonly used
@@ -52,7 +52,7 @@ raw.save(fname)
 raw = _read_raw(fname)
 
 ###############################################################################
-# Make behavior data:
+# Make behavior data
 #
 # We'll make a dictionary with lists for the events that are time-stamped when
 # the photodiode was turned on and other events relative to those events.
@@ -72,6 +72,8 @@ go_time = np.repeat(0.7, n_events)
 response_time = list(go_time + np.random.random(n_events) + 1.5)
 for i in [10, 129, 232, 288]:
     response_time[i] = 'n/a'  # make some no responses
+
+
 # put in dictionary to be converted to tsv file
 beh['fix_onset_time'] = beh['time'] + offsets
 beh['go_time'] = go_time
@@ -81,7 +83,7 @@ behf = op.join(out_dir, 'sub-1_task-mytask_beh.tsv')
 _to_tsv(behf, beh)
 
 ###############################################################################
-# Use the interactive graphical user interface (GUI) to find parameters:
+# Use the interactive graphical user interface (GUI) to find parameters
 #
 # On the documentation webpage, this is example is not interactive,
 # but if you download it as a jupyter notebook and run it or copy the code
@@ -92,7 +94,7 @@ _to_tsv(behf, beh)
 pd_parser.find_pd_params(raw, pd_ch_names=['pd'])
 
 ###############################################################################
-# Find the photodiode events relative to the behavioral timing of interest:
+# Find the photodiode events relative to the behavioral timing of interest
 #
 # This function will use the default parameters or the parameters you
 # found from :func:`pd_parser.find_pd_parameters` to find and align the
@@ -106,7 +108,7 @@ pd_parser.find_pd_params(raw, pd_ch_names=['pd'])
 pd_parser.parse_pd(raw, beh=beh, pd_ch_names=['pd'], max_len=1.5)
 
 ###############################################################################
-# Add events relative to the photodiode events:
+# Add events relative to the photodiode events
 #
 # The photodiode is usually sychronized to one event (e.g. the fixation
 # so that if the deflections caused by the photodiode are large enough
@@ -126,7 +128,7 @@ pd_parser.add_relative_events(
 
 
 ###############################################################################
-# Save data to BIDS format:
+# Save data to BIDS format
 #
 # This saves our data to BIDS format so that it's ready to be analyzed in a
 # reproducible way; BIDS requires all the files the BIDS community has deemed

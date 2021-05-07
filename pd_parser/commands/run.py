@@ -19,13 +19,12 @@ def find_pd_params():
                         'for common referenced recording or two for '
                         'a bipolar recording. If not provided, the data '
                         'will be plotted for the user to pick')
-    parser.add_argument('--verbose', default=True, type=bool,
-                        required=False,
-                        help='Set verbose output to True or False.')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Whether to print function progress.')
     args = parser.parse_args()
     pd_parser.find_pd_params(args.raw, pd_ch_names=args.pd_ch_names,
                              verbose=args.verbose)
-    plt.show()
+    plt.show(block=True)
 
 
 def parse_pd():
@@ -86,9 +85,8 @@ def parse_pd():
                         'on the same channel')
     parser.add_argument('--recover', action='store_true',
                         help='Whether to recover corrupted events manually.')
-    parser.add_argument('--verbose', default=True, type=bool,
-                        required=False,
-                        help='Set verbose output to True or False.')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Whether to print function progress.')
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
@@ -140,9 +138,8 @@ def parse_audio():
                         'on the same channel')
     parser.add_argument('--recover', action='store_true',
                         help='Whether to recover corrupted events manually.')
-    parser.add_argument('--verbose', default=True, type=bool,
-                        required=False,
-                        help='Set verbose output to True or False.')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Whether to print function progress.')
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
@@ -174,9 +171,8 @@ def add_pd_off_events():
     parser.add_argument('--baseline', type=float, required=False,
                         default=0.25, help='The same baseline as used '
                         'for `parse_pd`.')
-    parser.add_argument('--verbose', default=True, type=bool,
-                        required=False,
-                        help='Set verbose output to True or False.')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Whether to print function progress.')
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
@@ -204,9 +200,8 @@ def add_relative_events():
                         default=['ISI Onset', 'Go Cue', 'Response'],
                         help='The name of the corresponding '
                         '`relative_event_keys` events')
-    parser.add_argument('--verbose', default=True, type=bool,
-                        required=False,
-                        help='Set verbose output to True or False.')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Whether to print function progress.')
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
@@ -225,17 +220,16 @@ def add_events_to_raw():
     parser.add_argument('--out_fname', type=str, required=False,
                         help='The name to save out the new '
                              'raw file out to')
-    parser.add_argument('--drop_pd_channels', type=bool, required=False,
-                        default=True, help='Whether to drop the '
+    parser.add_argument('--keep_pd_channels', action='store_true',
+                        help='Whether to keep the '
                         'channels with the photodiode data.')
-    parser.add_argument('--verbose', default=True, type=bool,
-                        required=False,
-                        help='Set verbose output to True or False.')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Whether to print function progress.')
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
     raw = pd_parser.add_events_to_raw(
-        args.raw, drop_pd_channels=args.drop_pd_channels,
+        args.raw, keep_pd_channels=args.keep_pd_channels,
         verbose=args.verbose)
     raw.save(args.raw if args.out_fname is None else args.out_fname,
              overwrite=args.overwrite)
@@ -267,9 +261,8 @@ def pd_parser_save_to_bids():
     parser.add_argument('--emgs', type=str, nargs='*',
                         required=False, default=None,
                         help='The emgs if not set correctly already')
-    parser.add_argument('--verbose', default=True, type=bool,
-                        required=False,
-                        help='Set verbose output to True or False.')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Whether to print function progress.')
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()

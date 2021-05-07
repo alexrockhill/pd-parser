@@ -13,7 +13,7 @@ photodiode events based on their square wave shape.
 # License: BSD (3-clause)
 
 ###############################################################################
-# Load in a video with audio:
+# Load in a video with audio
 #
 # In this example, we'll use audio and instead of aligning electrophysiology
 # data, we'll align a video. This example data is from a task where movements
@@ -37,7 +37,6 @@ import mne
 from mne.utils import _TempDir
 
 import pd_parser
-from pd_parser.parse_pd import _load_data  # , _read_tsv
 
 # get the data
 out_dir = _TempDir()
@@ -83,22 +82,23 @@ raw.save(fname)
 behf = op.join(out_dir, 'test_video_beh.tsv')
 
 ###############################################################################
-# Run the parser:
+# Run the parser
 #
 # Now we'll call the main function to automatically parse the audio events.
-pd_parser.parse_audio(fname, beh=behf, beh_key='tone_onset_time',
-                      audio_ch_names=['audio'], zscore=10)
+annot, samples = pd_parser.parse_audio(fname, beh=behf,
+                                       beh_key='tone_onset_time',
+                                       audio_ch_names=['audio'], zscore=10)
 
 ###############################################################################
-# Load the results:
+# Load the results
 #
 # Finally, we'll load the events and use them to crop the video although it
 # requires ffmpeg so it is commented out.
-annot = _load_data(fname)[0]
 print('Here are the event times: ', annot.onset)
 
 # Crop the videos with ffmpeg
 '''
+from pd_parser.parse_pd import _read_tsv
 beh = _read_tsv(behf)
 for i in range(annot.onset.size):  # skip the first video
     action_time = (beh['tone_onset'][i] - beh['action_onset'][i]) / 1000

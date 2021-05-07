@@ -12,7 +12,7 @@ to behavior.
 # License: BSD (3-clause)
 
 ###############################################################################
-# Simulate data and use it to make a raw object:
+# Simulate data and use it to make a raw object
 #
 # We'll make an `mne.io.Raw` object so that we can save out some random
 # data with a photodiode event channel in it in fif format (a commonly used
@@ -60,7 +60,7 @@ fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
 raw.save(fname)
 
 ###############################################################################
-# Find the photodiode events relative to the behavioral timing of interest:
+# Find the photodiode events relative to the behavioral timing of interest
 #
 # This function will use the default parameters to find and align the
 # photodiode events, excluding events that were off.
@@ -77,7 +77,7 @@ pd_parser.parse_pd(fname, pd_event_name='Stim On', beh=beh,
 # Another piece of information in the photodiode channel is the cessation of
 # the events. Let's find those and add them to the events.
 
-pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
+pd_parser.add_pd_off_events(fname, off_event_name='Stim Off', max_len=1.5)
 
 ###############################################################################
 # Check recovered event lengths and compare to the simulation ground truth

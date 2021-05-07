@@ -20,4 +20,4 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 	cp -a figs/* _build/html/_images/
 	cp favicon.png _build/html/_images/
-	cp -a _build/html/. ../docs/dev
+	cp -a _build/html/. ../docs/dev/

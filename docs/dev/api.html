@@ -4,7 +4,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API Documentation &#8212; pd-parser v0.5dev0 documentation</title>
+    <title>API Documentation &#8212; pd-parser v0.6dev0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
@@ -40,7 +40,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="index.html">
-          pd-parser v0.5dev0</a>
+          pd-parser v0.6dev0</a>
         <span class="navbar-text navbar-version pull-left"><b></b></span>
       </div>
 
@@ -107,7 +107,7 @@
 the event time samples at which it turned on.</p>
 <dl class="py function">
 <dt id="parse_pd.add_events_to_raw">
-<code class="sig-name descname">add_events_to_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">drop_pd_channels</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_events_to_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_events_to_raw" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_events_to_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">keep_pd_channels</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_events_to_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_events_to_raw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save out a new raw file with photodiode events.</p>
 <p>Note: this function is not recommended, rather just skip it and
 use <cite>save_to_bids</cite> which doesn’t modify the underlying raw data
@@ -120,7 +120,7 @@ information, it’s only stored in the sidecar.</p>
 <dt><strong>raw: str | mne Raw object</strong></dt><dd><p>The object or filepath of the time-series data file
 (e.g. meg, eeg, ieeg).</p>
 </dd>
-<dt><strong>drop_pd_channels</strong><span class="classifier">bool</span></dt><dd><p>Whether to drop the channel(s) the photodiode data was on.</p>
+<dt><strong>keep_pd_channels</strong><span class="classifier">bool</span></dt><dd><p>Whether to keep the channel(s) the photodiode data was on.</p>
 </dd>
 <dt><strong>verbose: bool</strong></dt><dd><p>Whether to display or supress text output on the progress
 of the function.</p>
@@ -299,6 +299,9 @@ of the function.</p>
 <dd class="field-even"><dl class="simple">
 <dt>annot: mne.Annotations</dt><dd><p>The annotations with the added events.</p>
 </dd>
+<dt>samples: list</dt><dd><p>The samples corresponding to the events, with ‘n/a’ if no event is
+found.</p>
+</dd>
 </dl>
 </dd>
 </dl>
@@ -379,6 +382,9 @@ of the function.</p>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><dl class="simple">
 <dt>annot: mne.Annotations</dt><dd><p>The annotations with the added events.</p>
+</dd>
+<dt>samples: list</dt><dd><p>The samples corresponding to the events, with ‘n/a’ if no event is
+found.</p>
 </dd>
 </dl>
 </dd>

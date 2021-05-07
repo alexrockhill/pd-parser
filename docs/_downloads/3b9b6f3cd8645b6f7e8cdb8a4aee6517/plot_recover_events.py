@@ -14,7 +14,7 @@ as there might be noise in the data around this time.
 # License: BSD (3-clause)
 
 ###############################################################################
-# Simulate data and use it to make a raw object:
+# Simulate data and use it to make a raw object
 #
 # We'll make an `mne.io.Raw` object so that we can save out some random
 # data with a photodiode event channel in it in fif format (a commonly used
@@ -83,7 +83,7 @@ fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
 raw.save(fname)
 
 ###############################################################################
-# Find the photodiode events relative to the behavioral timing of interest:
+# Find the photodiode events relative to the behavioral timing of interest
 #
 # This function will use the default parameters to find and align the
 # photodiode events, recovering the events that we just corrupted.
@@ -105,13 +105,15 @@ with mock.patch('builtins.input', return_value='y'):
 # On the documentation webpage, this is example is not interactive,
 # but if you download it as a jupyter notebook and run it or copy the code
 # into a console running python (ipython recommended), you can see how to
-# interact with the photodiode data to pick reasonable parameters by
+# interact with the window to accept or reject the recovered events by
 # following the instructions.
 
-pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
+# reject the two false deflections in the middle of the second event
+with mock.patch('builtins.input', side_effect=['y'] + ['n'] * 2 + ['y'] * 2):
+    pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
 
 ###############################################################################
-# Check the results:
+# Check the results
 #
 # Finally, we'll check that the recovered events and the original events match.
 
@@ -122,12 +124,8 @@ on_events = events2[events2[:, 2] == event_id['Stim On']]
 print(f'Original: {events[corrupted_indices, 0]}\n'
       f'Recovered: {on_events[corrupted_indices, 0]}')
 
-'''
-# uncomment when using interactively, this section doesn't work
-# for the non-interactive documentation
 off_events = events2[events2[:, 2] == event_id['Stim Off']]
 original_off = events[corrupted_indices, 0] + \
-  np.round(n_secs_on[corrupted_indices] * raw.info['sfreq']).astype(int)
+    np.round(n_secs_on[corrupted_indices] * raw.info['sfreq']).astype(int)
 print(f'Original off: {original_off}\n'
-      f'Recovered off: {on_events[corrupted_indices, 0]}')
-'''
+      f'Recovered off: {off_events[corrupted_indices, 0]}')

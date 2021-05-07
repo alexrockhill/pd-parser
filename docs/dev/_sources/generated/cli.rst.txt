@@ -21,7 +21,7 @@ add_events_to_raw
 
 .. rst-class:: callout
 
-usage: ``add_events_to_raw raw [-h] [--out_fname OUT_FNAME] [--drop_pd_channels DROP_PD_CHANNELS] [--verbose VERBOSE] [-o]``
+usage: ``add_events_to_raw raw [-h] [--out_fname OUT_FNAME] [--keep_pd_channels] [-v] [-o]``
 
 positional arguments
 --------------------
@@ -38,10 +38,10 @@ optional arguments
 --out_fname OUT_FNAME		The name to save out the new raw file out to
 
 
---drop_pd_channels DROP_PD_CHANNELS		Whether to drop the channels with the photodiode data.
+--keep_pd_channels		Whether to keep the channels with the photodiode data.
 
 
---verbose VERBOSE		Set verbose output to True or False.
+-v, --verbose		Whether to print function progress.
 
 
 -o, --overwrite		Pass this flag to overwrite an existing file
@@ -59,7 +59,7 @@ add_pd_off_events
 
 .. rst-class:: callout
 
-usage: ``add_pd_off_events raw [-h] [--off_event_name OFF_EVENT_NAME] [--max_len MAX_LEN] [--zscore ZSCORE] [--max_flip_i MAX_FLIP_I] [--baseline BASELINE] [--verbose VERBOSE] [-o]``
+usage: ``add_pd_off_events raw [-h] [--off_event_name OFF_EVENT_NAME] [--max_len MAX_LEN] [--zscore ZSCORE] [--max_flip_i MAX_FLIP_I] [--baseline BASELINE] [-v] [-o]``
 
 positional arguments
 --------------------
@@ -88,7 +88,7 @@ optional arguments
 --baseline BASELINE		The same baseline as used for `parse_pd`.
 
 
---verbose VERBOSE		Set verbose output to True or False.
+-v, --verbose		Whether to print function progress.
 
 
 -o, --overwrite		Pass this flag to overwrite an existing file
@@ -106,7 +106,7 @@ add_relative_events
 
 .. rst-class:: callout
 
-usage: ``add_relative_events raw [-h] [--beh BEH] [--relative_event_keys [RELATIVE_EVENT_KEYS ...]] [--relative_event_names [RELATIVE_EVENT_NAMES ...]] [--verbose VERBOSE] [-o]``
+usage: ``add_relative_events raw [-h] [--beh BEH] [--relative_event_keys [RELATIVE_EVENT_KEYS ...]] [--relative_event_names [RELATIVE_EVENT_NAMES ...]] [-v] [-o]``
 
 positional arguments
 --------------------
@@ -129,7 +129,7 @@ optional arguments
 --relative_event_names [RELATIVE_EVENT_NAMES ...]		The name of the corresponding `relative_event_keys` events
 
 
---verbose VERBOSE		Set verbose output to True or False.
+-v, --verbose		Whether to print function progress.
 
 
 -o, --overwrite		Pass this flag to overwrite an existing file
@@ -147,7 +147,7 @@ find_pd_params
 
 .. rst-class:: callout
 
-usage: ``find_pd_params raw [-h] [--pd_ch_names [PD_CH_NAMES ...]] [--verbose VERBOSE]``
+usage: ``find_pd_params raw [-h] [--pd_ch_names [PD_CH_NAMES ...]] [-v]``
 
 positional arguments
 --------------------
@@ -164,7 +164,7 @@ optional arguments
 --pd_ch_names [PD_CH_NAMES ...]		The name(s) of the channels with the photodiode data. Can be one channel for common referenced recording or two for a bipolar recording. If not provided, the data will be plotted for the user to pick
 
 
---verbose VERBOSE		Set verbose output to True or False.
+-v, --verbose		Whether to print function progress.
 
 
 
@@ -179,7 +179,7 @@ parse_audio
 
 .. rst-class:: callout
 
-usage: ``parse_audio raw [-h] [--audio_event_name AUDIO_EVENT_NAME] [--beh BEH] [--beh_key BEH_KEY] [--audio_ch_names [AUDIO_CH_NAMES ...]] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--add_events] [--recover] [--verbose VERBOSE] [-o]``
+usage: ``parse_audio raw [-h] [--audio_event_name AUDIO_EVENT_NAME] [--beh BEH] [--beh_key BEH_KEY] [--audio_ch_names [AUDIO_CH_NAMES ...]] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--add_events] [--recover] [-v] [-o]``
 
 positional arguments
 --------------------
@@ -223,7 +223,7 @@ optional arguments
 --recover		Whether to recover corrupted events manually.
 
 
---verbose VERBOSE		Set verbose output to True or False.
+-v, --verbose		Whether to print function progress.
 
 
 -o, --overwrite		Pass this flag to overwrite an existing file
@@ -241,7 +241,7 @@ parse_pd
 
 .. rst-class:: callout
 
-usage: ``parse_pd raw [-h] [--pd_event_name PD_EVENT_NAME] [--beh BEH] [--beh_key BEH_KEY] [--pd_ch_names [PD_CH_NAMES ...]] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--max_flip_i MAX_FLIP_I] [--baseline BASELINE] [--add_events] [--recover] [--verbose VERBOSE] [-o]``
+usage: ``parse_pd raw [-h] [--pd_event_name PD_EVENT_NAME] [--beh BEH] [--beh_key BEH_KEY] [--pd_ch_names [PD_CH_NAMES ...]] [--exclude_shift EXCLUDE_SHIFT] [--resync RESYNC] [--max_len MAX_LEN] [--zscore ZSCORE] [--max_flip_i MAX_FLIP_I] [--baseline BASELINE] [--add_events] [--recover] [-v] [-o]``
 
 positional arguments
 --------------------
@@ -291,7 +291,7 @@ optional arguments
 --recover		Whether to recover corrupted events manually.
 
 
---verbose VERBOSE		Set verbose output to True or False.
+-v, --verbose		Whether to print function progress.
 
 
 -o, --overwrite		Pass this flag to overwrite an existing file
@@ -309,7 +309,7 @@ pd_parser_save_to_bids
 
 .. rst-class:: callout
 
-usage: ``pd_parser_save_to_bids bids_dir raw sub task [-h] [--ses SES] [--run RUN] [--data_type DATA_TYPE] [--eogs [EOGS ...]] [--ecgs [ECGS ...]] [--emgs [EMGS ...]] [--verbose VERBOSE] [-o]``
+usage: ``pd_parser_save_to_bids bids_dir raw sub task [-h] [--ses SES] [--run RUN] [--data_type DATA_TYPE] [--eogs [EOGS ...]] [--ecgs [ECGS ...]] [--emgs [EMGS ...]] [-v] [-o]``
 
 positional arguments
 --------------------
@@ -347,7 +347,7 @@ optional arguments
 --emgs [EMGS ...]		The emgs if not set correctly already
 
 
---verbose VERBOSE		Set verbose output to True or False.
+-v, --verbose		Whether to print function progress.
 
 
 -o, --overwrite		Pass this flag to overwrite an existing file
