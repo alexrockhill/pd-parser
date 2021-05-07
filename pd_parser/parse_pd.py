@@ -446,7 +446,8 @@ def _plot_excluded_events(section_data, max_len):
         axes = axes.flatten()
     for ax in axes[n_events_ex:]:
         ax.axis('off')  # turn off all unused axes
-    ymax = np.median([abs(sect[2]).max() for sect in section_data]) * 1.5
+    ymax = np.median([abs(sect[2]).max() for sect in section_data
+                      if sect[2].size > 0]) * 1.5
     for i, (event, title, section) in enumerate(section_data):
         axes[i].plot(np.linspace(-1, 1, section.size), section)
         axes[i].plot([0, 0], [-ymax, ymax], color='r')
@@ -498,7 +499,7 @@ def _exclude_ambiguous_events(beh_events, alignment, events, ch_data,
                 events[i] = np.nan
                 # if off by a less than max_len, report samples
                 text = f'{i} off by {int(error / sfreq * 1000)} ms' \
-                    if abs(error) < max_len_i else 'none found'
+                    if abs(error) < max_len_i else f'{i}, none found'
             if verbose:
                 print(text)
                 event = np.round(beh_e + alignment).astype(int)
