@@ -23,5 +23,7 @@ include examples/plot_recover_events.py
 include examples/plot_find_audio_events.py
 include pd_parser/tests/data/pd_beh.tsv
 include pd_parser/tests/data/pd_data-raw.fif
+include pd_parser/tests/data/pd_data2-raw.fif
 include pd_parser/tests/data/pd_events.tsv
+include pd_parser/tests/data/pd_events2.tsv
 include pd_parser/tests/data/pd_relative_events.tsv
