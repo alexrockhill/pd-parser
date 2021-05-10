@@ -325,17 +325,29 @@ def _check_alignment(beh_events, alignment, candidates, candidates_set,
     return beh_events, events
 
 
-def _plot_trial_errors(errors, exclude_shift, sfreq):
+def _plot_trial_errors(beh_events, alignment, events,
+                       errors, exclude_shift, sfreq):
     """Plot the synchronization error on every trial."""
     import matplotlib.pyplot as plt
-    fig, ax = plt.subplots()
-    ax.plot(errors / sfreq * 1000)
+    fig, (ax, ax2) = plt.subplots(1, 2, figsize=(8, 4))
+    beh_events_s = (beh_events + alignment) / sfreq
+    beh_d = np.diff(beh_events_s).mean()
+    ax.scatter(beh_events_s, np.repeat(-1, beh_events.size))
+    ax.scatter(events / sfreq, np.repeat(1, events.size))
+    ax.set_xlim([beh_events_s.min() - beh_d, beh_events_s[:10].max() + beh_d])
+    ax.set_ylim([-5, 5])
+    ax.set_xlabel('Time (s)')
+    ax.set_yticks([-1, 1])
+    ax.set_yticklabels(['Beh', 'Sync'])
+    ax.set_title('Alignment (First 10)')
+    ax2.plot(errors / sfreq * 1000)
     exclude_shift_a = np.array([exclude_shift, exclude_shift]) * 1000
-    ax.plot([0, errors.size], exclude_shift_a, color='r')
-    ax.plot([0, errors.size], -exclude_shift_a, color='r')
-    ax.set_ylabel('Difference (ms)')
-    ax.set_xlabel('Trial')
-    ax.set_title('Synchronization Events Compared to Behavior Events')
+    ax2.plot([0, errors.size], exclude_shift_a, color='r')
+    ax2.plot([0, errors.size], -exclude_shift_a, color='r')
+    ax2.set_ylabel('Difference (ms)')
+    ax2.set_xlabel('Trial')
+    ax2.set_title('Event Differences')
+    fig.tight_layout()
     fig.show()
 
 
@@ -389,7 +401,8 @@ def _find_best_alignment(beh_events, candidates, exclude_shift, resync,
                   shift, min(errors), np.quantile(errors, 0.25),
                   np.median(errors), np.quantile(errors, 0.75),
                   max(errors), n_missed_events))
-        _plot_trial_errors(best_errors, exclude_shift, sfreq)
+        _plot_trial_errors(beh_events, best_alignment, best_events,
+                           best_errors, exclude_shift, sfreq)
     return best_beh_events_adjusted, best_alignment, best_events
 
 

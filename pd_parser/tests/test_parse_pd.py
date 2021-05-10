@@ -52,26 +52,24 @@ overwrite = False
 
 def make_raw(out_dir):
     np.random.seed(99)
-    raw, _, events, _ = pd_parser.simulate_pd_data()
+    raw, beh, events, corrupted = pd_parser.simulate_pd_data(seed=99)
     raw2 = mne.io.RawArray(np.random.random((3, raw._data.shape[1])),
                            mne.create_info([f'ch{i}' for i in range(3)],
                                            raw.info['sfreq'], ['eeg'] * 3))
     raw.add_channels([raw2])
-    beh_events = events[:, 0].astype(float) / raw.info['sfreq']
-    offsets = np.random.random(len(beh_events)) * 0.05 - 0.025
-    response_times = list(np.random.random(beh_events.size))
-    for i in np.random.choice(range(beh_events.size), 3):
+    offsets = np.random.random(beh['time'].size) * 0.05 - 0.025
+    beh['fix_onset_time'] = beh['time'] + offsets
+    response_times = list(np.random.random(beh['time'].size))
+    for i in np.random.choice(range(beh['time'].size), 3):
         response_times[i] = 'n/a'
-    beh = dict(trial=np.arange(beh_events.size),
-               fix_onset_time=beh_events + offsets,
-               fix_duration=[0.6] * beh_events.size,
-               go_time=np.random.random(beh_events.size),
-               response_time=response_times)
+    beh['fix_duration'] = [0.6] * beh['time'].size
+    beh['go_time'] = np.random.random(beh['time'].size)
+    beh['response_time'] = response_times
     fname = op.join(out_dir, 'test-raw.fif')
     raw.save(fname)
     behf = op.join(out_dir, 'behf-test.tsv')
     _to_tsv(behf, beh)
-    return fname, behf
+    return fname, behf, corrupted
 
 
 # from mne_bids.tests.test_write._bids_validate
@@ -316,12 +314,23 @@ def test_two_pd_alignment():
 
 def test_plotting():
     """Test that the plots show properly."""
-    np.random.seed(11)
     out_dir = _TempDir()
-    fname, behf = make_raw(out_dir)
-    errors = (np.random.random(10) - 0.5) * 1000
-    _plot_trial_errors(errors, 0.1, 1000)
-    np.testing.assert_array_equal(plt.gca().lines[0].get_ydata(), errors)
+    fname, behf, corrupted = make_raw(out_dir)
+    raw = _read_raw(fname)
+    pd = raw._data[0]
+    candidates = _find_pd_candidates(
+        pd, max_len=max_len, baseline=baseline,
+        zscore=zscore, max_flip_i=max_flip_i, sfreq=raw.info['sfreq'])
+    beh = _read_tsv(behf)
+    beh_events = np.array(beh['fix_onset_time']) * raw.info['sfreq']
+    beh_events_adjusted, alignment, events = _find_best_alignment(
+        beh_events, candidates, exclude_shift, resync, raw.info['sfreq'],
+        verbose=False)
+    errors = beh_events_adjusted - events + alignment
+    _plot_trial_errors(beh_events_adjusted, alignment, events,
+                       errors, exclude_shift, raw.info['sfreq'])
+    np.testing.assert_array_almost_equal(
+        plt.gca().lines[0].get_ydata(), errors)
     section_data = [(0, 'test', np.random.random(10))]
     _plot_excluded_events(section_data, 2)
     assert plt.gca().title.get_text() == 'test'
@@ -450,7 +459,7 @@ def test_cli():
     if platform.system() == 'Windows':
         return
     out_dir = _TempDir()
-    fname, behf = make_raw(out_dir)
+    fname, behf, _ = make_raw(out_dir)
     # can't test with a live plot, but if this should be called by hand
     # call([f'find_pd_params {fname} --pd_ch_names pd'], shell=True,
     #      env=os.environ)
