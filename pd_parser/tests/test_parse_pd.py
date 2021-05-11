@@ -136,8 +136,6 @@ def test_inputs():
         _get_data(raw, ['foo'])
     with pytest.raises(ValueError, match='in raw channel names'):
         _get_channel_data(raw, ['foo'])
-    with pytest.raises(ValueError, match='cannot be longer'):
-        pd_parser.parse_pd(raw, beh=beh, exclude_shift=1, resync=0.5)
     with pytest.raises(ValueError, match='baseline must be between 0 and 1'):
         pd_parser.parse_pd(raw, beh=beh, baseline=2)
     with pytest.raises(FileNotFoundError, match='fname does not exist'):
@@ -178,26 +176,31 @@ def test_inputs():
         _check_overwrite(raw, add_events=False, overwrite=False)
 
 
-def test_find_alignment():
+def test_core():
     """Test the core functions of aligning photodiode events."""
     np.random.seed(121)
     raw, beh, events, corrupted_indices = pd_parser.simulate_pd_data(seed=1211)
     pd = raw._data[0]
     # test find pd candidates
-    max_len = 1
+    max_len = 1.5
     exclude_shift_i = np.round(raw.info['sfreq'] * exclude_shift).astype(int)
     max_len_i = np.round(raw.info['sfreq'] * max_len).astype(int)
     baseline_i = np.round(max_len_i * baseline / 2).astype(int)
     resync_i = np.round(raw.info['sfreq'] * resync).astype(int)
-    assert _check_if_pd_event(np.diff(pd), events[0, 0] - baseline_i,
-                              max_len_i, zscore, max_flip_i, baseline_i) == \
+    pd_diff = np.diff(pd)
+    pd_diff -= np.median(pd_diff)
+    median_std = np.median([np.std(pd_diff[i - baseline_i:i]) for i in
+                            range(baseline_i, len(pd_diff) - baseline_i,
+                                  baseline_i)])
+    assert _check_if_pd_event(pd_diff, events[0, 0] - 1, max_len_i, zscore,
+                              max_flip_i, median_std) == \
         ('up', events[0, 0], events[0, 0] + raw.info['sfreq'])  # one sec event
     assert _check_if_pd_event(pd, baseline_i,
-                              max_len_i, zscore, max_flip_i, baseline_i) == \
+                              max_len_i, zscore, max_flip_i, median_std) == \
         (None, None, None)
     candidates = _find_pd_candidates(
         pd, max_len=max_len, baseline=baseline,
-        zscore=zscore, max_flip_i=max_flip_i, sfreq=raw.info['sfreq'])
+        zscore=zscore, max_flip_i=max_flip_i, sfreq=raw.info['sfreq'])[0]
     candidates_set = set(candidates)
     assert all([event in candidates for event in events[:, 0]])
     # test pd event dist
@@ -242,7 +245,7 @@ def test_resync():
     exclude_shift_i = np.round(raw.info['sfreq'] * exclude_shift).astype(int)
     candidates = _find_pd_candidates(
         pd, max_len=max_len, baseline=baseline,
-        zscore=zscore, max_flip_i=max_flip_i, sfreq=raw.info['sfreq'])
+        zscore=zscore, max_flip_i=max_flip_i, sfreq=raw.info['sfreq'])[0]
     beh_events = beh['time'] * raw.info['sfreq']
     offsets = (2 * resync * np.random.random(beh_events.size) - 1
                ) * raw.info['sfreq']
@@ -253,7 +256,7 @@ def test_resync():
     errors = beh_events_adjusted - best_events + alignment
     resync_exclusions = np.where(abs(errors) > exclude_shift_i)[0]
     idx = resync_exclusions[0]
-    correct = (best_events[idx], f'{idx} recovered (not excluded)')
+    correct = (best_events[idx], f'{idx}\nrecovered (not excluded)')
     assert len(resync_exclusions) > 0
     # test exclude ambiguous
     pd_events = _exclude_ambiguous_events(
@@ -320,7 +323,7 @@ def test_plotting():
     pd = raw._data[0]
     candidates = _find_pd_candidates(
         pd, max_len=max_len, baseline=baseline,
-        zscore=zscore, max_flip_i=max_flip_i, sfreq=raw.info['sfreq'])
+        zscore=zscore, max_flip_i=max_flip_i, sfreq=raw.info['sfreq'])[0]
     beh = _read_tsv(behf)
     beh_events = np.array(beh['fix_onset_time']) * raw.info['sfreq']
     beh_events_adjusted, alignment, events = _find_best_alignment(
@@ -358,7 +361,7 @@ def test_parse_pd(_bids_validate):
     plt.close('all')
     # test core functionality
     annot, samples = pd_parser.parse_pd(fname, beh=behf, pd_ch_names=['pd'],
-                                        zscore=20, resync=0.1)
+                                        zscore=20, resync=0.125)
     plt.close('all')
     raw = mne.io.read_raw_fif(fname)
     raw.set_annotations(annot)
@@ -367,7 +370,7 @@ def test_parse_pd(_bids_validate):
         events2[:, 0], [e for e in events['pd_parser_sample'] if e != 'n/a'])
     assert samples == events['pd_parser_sample']
     # test add_pd_off_events
-    annot = pd_parser.add_pd_off_events(raw, off_event_name=off_event_name,
+    annot = pd_parser.add_pd_off_events(fname, off_event_name=off_event_name,
                                         zscore=20)
     raw.set_annotations(annot)
     assert off_event_name in annot.description
@@ -375,6 +378,13 @@ def test_parse_pd(_bids_validate):
     off_events = events2[events2[:, 2] == event_id[off_event_name]]
     np.testing.assert_array_equal(
         off_events[:, 0], [e for e in events['off_sample'] if e != 'n/a'])
+    '''
+    df = dict(trial=range(300), pd_parser_sample=samples, off_sample=list())
+    i = 0
+    for s in samples:
+        df['off_sample'].append('n/a' if s == 'n/a' else off_events[i, 0])
+        i += s != 'n/a'
+    '''
     # test add_pd_relative_events
     pd_parser.add_relative_events(
         raw, behf,
@@ -409,9 +419,9 @@ def test_long_events():
     behf = op.join(basepath, 'pd_events2.tsv')
     _, samples = pd_parser.parse_pd(
         fname, beh=behf, beh_key='event', pd_ch_names=['pd'],
-        zscore=20, max_len=4.5, exclude_shift=1, resync=1)
-    assert samples == [47900, 55952, 73457, 81293, 99415, 107467,
-                       'n/a', 134108, 152030, 160482]
+        zscore=20, max_len=4, exclude_shift=1.5, resync=2)
+    assert samples == [47900, 55953, 73458, 81293, 99415,
+                       107467, 125972, 134108, 152030, 160482]
 
 
 def test_parse_audio():

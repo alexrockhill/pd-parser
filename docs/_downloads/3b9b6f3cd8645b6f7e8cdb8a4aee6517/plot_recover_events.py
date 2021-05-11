@@ -93,7 +93,7 @@ raw.save(fname)
 # your own input depending on whether you want to keep the events or not.
 
 with mock.patch('builtins.input', return_value='y'):
-    pd_parser.parse_pd(fname, pd_event_name='Stim On', beh=beh,
+    pd_parser.parse_pd(fname, pd_event_name='Stim On', beh=beh, max_len=1.5,
                        pd_ch_names=['pd'], beh_key='time', recover=True)
 
 ###############################################################################
@@ -109,8 +109,8 @@ with mock.patch('builtins.input', return_value='y'):
 # following the instructions.
 
 # reject the two false deflections in the middle of the second event
-with mock.patch('builtins.input', side_effect=['y'] + ['n'] * 2 + ['y'] * 2):
-    pd_parser.add_pd_off_events(fname, off_event_name='Stim Off')
+with mock.patch('builtins.input', side_effect=['n'] * 2 + ['y'] * 2):
+    pd_parser.add_pd_off_events(fname, max_len=1.5, off_event_name='Stim Off')
 
 ###############################################################################
 # Check the results

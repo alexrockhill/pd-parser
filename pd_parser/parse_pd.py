@@ -155,65 +155,78 @@ def _get_data(raw, ch_names):
     return ch_data, ch_names
 
 
-def _check_if_pd_event(pd_diff, i, max_len_i, zscore, max_flip_i, baseline_i):
+def _check_if_pd_event(pd_diff, i, max_len_i, zscore, max_flip_i,
+                       baseline_std):
     """Take one stretch of data and determine if there is an event there.
 
-    Move in chunks twice as long as your longest photodiode signal
-    with the first 0.25 as baseline to test whether the signal goes
-    above/below baseline and back below/above.
-    The event onset must be of maximum length `max_flip_i`.
+    Use almost all events for on/off due to noise in photodiode causing
+    the last event to hop under the threshold and back.
     """
-    b = pd_diff[i - baseline_i:i]
-    # use twice the length so event can be centered
-    s = (pd_diff[i:i + 2 * max_len_i] - np.median(b)) / np.std(b)
+    s = pd_diff[i:i + max_len_i].copy()
+    s -= np.median(s)
+    s /= baseline_std
     binned_s = np.digitize(s, [-np.inf, -zscore, zscore, np.inf]) - 2
     for direction, binary_s in {'up': binned_s, 'down': -binned_s}.items():
-        onset = np.where(binary_s[:max_len_i] == 1)[0]
+        onset = np.where(binary_s == 1)[0]
         # must be flip on but can't flip back and forth
-        if onset.size > 0 and onset.size < max_flip_i and \
-                all(binary_s[onset[0]:onset[-1]] == 1):
+        if onset.size > 0 and onset.size < max_flip_i:
             e = onset[0]
-            if all(binary_s[:e] == 0):  # must start off:
+            almost_all_on = sum(binary_s[onset[0]:onset[-1]]) >= onset.size - 2
+            if all(binary_s[:e] == 0) and almost_all_on:  # must start off
                 # must have an offset and no more events
                 offset = np.where(binary_s[e:] == -1)[0]
-                if offset.size > 0 and offset.size < max_flip_i and \
-                        all(binary_s[e + offset[0]:e + offset[-1]] == -1):
-                    oe = offset[0]
-                    eo = all(binary_s[e + oe + max_flip_i:e + max_len_i] == 0)
-                    if oe <= max_len_i and eo:  # must end off
-                        return direction, i + e + 1, i + e + oe + 2
+                if offset.size > 0 and offset.size < max_flip_i:
+                    o = offset[0]
+                    almost_all_off = -sum(binary_s[e + o:e + offset[-1]]) \
+                        >= offset.size - 2
+                    almost_all_zero = \
+                        sum(abs(binary_s[e + o + max_flip_i:])) <= 1
+                    if almost_all_zero and almost_all_off:
+                        return direction, i + e + 1, i + e + o + 2
     return None, None, None
 
 
-def _find_pd_candidates(pd, max_len, baseline, zscore, max_flip_i, sfreq,
-                        verbose=True):
+def _find_pd_candidates(pd, max_len, baseline, zscore,
+                        max_flip_i, sfreq, verbose=True):
     """Find all points in the signal that look like a square wave."""
     if verbose:
         print('Finding photodiode events')
     max_len_i = np.round(sfreq * max_len).astype(int)
     baseline_i = np.round(max_len_i * baseline).astype(int)
-    pd_candidates = dict(up=set(), down=set())
+    # zscore photodiode based on baseline values
     pd_diff = np.diff(pd)
-    for i in tqdm(range(baseline_i, len(pd_diff) - max_len_i - baseline_i,
-                        baseline_i // 2)):
-        direction, onset, _ = _check_if_pd_event(
-            pd_diff, i, max_len_i, zscore, max_flip_i, baseline_i)
+    pd_diff -= np.median(pd_diff)
+    median_std = np.median([np.std(pd_diff[i - baseline_i:i]) for i in
+                            range(baseline_i, len(pd_diff) - baseline_i,
+                                  baseline_i)])
+    # find indices to check based on being the first above zscore
+    check_i = set(np.where(abs(pd_diff) / median_std > zscore)[0])
+    check_remove = set()
+    for i in check_i:
+        if i + 1 in check_i:
+            check_remove.add(i + 1)
+    check_i = check_i.difference(check_remove)
+    # check for clean onset and offset
+    pd_candidates = dict(up=list(), down=list(),
+                         up_off=list(), down_off=list())
+    for i in tqdm(check_i):
+        direction, onset, offset = _check_if_pd_event(
+            pd_diff, i, max_len_i, zscore, max_flip_i, median_std)
         # no rounding errors
-        if onset is not None and all(
-            [onset + j not in this_pd_cs for j in
-             range(-max_flip_i, max_flip_i + 1)
-             for this_pd_cs in pd_candidates.values()]):
-            pd_candidates[direction].add(onset)
-    pd_direction = 'down' if \
+        if onset is not None:
+            pd_candidates[direction].append(onset)
+            pd_candidates[direction + '_off'].append(offset)
+    this_dir = 'down' if \
         len(pd_candidates['down']) > len(pd_candidates['up']) else 'up'
-    pd_candidates = pd_candidates[pd_direction]
-    if len(pd_candidates) == 0:
+    pd_candidates = pd_candidates[this_dir], pd_candidates[this_dir + '_off']
+    if len(pd_candidates[0]) == 0:
         raise ValueError('No photodiode candidates found, please raise an '
                          'issue with code to reproduce the error on GitHub')
     if verbose:
-        print(f'{len(pd_candidates)} {pd_direction}-deflection photodiode '
+        print(f'{len(pd_candidates[0])} {this_dir}-deflection photodiode '
               'candidate events found')
-    return np.array(sorted(pd_candidates))
+    return (np.array(sorted(pd_candidates[0])),
+            np.array(sorted(pd_candidates[1])))
 
 
 def _get_audio_zscore(audio, fs):
@@ -419,7 +432,7 @@ def _recover_event(idx, ch_data, beh_e, exclude_shift,
                                beh_e_i - exclude_shift_i])
     section = (section - np.median(baseline)) / baseline.std()
     events = np.where(np.abs(section) > zscore)[0] + 1
-    text = f'{idx} none found to recover'
+    text = f'{idx}\nnone found to recover'
     if events.size == 0 or events.size > 3:  # only can recover 3
         return np.nan, text
     for sync_e in events + beh_e_i - exclude_shift_i:
@@ -434,9 +447,9 @@ def _recover_event(idx, ch_data, beh_e, exclude_shift,
         ax.set_ylabel('voltage')
         fig.show()
         if input('Recover event? (y/N) ').lower() == 'y':
-            return sync_e, f'{idx} recovered (not excluded)'
+            return sync_e, f'{idx}\nrecovered (not excluded)'
         else:
-            text = f'{idx} recovered but discarded'
+            text = f'{idx}\nrecovered but discarded'
             event = np.nan
     return event, text
 
@@ -459,8 +472,8 @@ def _plot_excluded_events(section_data, max_len):
         axes = axes.flatten()
     for ax in axes[n_events_ex:]:
         ax.axis('off')  # turn off all unused axes
-    ymax = np.median([abs(sect[2]).max() for sect in section_data
-                      if sect[2].size > 0]) * 1.5
+    ymax = np.quantile([abs(sect[2]).max() for sect in section_data
+                        if sect[2].size > 0], 0.25) * 1.1
     for i, (event, title, section) in enumerate(section_data):
         axes[i].plot(np.linspace(-1, 1, section.size), section)
         axes[i].plot([0, 0], [-ymax, ymax], color='r')
@@ -470,9 +483,9 @@ def _plot_excluded_events(section_data, max_len):
             axes[i].set_ylabel('voltage')
         axes[i].set_yticks([])
         if i // ncols == nrows - 1:
-            axes[i].set_xticks(np.linspace(-1, 1, 5))
+            axes[i].set_xticks(np.linspace(-1, 1, 3))
             axes[i].set_xticklabels(
-                np.round(np.linspace(-max_len, max_len, 5), 2))
+                np.round(np.linspace(-2 * max_len, 2 * max_len, 3), 2))
             axes[i].set_xlabel('time (s)')
         else:
             axes[i].set_xticks([])
@@ -496,13 +509,18 @@ def _exclude_ambiguous_events(beh_events, alignment, events, ch_data,
                                       candidates < (sync_e + max_len_i)).sum()
             if n_events > 1:
                 events[i] = np.nan
+                text = (f'{i}\n{n_events} sync events found')
+                if recover:
+                    events[i], text = _recover_event(
+                        i, ch_data, beh_e + alignment, exclude_shift, zscore,
+                        max_len, sfreq)
                 if verbose:
-                    text = (f'{i} {n_events} sync events found')
                     print(text.replace('\n', ' '))
                     event = np.round(beh_e + alignment).astype(int)
                     section_data.append(
-                        (beh_e, text, ch_data[event - max_len_i:
-                                              event + max_len_i]))
+                        (beh_e, text, ch_data[event - 2 * max_len_i:
+                                              event + 2 * max_len_i]))
+
         elif not np.isnan(beh_e):
             if recover:
                 events[i], text = _recover_event(
@@ -511,14 +529,14 @@ def _exclude_ambiguous_events(beh_events, alignment, events, ch_data,
             else:
                 events[i] = np.nan
                 # if off by a less than max_len, report samples
-                text = f'{i} off by {int(error / sfreq * 1000)} ms' \
-                    if abs(error) < max_len_i else f'{i}, none found'
+                text = f'{i}\noff by {int(error / sfreq * 1000)} ms' \
+                    if abs(error) < max_len_i else f'{i}\nnone found'
             if verbose:
-                print(text)
+                print(text.replace('\n', ' '))
                 event = np.round(beh_e + alignment).astype(int)
                 section_data.append(
-                    (beh_e, text, ch_data[event - max_len_i:
-                                          event + max_len_i]))
+                    (beh_e, text, ch_data[event - 2 * max_len_i:
+                                          event + 2 * max_len_i]))
     if verbose:
         _plot_excluded_events(section_data, max_len)
     return events
@@ -831,9 +849,6 @@ def parse_pd(raw, pd_event_name='Fixation', beh=None,
         found.
 
     """
-    if resync < exclude_shift:
-        raise ValueError(f'`exclude_shift` ({exclude_shift}) cannot be longer '
-                         f'than `resync` ({resync})')
     if baseline <= 0 or baseline > 1:
         raise ValueError(f'baseline must be between 0 and 1, got {baseline}')
     # load raw data file with the photodiode data
@@ -845,7 +860,7 @@ def parse_pd(raw, pd_event_name='Fixation', beh=None,
     pd, pd_ch_names = _get_data(raw, pd_ch_names)
     candidates = _find_pd_candidates(
         pd=pd, max_len=max_len, baseline=baseline, zscore=zscore,
-        max_flip_i=max_flip_i, sfreq=raw.info['sfreq'], verbose=verbose)
+        max_flip_i=max_flip_i, sfreq=raw.info['sfreq'], verbose=verbose)[0]
     # load behavioral data with which to validate event timing
     if beh is None:
         if verbose:
@@ -1019,23 +1034,15 @@ def add_pd_off_events(raw, off_event_name='Stim Off', max_len=1., zscore=10,
     """
     raw = _read_raw(raw, verbose=verbose)
     annot, pd_ch_names, beh = _load_data(raw)
+    max_len_i = np.round(raw.info['sfreq'] * max_len).astype(int)
     pd = _get_channel_data(raw, pd_ch_names)
-    pd_diff = np.diff(pd)
-    sfreq = raw.info['sfreq']
-    max_len_i = np.round(sfreq * max_len).astype(int)
-    baseline_i = np.round(max_len_i * baseline).astype(int)
     events = {samp: i for i, samp in enumerate(beh['pd_parser_sample'])
               if samp != 'n/a'}
-    off_events = {'up': dict(), 'down': dict()}
-    for i in tqdm(range(baseline_i, len(pd_diff) - max_len_i - baseline_i,
-                        baseline_i // 2)):
-        direction, onset, offset = _check_if_pd_event(
-            pd_diff, i, max_len_i, zscore, max_flip_i, baseline_i)
-        if onset in events:
-            off_events[direction][events[onset]] = offset
-    pd_direction = 'down' if \
-        len(off_events['down']) > len(off_events['up']) else 'up'
-    off_events = off_events[pd_direction]
+    on_candidates, off_candidates = _find_pd_candidates(
+        pd=pd, max_len=max_len, baseline=baseline, zscore=zscore,
+        max_flip_i=max_flip_i, sfreq=raw.info['sfreq'], verbose=verbose)
+    off_events = {events[onset]: offset for onset, offset in
+                  zip(on_candidates, off_candidates) if onset in events}
     recovered = [event_idx for event_idx in events.values()
                  if event_idx not in off_events.keys()]
     if recovered:  # some events found manually, recover
@@ -1044,7 +1051,7 @@ def add_pd_off_events(raw, off_event_name='Stim Off', max_len=1., zscore=10,
             beh_e = \
                 beh['pd_parser_sample'][idx] + max_flip_i + max_len_i // 2
             event, text = _recover_event(idx, pd, beh_e, max_len / 2,
-                                         zscore, max_len, sfreq)
+                                         zscore, max_len, raw.info['sfreq'])
             if not np.isnan(event):
                 off_events[idx] = event
             if verbose:
