@@ -666,10 +666,13 @@ def find_pd_params(raw, pd_ch_names=None, verbose=True):
         if event.key == 'enter':
             ymin, ymax = ax.get_ylim()
             xmin, xmax = plot_data['xlims']
-            b = pd[raw.time_as_index(xmin)[0]: raw.time_as_index(
-                xmin + (xmax - xmin) * 0.25)[0]]  # 0.25 == default baseline
+            pd_diff = np.diff(pd)
+            baseline_i = np.round(0.25 * raw.info['sfreq']).astype(int)
+            median_std = np.median(
+                [np.std(pd_diff[i - baseline_i:i]) for i in
+                 range(baseline_i, len(pd_diff) - baseline_i, baseline_i)])
             zy = plot_data['zscore'].get_ydata()[0]
-            recs['zscore'] = (zy - np.median(b)) / np.std(b)
+            recs['zscore'] = zy / median_std
             recommendations = (
                 'Recommendations\nmax_len: {:.2f}, zscore: {:.2f}\n'
                 'Try using these parameters for `parse_pd` and\n'
