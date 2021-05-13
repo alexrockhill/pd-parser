@@ -266,7 +266,7 @@ def pd_parser_save_to_bids():
     parser.add_argument('-o', '--overwrite', action='store_true',
                         help='Pass this flag to overwrite an existing file')
     args = parser.parse_args()
-    pd_parser.pd_parser_save_to_bids(
+    pd_parser.save_to_bids(
         args.bids_dir, args.raw, args.sub, args.task, ses=args.ses,
         run=args.run, data_type=args.data_type, eogs=args.eogs,
         ecgs=args.ecgs, emgs=args.emgs, verbose=args.verbose,

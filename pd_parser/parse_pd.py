@@ -1176,9 +1176,9 @@ def add_events_to_raw(raw, keep_pd_channels=False, verbose=True):
     return raw
 
 
-def pd_parser_save_to_bids(bids_dir, raw, sub, task, ses=None, run=None,
-                           data_type=None, eogs=None, ecgs=None, emgs=None,
-                           verbose=True, overwrite=False):
+def save_to_bids(bids_dir, raw, sub, task, ses=None, run=None,
+                 data_type=None, eogs=None, ecgs=None, emgs=None,
+                 verbose=True, overwrite=False):
     """Convert data to BIDS format with events found from the photodiode.
 
     Parameters
@@ -1230,6 +1230,8 @@ def pd_parser_save_to_bids(bids_dir, raw, sub, task, ses=None, run=None,
     annot, pd_channels, beh = _load_data(raw)
     raw.set_annotations(annot)
     events, event_id = mne.events_from_annotations(raw)
+    raw.info['bads'] += [ch for ch in pd_channels
+                         if ch not in raw.info['bads']]
     # raw.set_channel_types({ch: 'stim' for ch in pd_channels
     #                        if ch in raw.ch_names})
     bids_path = mne_bids.BIDSPath(subject=sub, session=ses, task=task,

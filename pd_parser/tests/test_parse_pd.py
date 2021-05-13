@@ -405,8 +405,7 @@ def test_parse_pd(_bids_validate):
     # test pd_parser_save_to_bids
     bids_dir = op.join(out_dir, 'bids_dir')
     raw.save(fname, overwrite=True)
-    pd_parser.pd_parser_save_to_bids(bids_dir, fname, '1', 'test',
-                                     verbose=False)
+    pd_parser.save_to_bids(bids_dir, fname, '1', 'test', verbose=False)
     _bids_validate(bids_dir)
 
 
