@@ -122,11 +122,11 @@ def test_inputs():
     # test read
     raw, beh, events, corrupted_indices = pd_parser.simulate_pd_data()
     with pytest.raises(ValueError, match='must be loaded from disk'):
-        _read_raw(raw)
+        _read_raw(raw, preload=True)
     raw.save(op.join(out_dir, 'test-raw.fif'), overwrite=True)
     with pytest.raises(ValueError, match='not recognized'):
         _read_raw('foo.bar')
-    raw2 = _read_raw(op.join(out_dir, 'test-raw.fif'))
+    raw2 = _read_raw(op.join(out_dir, 'test-raw.fif'), preload=True)
     np.testing.assert_array_almost_equal(raw._data, raw2._data, decimal=3)
     # test load beh
     with pytest.raises(ValueError, match='not in the columns'):
@@ -319,7 +319,7 @@ def test_plotting():
     """Test that the plots show properly."""
     out_dir = _TempDir()
     fname, behf, corrupted = make_raw(out_dir)
-    raw = _read_raw(fname)
+    raw = _read_raw(fname, preload=True)
     pd = raw._data[0]
     candidates = _find_pd_candidates(
         pd, max_len=max_len, baseline=baseline,
@@ -404,7 +404,6 @@ def test_parse_pd(_bids_validate):
     assert event_id2 == event_id
     # test pd_parser_save_to_bids
     bids_dir = op.join(out_dir, 'bids_dir')
-    raw.save(fname, overwrite=True)
     pd_parser.save_to_bids(bids_dir, fname, '1', 'test', verbose=False)
     _bids_validate(bids_dir)
 
@@ -434,7 +433,7 @@ def test_parse_audio():
     raw = mne.io.RawArray(data[np.newaxis], info)
     fname = op.join(out_dir, 'test_video-raw.fif')
     raw.save(fname, overwrite=True)
-    raw = _read_raw(fname)
+    raw = _read_raw(fname, preload=True)
     audio = raw._data[0]
     candidates = _find_audio_candidates(
         audio=audio, sfreq=raw.info['sfreq'], max_len=max_len,

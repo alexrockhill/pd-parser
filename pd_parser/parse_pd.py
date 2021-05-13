@@ -63,7 +63,7 @@ def _to_tsv(fname, df):
             fid.write('\t'.join([str(val[i]) for val in df.values()]) + '\n')
 
 
-def _read_raw(raw, preload=True, verbose=True):
+def _read_raw(raw, preload=None, verbose=True):
     """Read raw object from file if it's not already loaded."""
     if isinstance(raw, mne.io.BaseRaw):
         if preload:
@@ -116,11 +116,9 @@ def _get_channel_data(raw, ch_names):
     if any([ch not in raw.ch_names for ch in ch_names]):
         raise ValueError(f'Not all pd_ch_names, {ch_names}, '
                          'in raw channel names')
-    if len(ch_names) == 2:
-        ch_data = raw._data[raw.ch_names.index(ch_names[0])].copy()
-        ch_data -= raw._data[raw.ch_names.index(ch_names[1])]
-    else:
-        ch_data = raw._data[raw.ch_names.index(ch_names[0])]
+    ch_raw = raw.copy().pick_channels(ch_names).load_data()
+    ch_data = ch_raw._data[0] - ch_raw._data[1] if len(ch_names) == 2 \
+        else ch_raw._data[0]
     ch_data -= np.median(ch_data)
     return ch_data
 

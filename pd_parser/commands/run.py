@@ -231,6 +231,8 @@ def add_events_to_raw():
     raw = pd_parser.add_events_to_raw(
         args.raw, keep_pd_channels=args.keep_pd_channels,
         verbose=args.verbose)
+    if args.out_fname is None:
+        raw.load_data()
     raw.save(args.raw if args.out_fname is None else args.out_fname,
              overwrite=args.overwrite)
 
