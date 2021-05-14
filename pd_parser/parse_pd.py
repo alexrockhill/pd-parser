@@ -365,13 +365,14 @@ def _plot_trial_errors(beh_events, alignment, events,
 def _find_best_alignment(beh_events, candidates, exclude_shift, resync,
                          sfreq, verbose=True):
     """Find the beh event that causes the best alignment when used to start."""
+    beh_events = beh_events[~np.isnan(beh_events)]  # can't use missing beh
     resync_i = np.round(sfreq * resync).astype(int)
     min_error = best_events = best_beh_events_adjusted = best_alignment = None
     bin_size = np.diff(beh_events).min() / 2
     candidates_set = set(candidates)
     if verbose:
         print('Checking best alignments')
-    for beh_e in tqdm(beh_events[~np.isnan(beh_events)]):
+    for beh_e in tqdm(beh_events):
         this_min_error = alignment = None
         for sync_e in candidates:
             bins = np.zeros((2 * beh_events.size))
@@ -429,11 +430,17 @@ def _recover_event(idx, ch_data, beh_e, exclude_shift,
     baseline = np.diff(ch_data[beh_e_i - 2 * exclude_shift_i:
                                beh_e_i - exclude_shift_i])
     section = (section - np.median(baseline)) / baseline.std()
-    events = np.where(np.abs(section) > zscore)[0] + 1
+    check_i = set(np.where(abs(section) > zscore)[0])
+    check_remove = set()
+    for i in check_i:
+        if i + 1 in check_i:
+            check_remove.add(i + 1)
+    check_i = check_i.difference(check_remove)
     text = f'{idx}\nnone found to recover'
-    if events.size == 0 or events.size > 3:  # only can recover 3
+    if len(check_i) == 0 or len(check_i) > 3:  # only can recover 3
         return np.nan, text
-    for sync_e in events + beh_e_i - exclude_shift_i:
+    for i in check_i:
+        sync_e = i + beh_e_i - exclude_shift_i
         fig, ax = plt.subplots()
         section_size = np.round(1.5 * max_len_i).astype(int)
         section = ch_data[sync_e - section_size: sync_e + section_size]
@@ -518,7 +525,6 @@ def _exclude_ambiguous_events(beh_events, alignment, events, ch_data,
                     section_data.append(
                         (beh_e, text, ch_data[event - 2 * max_len_i:
                                               event + 2 * max_len_i]))
-
         elif not np.isnan(beh_e):
             if recover:
                 events[i], text = _recover_event(
