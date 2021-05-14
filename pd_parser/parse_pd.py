@@ -207,13 +207,16 @@ def _find_pd_candidates(pd, max_len, baseline, zscore,
     # check for clean onset and offset
     pd_candidates = dict(up=list(), down=list(),
                          up_off=list(), down_off=list())
-    for i in tqdm(check_i):
+    for i in tqdm(sorted(list(check_i))):
         direction, onset, offset = _check_if_pd_event(
             pd_diff, i, max_len_i, zscore, max_flip_i, median_std)
-        # no rounding errors
+        # no events immediately following (caused by noise)
         if onset is not None:
-            pd_candidates[direction].append(onset)
-            pd_candidates[direction + '_off'].append(offset)
+            in_flip = onset - pd_candidates[direction][-1] < max_flip_i if \
+                pd_candidates[direction] else False
+            if not in_flip:
+                pd_candidates[direction].append(onset)
+                pd_candidates[direction + '_off'].append(offset)
     this_dir = 'down' if \
         len(pd_candidates['down']) > len(pd_candidates['up']) else 'up'
     pd_candidates = pd_candidates[this_dir], pd_candidates[this_dir + '_off']
@@ -436,9 +439,11 @@ def _recover_event(idx, ch_data, beh_e, exclude_shift,
         if i + 1 in check_i:
             check_remove.add(i + 1)
     check_i = check_i.difference(check_remove)
-    text = f'{idx}\nnone found to recover'
-    if len(check_i) == 0 or len(check_i) > 3:  # only can recover 3
-        return np.nan, text
+    if len(check_i) == 0:
+        return np.nan, f'{idx}\nnone found to recover'
+    elif len(check_i) > 3:  # only can recover 3, don't overwhelm user
+        return np.nan, f'{idx}\ntoo many ({len(check_i)}) to recover'
+    event, text = np.nan, f'{idx}\nrecovered but discarded'
     for i in check_i:
         sync_e = i + beh_e_i - exclude_shift_i
         fig, ax = plt.subplots()
@@ -453,9 +458,6 @@ def _recover_event(idx, ch_data, beh_e, exclude_shift,
         fig.show()
         if input('Recover event? (y/N) ').lower() == 'y':
             return sync_e, f'{idx}\nrecovered (not excluded)'
-        else:
-            text = f'{idx}\nrecovered but discarded'
-            event = np.nan
     return event, text
 
 

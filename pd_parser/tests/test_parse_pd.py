@@ -265,9 +265,11 @@ def test_resync():
     assert np.isnan(pd_events[resync_exclusions]).all()
     assert np.isnan(pd_events[np.isnan(best_events)]).all()
     with mock.patch('builtins.input', return_value='y'):
-        assert _recover_event(idx, pd, beh_events_adjusted[idx] + alignment,
-                              resync, zscore, max_len,
-                              raw.info['sfreq']) == correct
+        found = _recover_event(
+            idx, pd, beh_events_adjusted[idx] + alignment, resync, zscore,
+            max_len, raw.info['sfreq'])
+        assert abs(found[0] - correct[0]) < 2
+        assert found[1] == correct[1]
 
 
 def test_two_pd_alignment():
