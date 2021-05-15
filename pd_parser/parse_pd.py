@@ -318,8 +318,9 @@ def _event_dist(beh_e, candidates_set, max_samp, resync_i):
 
 
 def _check_alignment(beh_events, alignment, candidates, candidates_set,
-                     resync_i):
+                     resync_i, check_i=None):
     """Check the alignment, account for misalignment accumulation."""
+    check_i = resync_i if check_i is None else check_i
     beh_events = beh_events.copy()  # don't modify original
     events = np.zeros((beh_events.size))
     start = np.argmin([abs(beh_e - candidates).min()
@@ -327,14 +328,14 @@ def _check_alignment(beh_events, alignment, candidates, candidates_set,
     for i, beh_e in enumerate(beh_events[start:]):
         error, events[start + i] = \
             _event_dist(beh_e + alignment, candidates_set, candidates[-1],
-                        resync_i)
-        if not np.isnan(error) and start + i + 1 < beh_events.size:
+                        check_i)
+        if abs(error) <= resync_i and start + i + 1 < beh_events.size:
             beh_events[start + i + 1:] -= error
     for i, beh_e in enumerate(beh_events[:start][::-1]):
         error, events[start - i - 1] = \
             _event_dist(beh_e + alignment, candidates_set, candidates[-1],
-                        resync_i)
-        if not np.isnan(error) and start - i - 2 > 0:
+                        check_i)
+        if abs(error) <= resync_i and start - i - 2 > 0:
             beh_events[:start - i - 2] -= error
     return beh_events, events
 
@@ -354,6 +355,9 @@ def _plot_trial_errors(beh_events, alignment, events,
     ax.set_yticks([-1, 1])
     ax.set_yticklabels(['Beh', 'Sync'])
     ax.set_title('Alignment (First 10)')
+    errors = errors.copy()  # don't modify the original
+    # don't show huge errors
+    errors[abs(errors) / sfreq > 2 * exclude_shift] = np.nan
     ax2.plot(errors / sfreq * 1000)
     exclude_shift_a = np.array([exclude_shift, exclude_shift]) * 1000
     ax2.plot([0, errors.size], exclude_shift_a, color='r')
@@ -370,7 +374,7 @@ def _find_best_alignment(beh_events, candidates, exclude_shift, resync,
     """Find the beh event that causes the best alignment when used to start."""
     beh_events = beh_events[~np.isnan(beh_events)]  # can't use missing beh
     resync_i = np.round(sfreq * resync).astype(int)
-    min_error = best_events = best_beh_events_adjusted = best_alignment = None
+    min_error = best_alignment = None
     bin_size = np.diff(beh_events).min() / 2
     candidates_set = set(candidates)
     if verbose:
@@ -400,9 +404,10 @@ def _find_best_alignment(beh_events, candidates, exclude_shift, resync,
             resync_i * errors[np.isnan(errors)].size
         if min_error is None or error < min_error:
             min_error = error
-            best_events = events
-            best_beh_events_adjusted = beh_events_adjusted
             best_alignment = alignment
+    best_beh_events_adjusted, best_events = _check_alignment(
+        beh_events, best_alignment, candidates, candidates_set, resync_i,
+        check_i=np.inf)  # get all errors even if more than resync away
     if verbose:
         best_errors = best_beh_events_adjusted - best_events + best_alignment
         n_missed_events = best_errors[np.isnan(best_errors)].size

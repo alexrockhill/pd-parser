@@ -225,8 +225,8 @@ def test_core():
         beh_events, candidates, exclude_shift, resync, raw.info['sfreq'])
     assert abs(alignment - candidates[2]) < exclude_shift_i
     errors = beh_events_adjusted - best_events + alignment
-    assert all([np.isnan(e) if i + 2 in corrupted_indices
-                else e < exclude_shift_i for i, e in enumerate(errors)])
+    assert all([abs(e) > exclude_shift_i if i + 2 in corrupted_indices
+                else abs(e) < exclude_shift_i for i, e in enumerate(errors)])
     # test exclude ambiguous
     pd_events = _exclude_ambiguous_events(
         beh_events, alignment, best_events, pd, candidates,
@@ -266,7 +266,7 @@ def test_resync():
     assert np.isnan(pd_events[np.isnan(best_events)]).all()
     with mock.patch('builtins.input', return_value='y'):
         found = _recover_event(
-            idx, pd, beh_events_adjusted[idx] + alignment, resync, zscore,
+            idx, pd, beh_events_adjusted[idx] + alignment, 2 * resync, zscore,
             max_len, raw.info['sfreq'])
         assert abs(found[0] - correct[0]) < 2
         assert found[1] == correct[1]
@@ -334,6 +334,7 @@ def test_plotting():
     errors = beh_events_adjusted - events + alignment
     _plot_trial_errors(beh_events_adjusted, alignment, events,
                        errors, exclude_shift, raw.info['sfreq'])
+    errors[abs(errors) / raw.info['sfreq'] * 1000 > 2 * exclude_shift] = np.nan
     np.testing.assert_array_almost_equal(
         plt.gca().lines[0].get_ydata(), errors)
     section_data = [(0, 'test', np.random.random(10))]
