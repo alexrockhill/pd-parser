@@ -334,7 +334,7 @@ def test_plotting():
     errors = beh_events_adjusted - events + alignment
     _plot_trial_errors(beh_events_adjusted, alignment, events,
                        errors, exclude_shift, raw.info['sfreq'])
-    errors[abs(errors) / raw.info['sfreq'] * 1000 > 2 * exclude_shift] = np.nan
+    errors[abs(errors) / raw.info['sfreq'] > 2 * exclude_shift] = np.nan
     np.testing.assert_array_almost_equal(
         plt.gca().lines[0].get_ydata(), errors)
     section_data = [(0, 'test', np.random.random(10))]
