@@ -225,8 +225,9 @@ def test_core():
         beh_events, candidates, exclude_shift, resync, raw.info['sfreq'])
     assert abs(alignment - candidates[2]) < exclude_shift_i
     errors = beh_events_adjusted - best_events + alignment
-    assert all([abs(e) > exclude_shift_i if i + 2 in corrupted_indices
-                else abs(e) < exclude_shift_i for i, e in enumerate(errors)])
+    assert all([np.isnan(e) or abs(e) > exclude_shift_i
+                if i + 2 in corrupted_indices else abs(e) < exclude_shift_i
+                for i, e in enumerate(errors)])
     # test exclude ambiguous
     pd_events = _exclude_ambiguous_events(
         beh_events, alignment, best_events, pd, candidates,
@@ -315,6 +316,18 @@ def test_two_pd_alignment():
                                   events3[:, 0])
     assert pd_ch_names == ['pd']
     np.testing.assert_array_equal(beh2['pd_parser_sample'], events2[:, 0])
+
+
+def test_beh_with_nas():
+    """Test that behavior with 'n/a' entries works properly."""
+    out_dir = _TempDir()
+    fname, behf, corrupted = make_raw(out_dir)
+    beh = _read_tsv(behf)
+    beh['fix_onset_time'][4] = 'n/a'
+    beh['fix_onset_time'][8] = 'n/a'
+    _, samples = pd_parser.parse_pd(fname, beh=beh, pd_ch_names=['pd'])
+    assert samples == ['n/a', 19740, 26978, 33025, 'n/a',
+                       'n/a', 53531, 59601, 'n/a', 'n/a']
 
 
 def test_plotting():

@@ -345,6 +345,7 @@ def _plot_trial_errors(beh_events, alignment, events,
     """Plot the synchronization error on every trial."""
     import matplotlib.pyplot as plt
     fig, (ax, ax2) = plt.subplots(1, 2, figsize=(8, 4))
+    # plot scrollable dot pattern to first pass check alignment
     beh_events_s = (beh_events + alignment) / sfreq
     beh_d = np.diff(beh_events_s).mean()
     ax.scatter(beh_events_s, np.repeat(-1, beh_events.size))
@@ -355,6 +356,7 @@ def _plot_trial_errors(beh_events, alignment, events,
     ax.set_yticks([-1, 1])
     ax.set_yticklabels(['Beh', 'Sync'])
     ax.set_title('Alignment (First 10)')
+    # plot the difference between expected and adjusted behavior
     errors = errors.copy()  # don't modify the original
     # don't show huge errors
     errors[abs(errors) / sfreq > 2 * exclude_shift] = np.nan
@@ -372,7 +374,11 @@ def _plot_trial_errors(beh_events, alignment, events,
 def _find_best_alignment(beh_events, candidates, exclude_shift, resync,
                          sfreq, verbose=True):
     """Find the beh event that causes the best alignment when used to start."""
-    beh_events = beh_events[~np.isnan(beh_events)]  # can't use missing beh
+    beh_adjusted = np.zeros((beh_events.size))
+    events = np.zeros((beh_events.size))
+    beh_idx = np.where(~np.isnan(beh_events))[0]
+    missing_idx = np.where(np.isnan(beh_events))[0]
+    beh_events = beh_events[~np.isnan(beh_events)]  # can't use missing
     resync_i = np.round(sfreq * resync).astype(int)
     min_error = best_alignment = None
     bin_size = np.diff(beh_events).min() / 2
@@ -396,10 +402,10 @@ def _find_best_alignment(beh_events, candidates, exclude_shift, resync,
             if this_min_error is None or this_min_error > error:
                 alignment = sync_e - beh_e
                 this_min_error = error
-        beh_events_adjusted, events = _check_alignment(
+        beh_events_adjusted, these_events = _check_alignment(
             beh_events, alignment, candidates,
             candidates_set, resync_i)
-        errors = beh_events_adjusted - events + alignment
+        errors = beh_events_adjusted - these_events + alignment
         error = np.nansum(abs(errors)) + \
             resync_i * errors[np.isnan(errors)].size
         if min_error is None or error < min_error:
@@ -407,11 +413,12 @@ def _find_best_alignment(beh_events, candidates, exclude_shift, resync,
             best_alignment = alignment
     best_beh_events_adjusted, best_events = _check_alignment(
         beh_events, best_alignment, candidates, candidates_set, resync_i,
-        check_i=np.inf)  # get all errors even if more than resync away
+        check_i=3 * resync_i)  # get all errors even if more than resync away
     if verbose:
         best_errors = best_beh_events_adjusted - best_events + best_alignment
-        n_missed_events = best_errors[np.isnan(best_errors)].size
         errors = best_errors[~np.isnan(best_errors)] / sfreq * 1000
+        errors = errors[abs(errors) < resync * 1000]
+        n_missed_events = beh_events.size - errors.size
         beh0 = beh_events[~np.isnan(beh_events)][0]
         shift = (beh0 + best_alignment - candidates[0]) / sfreq
         print('Best alignment is with the first behavioral event shifted '
@@ -423,7 +430,11 @@ def _find_best_alignment(beh_events, candidates, exclude_shift, resync,
                   max(errors), n_missed_events))
         _plot_trial_errors(beh_events, best_alignment, best_events,
                            best_errors, exclude_shift, sfreq)
-    return best_beh_events_adjusted, best_alignment, best_events
+    beh_adjusted[beh_idx] = best_beh_events_adjusted
+    beh_adjusted[missing_idx] = np.nan
+    events[beh_idx] = best_events
+    events[missing_idx] = np.nan
+    return beh_adjusted, best_alignment, events
 
 
 def _recover_event(idx, ch_data, beh_e, exclude_shift,
