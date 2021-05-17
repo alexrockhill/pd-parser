@@ -136,5 +136,5 @@ pd_parser.add_relative_events(
 # on with an analysis at this point. See https://bids.neuroimaging.io/ and
 # https://mne.tools/mne-bids/ for more information about BIDS.
 
-pd_parser.pd_parser_save_to_bids(op.join(out_dir, 'bids_dir'), fname,
-                                 sub='1', task='mytask')
+pd_parser.save_to_bids(op.join(out_dir, 'bids_dir'), fname,
+                       sub='1', task='mytask')
