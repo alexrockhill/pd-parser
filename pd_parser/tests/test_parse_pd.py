@@ -366,8 +366,9 @@ def test_parse_pd(_bids_validate):
     events_relative = _read_tsv(op.join(basepath, 'pd_relative_events.tsv'))
     raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
                                   preload=True)
-    raw_tmp.info['dig'] = None
-    raw_tmp.info['line_freq'] = 60
+    with raw_tmp.info._unlock():
+        raw_tmp.info['dig'] = None
+        raw_tmp.info['line_freq'] = 60
     out_dir = _TempDir()
     fname = op.join(out_dir, 'pd_data-raw.fif')
     raw_tmp.save(fname)

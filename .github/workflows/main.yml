@@ -42,18 +42,10 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 12
+        node-version: 16
     - name: Install BIDS validator (stable)
-      if: "matrix.os != 'ubuntu-latest'"
       run: |
         npm install -g bids-validator
-    - name: Install BIDS validator (main)
-      if: "matrix.os == 'ubuntu-latest'"
-      run: |
-        pushd ..
-        git clone --depth 1 https://github.com/bids-standard/bids-validator
-        npm install -g bids-validator/bids-validator
-        popd
     - name: Install pd-parser
       run: pip install --no-deps .
     - name: Run pytest

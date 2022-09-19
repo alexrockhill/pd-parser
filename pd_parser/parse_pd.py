@@ -212,7 +212,7 @@ def _find_pd_candidates(pd, max_len, baseline, zscore,
             pd_diff, i, max_len_i, zscore, max_flip_i, median_std)
         # no events immediately following (caused by noise)
         if onset is not None:
-            in_flip = onset - pd_candidates[direction][-1] < max_flip_i if \
+            in_flip = (onset - pd_candidates[direction][-1]) < max_flip_i if \
                 pd_candidates[direction] else False
             if not in_flip:
                 pd_candidates[direction].append(onset)
