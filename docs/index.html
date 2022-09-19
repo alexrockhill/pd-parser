@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pd-parser &#8212; pd-parser v0.7 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-rendered-html.css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>pd-parser &#8212; pd-parser v0.8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/favicon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -23,10 +24,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -40,7 +41,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="#">
-          pd-parser v0.7</a>
+          pd-parser v0.8</a>
         <span class="navbar-text navbar-version pull-left"><b></b></span>
       </div>
 
@@ -98,8 +99,8 @@
       
   <a class="reference external image-reference" href="https://zenodo.org/badge/latestdoi/287045175"><img alt="https://zenodo.org/badge/287045175.svg" src="https://zenodo.org/badge/287045175.svg" /></a>
 <a class="reference external image-reference" href="https://doi.org/10.21105/joss.02674"><img alt="https://joss.theoj.org/papers/10.21105/joss.02674/status.svg" src="https://joss.theoj.org/papers/10.21105/joss.02674/status.svg" /></a>
-<div class="section" id="icon-pd-parser">
-<h1><a class="reference internal" href="https://alexrockhill.github.io/pd-parser/_images/favicon.png"><img alt="icon" src="https://alexrockhill.github.io/pd-parser/_images/favicon.png" style="width: 25px;" /></a> pd-parser<a class="headerlink" href="#icon-pd-parser" title="Permalink to this headline">¶</a></h1>
+<section id="icon-pd-parser">
+<h1><a class="reference internal" href="https://alexrockhill.github.io/pd-parser/_images/favicon.png"><img alt="icon" src="https://alexrockhill.github.io/pd-parser/_images/favicon.png" style="width: 25px;" /></a> pd-parser<a class="headerlink" href="#icon-pd-parser" title="Permalink to this heading">¶</a></h1>
 <p>The development version of the documentation can be found <a class="reference external" href="https://alexrockhill.github.io/pd-parser/dev/">here</a>.</p>
 <p>A tool to parse photodiode events from a possibly corrupted channel, compatible with BIDS formatting.</p>
 <p>Corrupted data may look like so:</p>
@@ -107,8 +108,8 @@
 <p>Which may lead to some excluded events and differences between the events and the expected timing based on the behavior that look like so:</p>
 <a class="reference internal image-reference" href="https://alexrockhill.github.io/pd-parser/_images/event_diffs.png"><img alt="https://alexrockhill.github.io/pd-parser/_images/event_diffs.png" src="https://alexrockhill.github.io/pd-parser/_images/event_diffs.png" style="width: 400px;" /></a>
 <p><code class="docutils literal notranslate"><span class="pre">pd-parser</span></code> matches deflection events on a potentially corrupted photodiode channel with time-stamped events generated by the computer that changes the luminance sensed by the photodiode. This tool is for research that needs high-performance timing synchronization, especially in clinical settings where having a channel record a photodiode is the best or only method of task-integration available and where the photodiode is especially likely to be corrupted by unavoidable environmental noise. First, photodiode time series data is extracted from an electrophysiology data file. The photodiode data can be on a single channel or two channels that are then bipolar re-referenced. Candidate photodiode events from this photodiode time series are identified based on matching a square-wave template. Time-stamped events from the computer triggering changes to the luminance of the photodiode are read from a tab-separated value (tsv) file, and the best alignment of these events relative to photodiode deflection events is then found while accounting for any drift between computer clocks of separate recording devices. Events are excluded where when the difference between the photodiode event and the time-stamped event are greater then a specified threshold. This discrepancy in timing can occur when a monitor doesn’t update the display for one or more frames most often because the computer paused execution of the program controlling luminance to do background tasks. Additional events can then be added using the time of each event relative to the corresponding photodiode-synchronized event. Adding relative events may be needed for any number of reasons. For instance, events may occur too rapidly in series relative to the monitor refresh rate to have a photodiode deflection for each event, or the photodiode deflection may effect neighboring channels on the amplifier with its large deflection and so be placed synchronous with an event, such the onset of fixation, where it will not effect other, more important events. Finally, the raw data and events data can be saved in brain imaging data structure (BIDS) format, which allows the behavioral events to be stored in a standardized format without modifying the underlying raw electrophysiology file.</p>
-<div class="section" id="installation-instructions">
-<h2>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this headline">¶</a></h2>
+<section id="installation-instructions">
+<h2>Installation Instructions<a class="headerlink" href="#installation-instructions" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic">
 <li><dl>
 <dt>Install the latest version python using of anaconda</dt><dd><ul class="simple">
@@ -130,9 +131,9 @@
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">pip</span></code> in a terminal, and then ensure that when you run <code class="docutils literal notranslate"><span class="pre">which</span> <span class="pre">pip</span></code> in a terminal it points to the where the anaconda or python you just installed is.</p></li>
 <li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pd-parser</span></code> in a terminal.</p></li>
 </ol>
-</div>
-<div class="section" id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h2>
 <ol class="arabic simple">
 <li><dl class="simple">
 <dt>Plot the examples in a Jupyter notebook</dt><dd><ul class="simple">
@@ -170,20 +171,20 @@
 </dl>
 </li>
 </ol>
-</div>
-<div class="section" id="bug-reports">
-<h2>Bug reports<a class="headerlink" href="#bug-reports" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="bug-reports">
+<h2>Bug reports<a class="headerlink" href="#bug-reports" title="Permalink to this heading">¶</a></h2>
 <p>Use the <a class="reference external" href="https://github.com/alexrockhill/pd-parser/issues">GitHub issue tracker</a>
 to report bugs.</p>
-</div>
-<div class="section" id="contributing">
-<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Permalink to this heading">¶</a></h2>
 <p>Please see our <a class="reference external" href="https://github.com/alexrockhill/pd-parser/blob/master/CONTRIBUTING.md">contributing guide</a>.
 `</p>
 <p>Alex Rockhill
 Eugene, OR 2020</p>
-</div>
-</div>
+</section>
+</section>
 
 
     </div>
@@ -198,7 +199,7 @@ Eugene, OR 2020</p>
     </p>
     <p>
         &copy; Copyright 2020, Alex Rockhill.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br/>
     </p>
   </div>
 </footer>

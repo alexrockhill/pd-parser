@@ -1,21 +1,22 @@
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>API Documentation &#8212; pd-parser v0.7 documentation</title>
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/gallery-rendered-html.css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>API Documentation &#8212; pd-parser v0.8 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bootstrap-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery-rendered-html.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
     <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
     <link rel="shortcut icon" href="_static/favicon.png"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -23,10 +24,10 @@
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
 <meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+<script type="text/javascript" src="_static/js/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" src="_static/js/jquery-fix.js"></script>
+<script type="text/javascript" src="_static/bootstrap-3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="_static/bootstrap-sphinx.js"></script>
 
   </head><body>
 
@@ -40,7 +41,7 @@
           <span class="icon-bar"></span>
         </button>
         <a class="navbar-brand" href="index.html">
-          pd-parser v0.7</a>
+          pd-parser v0.8</a>
         <span class="navbar-text navbar-version pull-left"><b></b></span>
       </div>
 
@@ -96,18 +97,18 @@
   <div class="row">
     <div class="body col-md-12 content" role="main">
       
-  <div class="section" id="api-documentation">
-<span id="id1"></span><h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this headline">¶</a></h1>
+  <section id="api-documentation">
+<span id="id1"></span><h1>API Documentation<a class="headerlink" href="#api-documentation" title="Permalink to this heading">¶</a></h1>
 <p>Here we list the Application-Programming Interface (API) for pd-parser.</p>
-<div class="section" id="pd-parser">
-<h2>pd-parser<a class="headerlink" href="#pd-parser" title="Permalink to this headline">¶</a></h2>
+<section id="pd-parser">
+<h2>pd-parser<a class="headerlink" href="#pd-parser" title="Permalink to this heading">¶</a></h2>
 <p><code class="xref py py-mod docutils literal notranslate"><span class="pre">pd_parser</span></code>:</p>
 <span class="target" id="module-parse_pd"></span><p>Find photodiode events.</p>
 <p>Take a potentially corrupted photodiode channel and find
 the event time samples at which it turned on.</p>
 <dl class="py function">
-<dt id="parse_pd.add_events_to_raw">
-<code class="sig-name descname">add_events_to_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">keep_pd_channels</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_events_to_raw"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_events_to_raw" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parse_pd.add_events_to_raw">
+<span class="sig-name descname"><span class="pre">add_events_to_raw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_pd_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_events_to_raw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parse_pd.add_events_to_raw" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save out a new raw file with photodiode events.</p>
 <p>Note: this function is not recommended, rather just skip it and
 use <cite>save_to_bids</cite> which doesn’t modify the underlying raw data
@@ -115,7 +116,7 @@ especially converting it to fif if it isn’t fif already. In
 <cite>save_to_bids</cite> the raw file itself doens’t contain the event
 information, it’s only stored in the sidecar.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>raw: str | mne Raw object</strong></dt><dd><p>The object or filepath of the time-series data file
 (e.g. meg, eeg, ieeg).</p>
@@ -127,7 +128,7 @@ of the function.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt><strong>raw</strong><span class="classifier">mne.io.Raw</span></dt><dd><p>The modified raw object with events.</p>
 </dd>
@@ -137,11 +138,11 @@ of the function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="parse_pd.add_pd_off_events">
-<code class="sig-name descname">add_pd_off_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">off_event_name</span><span class="o">=</span><span class="default_value">'Stim Off'</span></em>, <em class="sig-param"><span class="n">max_len</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">max_flip_i</span><span class="o">=</span><span class="default_value">40</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_pd_off_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_pd_off_events" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parse_pd.add_pd_off_events">
+<span class="sig-name descname"><span class="pre">add_pd_off_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">off_event_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Stim</span> <span class="pre">Off'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zscore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flip_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_pd_off_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parse_pd.add_pd_off_events" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add events for when the photodiode deflection returns to baseline.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>raw: str | mne Raw object</strong></dt><dd><p>The object or filepath of the time-series data file
 (e.g. meg, eeg, ieeg).</p>
@@ -168,7 +169,7 @@ of the function.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>annot: mne.Annotations</dt><dd><p>The annotations with the added events.</p>
 </dd>
@@ -182,11 +183,11 @@ of the function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="parse_pd.add_relative_events">
-<code class="sig-name descname">add_relative_events</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">beh</span></em>, <em class="sig-param"><span class="n">relative_event_keys</span></em>, <em class="sig-param"><span class="n">relative_event_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_relative_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.add_relative_events" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parse_pd.add_relative_events">
+<span class="sig-name descname"><span class="pre">add_relative_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beh</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_event_keys</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">relative_event_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#add_relative_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parse_pd.add_relative_events" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add events relative to those determined from the photodiode.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>raw: str | mne Raw object</strong></dt><dd><p>The object or filepath of the time-series data file
 (e.g. meg, eeg, ieeg).</p>
@@ -205,7 +206,7 @@ of the function.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>annot: mne.Annotations</dt><dd><p>The annotations with the added events.</p>
 </dd>
@@ -215,13 +216,13 @@ of the function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="parse_pd.find_pd_params">
-<code class="sig-name descname">find_pd_params</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#find_pd_params"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.find_pd_params" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parse_pd.find_pd_params">
+<span class="sig-name descname"><span class="pre">find_pd_params</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pd_ch_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#find_pd_params"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parse_pd.find_pd_params" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the data so the user can determine the right parameters.</p>
 <p>The user can adjust window size to determine max_len and horizontal
 line height to determine zscore.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>raw: str | mne Raw object</strong></dt><dd><p>The object or filepath of the time-series data file
 (e.g. meg, eeg, ieeg).</p>
@@ -240,8 +241,8 @@ of the function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="parse_pd.parse_audio">
-<code class="sig-name descname">parse_audio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">audio_event_name</span><span class="o">=</span><span class="default_value">'Tone'</span></em>, <em class="sig-param"><span class="n">beh</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_key</span><span class="o">=</span><span class="default_value">'tone_onset_time'</span></em>, <em class="sig-param"><span class="n">audio_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.03</span></em>, <em class="sig-param"><span class="n">resync</span><span class="o">=</span><span class="default_value">0.075</span></em>, <em class="sig-param"><span class="n">max_len</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">recover</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_audio"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_audio" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parse_pd.parse_audio">
+<span class="sig-name descname"><span class="pre">parse_audio</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_event_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Tone'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beh_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'tone_onset_time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">audio_ch_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resync</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.075</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zscore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_audio"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parse_pd.parse_audio" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse audio events.</p>
 <p>Parses photodiode events from a likely very corrupted channel
 using behavioral data to sync events to determine which
@@ -249,7 +250,7 @@ behavioral events don’t have a match and are thus corrupted
 and should be excluded (while ignoring events that look like
 photodiode events but don’t match behavior)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>raw: str | mne Raw object</strong></dt><dd><p>The object or filepath of the time-series data file
 (e.g. meg, eeg, ieeg).</p>
@@ -295,7 +296,7 @@ of the function.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>annot: mne.Annotations</dt><dd><p>The annotations with the added events.</p>
 </dd>
@@ -308,8 +309,8 @@ found.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="parse_pd.parse_pd">
-<code class="sig-name descname">parse_pd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">pd_event_name</span><span class="o">=</span><span class="default_value">'Fixation'</span></em>, <em class="sig-param"><span class="n">beh</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">beh_key</span><span class="o">=</span><span class="default_value">'fix_onset_time'</span></em>, <em class="sig-param"><span class="n">pd_ch_names</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">exclude_shift</span><span class="o">=</span><span class="default_value">0.03</span></em>, <em class="sig-param"><span class="n">resync</span><span class="o">=</span><span class="default_value">0.075</span></em>, <em class="sig-param"><span class="n">max_len</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">zscore</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">max_flip_i</span><span class="o">=</span><span class="default_value">40</span></em>, <em class="sig-param"><span class="n">baseline</span><span class="o">=</span><span class="default_value">0.25</span></em>, <em class="sig-param"><span class="n">add_events</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">recover</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_pd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parse_pd.parse_pd">
+<span class="sig-name descname"><span class="pre">parse_pd</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pd_event_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Fixation'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beh</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beh_key</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'fix_onset_time'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pd_ch_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exclude_shift</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.03</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resync</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.075</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_len</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zscore</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_flip_i</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">40</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">baseline</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.25</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recover</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#parse_pd"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parse_pd.parse_pd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse photodiode events.</p>
 <p>Parses photodiode events from a likely very corrupted channel
 using behavioral data to sync events to determine which
@@ -317,7 +318,7 @@ behavioral events don’t have a match and are thus corrupted
 and should be excluded (while ignoring events that look like
 photodiode events but don’t match behavior)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>raw: str | mne Raw object</strong></dt><dd><p>The object or filepath of the time-series data file
 (e.g. meg, eeg, ieeg).</p>
@@ -379,7 +380,7 @@ of the function.</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl class="simple">
 <dt>annot: mne.Annotations</dt><dd><p>The annotations with the added events.</p>
 </dd>
@@ -392,11 +393,11 @@ found.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="parse_pd.save_to_bids">
-<code class="sig-name descname">save_to_bids</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bids_dir</span></em>, <em class="sig-param"><span class="n">raw</span></em>, <em class="sig-param"><span class="n">sub</span></em>, <em class="sig-param"><span class="n">task</span></em>, <em class="sig-param"><span class="n">ses</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">run</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">data_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">eogs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ecgs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">emgs</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">overwrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#save_to_bids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.save_to_bids" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parse_pd.save_to_bids">
+<span class="sig-name descname"><span class="pre">save_to_bids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bids_dir</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">task</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ses</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">run</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eogs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecgs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">emgs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#save_to_bids"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parse_pd.save_to_bids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert data to BIDS format with events found from the photodiode.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>bids_dir: str</strong></dt><dd><p>The subject directory in the bids directory where the data
 should be saved.</p>
@@ -434,14 +435,14 @@ of the function.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt id="parse_pd.simulate_pd_data">
-<code class="sig-name descname">simulate_pd_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">n_events</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">n_secs_on</span><span class="o">=</span><span class="default_value">1.0</span></em>, <em class="sig-param"><span class="n">amp</span><span class="o">=</span><span class="default_value">300.0</span></em>, <em class="sig-param"><span class="n">iti</span><span class="o">=</span><span class="default_value">6.0</span></em>, <em class="sig-param"><span class="n">iti_jitter</span><span class="o">=</span><span class="default_value">1.5</span></em>, <em class="sig-param"><span class="n">rc_decay</span><span class="o">=</span><span class="default_value">0.0001</span></em>, <em class="sig-param"><span class="n">prop_corrupted</span><span class="o">=</span><span class="default_value">0.1</span></em>, <em class="sig-param"><span class="n">sfreq</span><span class="o">=</span><span class="default_value">1000.0</span></em>, <em class="sig-param"><span class="n">seed</span><span class="o">=</span><span class="default_value">11</span></em>, <em class="sig-param"><span class="n">show</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#simulate_pd_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#parse_pd.simulate_pd_data" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="parse_pd.simulate_pd_data">
+<span class="sig-name descname"><span class="pre">simulate_pd_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_secs_on</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">amp</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">300.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iti</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">6.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iti_jitter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rc_decay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prop_corrupted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sfreq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1000.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">11</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/parse_pd.html#simulate_pd_data"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#parse_pd.simulate_pd_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Simulate photodiode data.</p>
 <p>Simulate data that is a square wave with a linear change in deflection
 <cite>drift</cite> amount towards zero that then over shoots and drifts back as
 photodiodes tend to do. Some events are also corrupted.</p>
 <dl class="field-list">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><dl class="simple">
 <dt><strong>n_events: float</strong></dt><dd><p>The number of events to simulate.</p>
 </dd>
@@ -466,7 +467,7 @@ over time with no external simulus (0. == perfect square wave).</p>
 </dd>
 </dl>
 </dd>
-<dt class="field-even">Returns</dt>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><dl>
 <dt>raw: mne.io.Raw</dt><dd><p>The raw object containing the photodiode data</p>
 </dd>
@@ -492,8 +493,8 @@ event identifier.</p>
 </dl>
 </dd></dl>
 
-</div>
-</div>
+</section>
+</section>
 
 
     </div>
@@ -508,7 +509,7 @@ event identifier.</p>
     </p>
     <p>
         &copy; Copyright 2020, Alex Rockhill.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.3.1.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1.<br/>
     </p>
   </div>
 </footer>

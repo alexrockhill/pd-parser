@@ -1,9 +1,5 @@
 :orphan:
 
-
-
-.. _sphx_glr_auto_examples:
-
 .. _general_examples:
 
 Examples Gallery
@@ -19,14 +15,76 @@ Here we show some exemplary use cases for pd-parser.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbnails">
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Find Photodiode Events">
 
 .. only:: html
 
- .. figure:: /auto_examples/images/thumb/sphx_glr_plot_find_pd_events_thumb.png
-     :alt: Find Photodiode Events
+  .. image:: /auto_examples/images/thumb/sphx_glr_plot_find_pd_events_thumb.png
+    :alt: Find Photodiode Events
 
-     :ref:`sphx_glr_auto_examples_plot_find_pd_events.py`
+  :ref:`sphx_glr_auto_examples_plot_find_pd_events.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Find Photodiode Events</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Find Photodiode On and Off Events">
+
+.. only:: html
+
+  .. image:: /auto_examples/images/thumb/sphx_glr_plot_find_pd_on_and_off_thumb.png
+    :alt: Find Photodiode On and Off Events
+
+  :ref:`sphx_glr_auto_examples_plot_find_pd_on_and_off.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Find Photodiode On and Off Events</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Use Audio to Align Video Data">
+
+.. only:: html
+
+  .. image:: /auto_examples/images/thumb/sphx_glr_plot_find_audio_events_thumb.png
+    :alt: Use Audio to Align Video Data
+
+  :ref:`sphx_glr_auto_examples_plot_find_audio_events.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Use Audio to Align Video Data</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Manually Recover Events Not Found by the Algorithm">
+
+.. only:: html
+
+  .. image:: /auto_examples/images/thumb/sphx_glr_plot_recover_events_thumb.png
+    :alt: Manually Recover Events Not Found by the Algorithm
+
+  :ref:`sphx_glr_auto_examples_plot_recover_events.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Manually Recover Events Not Found by the Algorithm</div>
+    </div>
+
 
 .. raw:: html
 
@@ -37,90 +95,22 @@ Here we show some exemplary use cases for pd-parser.
    :hidden:
 
    /auto_examples/plot_find_pd_events
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Find Photodiode On and Off Events">
-
-.. only:: html
-
- .. figure:: /auto_examples/images/thumb/sphx_glr_plot_find_pd_on_and_off_thumb.png
-     :alt: Find Photodiode On and Off Events
-
-     :ref:`sphx_glr_auto_examples_plot_find_pd_on_and_off.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
    /auto_examples/plot_find_pd_on_and_off
-
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Use Audio to Align Video Data">
-
-.. only:: html
-
- .. figure:: /auto_examples/images/thumb/sphx_glr_plot_find_audio_events_thumb.png
-     :alt: Use Audio to Align Video Data
-
-     :ref:`sphx_glr_auto_examples_plot_find_audio_events.py`
-
-.. raw:: html
-
-    </div>
-
-
-.. toctree::
-   :hidden:
-
    /auto_examples/plot_find_audio_events
+   /auto_examples/plot_recover_events
 
-.. raw:: html
-
-    <div class="sphx-glr-thumbcontainer" tooltip="Manually Recover Events Not Found by the Algorithm">
 
 .. only:: html
 
- .. figure:: /auto_examples/images/thumb/sphx_glr_plot_recover_events_thumb.png
-     :alt: Manually Recover Events Not Found by the Algorithm
+  .. container:: sphx-glr-footer sphx-glr-footer-gallery
 
-     :ref:`sphx_glr_auto_examples_plot_recover_events.py`
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-.. raw:: html
+      :download:`Download all examples in Python source code: auto_examples_python.zip </auto_examples/auto_examples_python.zip>`
 
-    </div>
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-.. toctree::
-   :hidden:
-
-   /auto_examples/plot_recover_events
-.. raw:: html
-
-    <div class="sphx-glr-clear"></div>
-
-
-
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-gallery
-
-
-  .. container:: sphx-glr-download sphx-glr-download-python
-
-    :download:`Download all examples in Python source code: auto_examples_python.zip </auto_examples/auto_examples_python.zip>`
-
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-    :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip </auto_examples/auto_examples_jupyter.zip>`
+      :download:`Download all examples in Jupyter notebooks: auto_examples_jupyter.zip </auto_examples/auto_examples_jupyter.zip>`
 
 
 .. only:: html

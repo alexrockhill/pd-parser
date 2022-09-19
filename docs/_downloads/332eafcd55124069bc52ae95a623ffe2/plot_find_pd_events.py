@@ -39,11 +39,8 @@ raw, beh, events, corrupted_indices = \
 info = mne.create_info(['ch1', 'ch2', 'ch3'], raw.info['sfreq'],
                        ['seeg'] * 3)
 raw2 = mne.io.RawArray(np.random.random((3, raw.times.size)) * 1e-6, info)
-raw2.info['lowpass'] = raw.info['lowpass']  # these must match to combine
 raw.add_channels([raw2])
-# bids needs these data fields
-raw.info['dig'] = None
-raw.info['line_freq'] = 60
+raw.info['line_freq'] = 60  # for bids
 
 fname = op.join(out_dir, 'sub-1_task-mytask_raw.fif')
 raw.save(fname)

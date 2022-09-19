@@ -87,7 +87,7 @@ def generate_cli_rst(app=None):
             output[0] = output[0].replace('usage: ', 'usage: ``') + '``'
             # newline for positionals
             i = output.index('positional arguments:') + 1
-            while output[i] != 'optional arguments:':
+            while output[i] != 'options:':
                 output[i + 1] = '\t' + output[i + 1]
                 i += 2
             # end with blank
@@ -113,7 +113,7 @@ def generate_cli_rst(app=None):
             # end with blank
             output.insert(-1, '\n')
             # make headers
-            for name in ('positional arguments:', 'optional arguments:'):
+            for name in ('positional arguments:', 'options:'):
                 output[output.index(name)] = \
                     '\n' + name[:-1] + '\n' + '-' * (len(name) - 1)
             title = fname + '\n' + '=' * len(fname)

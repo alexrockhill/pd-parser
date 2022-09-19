@@ -51,7 +51,7 @@ We'll make an `mne.io.Raw` object so that we can save out some random
 data with a photodiode event channel in it in fif format (a commonly used
 electrophysiology data format).
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-85
+.. GENERATED FROM PYTHON SOURCE LINES 22-82
 
 .. code-block:: default
 
@@ -104,11 +104,8 @@ electrophysiology data format).
     info = mne.create_info(['ch1', 'ch2', 'ch3'], raw.info['sfreq'],
                            ['seeg'] * 3)
     raw2 = mne.io.RawArray(np.random.random((3, raw.times.size)) * 1e-6, info)
-    raw2.info['lowpass'] = raw.info['lowpass']  # these must match to combine
     raw.add_channels([raw2])
-    # bids needs these data fields
-    raw.info['dig'] = None
-    raw.info['line_freq'] = 60
+    raw.info['line_freq'] = 60  # for bids
 
     # add some offsets to the behavior so it's a bit more realistic
     offsets = np.random.randn(n_events) * 0.001
@@ -121,14 +118,13 @@ electrophysiology data format).
 
 
 
-.. image:: /auto_examples/images/sphx_glr_plot_recover_events_001.png
-    :alt: Corrupted Events
-    :class: sphx-glr-single-img
+.. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_001.png
+   :alt: Corrupted Events
+   :srcset: /auto_examples/images/sphx_glr_plot_recover_events_001.png
+   :class: sphx-glr-single-img
 
 
 .. rst-class:: sphx-glr-script-out
-
- Out:
 
  .. code-block:: none
 
@@ -138,14 +134,14 @@ electrophysiology data format).
     Creating RawArray with float64 data, n_channels=3, n_times=2039600
         Range : 0 ... 2039599 =      0.000 ...  2039.599 secs
     Ready.
-    Writing /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_9q7hw3p3/sub-1_task-mytask_raw.fif
-    Closing /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_9q7hw3p3/sub-1_task-mytask_raw.fif
+    Writing /tmp/tmp_mne_tempdir__n31r5wk/sub-1_task-mytask_raw.fif
+    Closing /tmp/tmp_mne_tempdir__n31r5wk/sub-1_task-mytask_raw.fif
     [done]
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 86-94
+.. GENERATED FROM PYTHON SOURCE LINES 83-91
 
 Find the photodiode events relative to the behavioral timing of interest
 
@@ -156,7 +152,7 @@ Note that the mock function mocks user input so when you run the example,
 you want to delete that line and unindent the next line, and then provide
 your own input depending on whether you want to keep the events or not.
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-99
+.. GENERATED FROM PYTHON SOURCE LINES 91-96
 
 .. code-block:: default
 
@@ -173,52 +169,54 @@ your own input depending on whether you want to keep the events or not.
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_002.png
-          :alt: Alignment (First 10), Event Differences
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_002.png
+         :alt: Alignment (First 10), Event Differences
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_002.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_003.png
-          :alt: Corrupted Event 8
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_003.png
+         :alt: Corrupted Event 8
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_003.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_004.png
-          :alt: Corrupted Event 144
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_004.png
+         :alt: Corrupted Event 144
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_004.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_005.png
-          :alt: Corrupted Event 234
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_005.png
+         :alt: Corrupted Event 234
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_005.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_006.png
-          :alt: Excluded Events, 8 recovered (not excluded), 144 recovered (not excluded), 234 recovered (not excluded)
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_006.png
+         :alt: Excluded Events, 8 recovered (not excluded), 144 recovered (not excluded), 234 recovered (not excluded)
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_006.png
+         :class: sphx-glr-multi-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_9q7hw3p3/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_9q7hw3p3/sub-1_task-mytask_raw.fif...
-    Isotrak not found
+    Reading in /tmp/tmp_mne_tempdir__n31r5wk/sub-1_task-mytask_raw.fif
+    Opening raw data file /tmp/tmp_mne_tempdir__n31r5wk/sub-1_task-mytask_raw.fif...
         Range : 0 ... 2039599 =      0.000 ...  2039.599 secs
     Ready.
     Reading 0 ... 2039599  =      0.000 ...  2039.599 secs...
     Finding photodiode events
-      0%|          | 0/606 [00:00<?, ?it/s]     49%|####8     | 296/606 [00:00<00:00, 2944.92it/s]    100%|##########| 606/606 [00:00<00:00, 3227.61it/s]
+      0%|          | 0/606 [00:00<?, ?it/s]    100%|##########| 606/606 [00:00<00:00, 7220.86it/s]
     301 up-deflection photodiode candidate events found
     Checking best alignments
-      0%|          | 0/300 [00:00<?, ?it/s]      1%|          | 2/300 [00:00<00:16, 17.64it/s]      1%|1         | 4/300 [00:00<00:16, 17.81it/s]      2%|2         | 6/300 [00:00<00:16, 17.68it/s]      3%|2         | 8/300 [00:00<00:16, 17.84it/s]      3%|3         | 10/300 [00:00<00:16, 17.07it/s]      4%|4         | 12/300 [00:00<00:16, 17.48it/s]      5%|4         | 14/300 [00:00<00:16, 17.64it/s]      5%|5         | 16/300 [00:00<00:16, 17.23it/s]      6%|6         | 18/300 [00:01<00:16, 17.25it/s]      7%|6         | 20/300 [00:01<00:16, 17.27it/s]      7%|7         | 22/300 [00:01<00:15, 17.53it/s]      8%|8         | 24/300 [00:01<00:16, 17.23it/s]      9%|8         | 26/300 [00:01<00:16, 16.26it/s]      9%|9         | 28/300 [00:01<00:16, 16.56it/s]     10%|#         | 30/300 [00:01<00:15, 16.95it/s]     11%|#         | 32/300 [00:01<00:17, 15.76it/s]     11%|#1        | 34/300 [00:02<00:19, 13.90it/s]     12%|#2        | 36/300 [00:02<00:17, 14.68it/s]     13%|#2        | 38/300 [00:02<00:18, 14.53it/s]     13%|#3        | 40/300 [00:02<00:19, 13.44it/s]     14%|#4        | 42/300 [00:02<00:18, 14.17it/s]     15%|#4        | 44/300 [00:02<00:17, 14.57it/s]     15%|#5        | 46/300 [00:02<00:16, 15.36it/s]     16%|#6        | 48/300 [00:02<00:15, 15.77it/s]     17%|#6        | 50/300 [00:03<00:15, 15.63it/s]     17%|#7        | 52/300 [00:03<00:15, 15.78it/s]     18%|#8        | 54/300 [00:03<00:15, 16.24it/s]     19%|#8        | 56/300 [00:03<00:14, 16.36it/s]     19%|#9        | 58/300 [00:03<00:14, 16.60it/s]     20%|##        | 60/300 [00:03<00:14, 16.87it/s]     21%|##        | 62/300 [00:03<00:13, 17.06it/s]     21%|##1       | 64/300 [00:03<00:13, 17.20it/s]     22%|##2       | 66/300 [00:04<00:13, 17.27it/s]     23%|##2       | 68/300 [00:04<00:13, 17.43it/s]     23%|##3       | 70/300 [00:04<00:13, 17.42it/s]     24%|##4       | 72/300 [00:04<00:13, 16.99it/s]     25%|##4       | 74/300 [00:04<00:13, 16.73it/s]     25%|##5       | 76/300 [00:04<00:13, 17.05it/s]     26%|##6       | 78/300 [00:04<00:12, 17.39it/s]     27%|##6       | 80/300 [00:04<00:12, 17.48it/s]     27%|##7       | 82/300 [00:04<00:12, 17.42it/s]     28%|##8       | 84/300 [00:05<00:12, 17.36it/s]     29%|##8       | 86/300 [00:05<00:12, 17.46it/s]     29%|##9       | 88/300 [00:05<00:12, 17.41it/s]     30%|###       | 90/300 [00:05<00:12, 17.47it/s]     31%|###       | 92/300 [00:05<00:11, 17.53it/s]     31%|###1      | 94/300 [00:05<00:11, 17.44it/s]     32%|###2      | 96/300 [00:05<00:11, 17.50it/s]     33%|###2      | 98/300 [00:05<00:11, 17.53it/s]     33%|###3      | 100/300 [00:06<00:11, 17.20it/s]     34%|###4      | 102/300 [00:06<00:11, 17.36it/s]     35%|###4      | 104/300 [00:06<00:11, 17.49it/s]     35%|###5      | 106/300 [00:06<00:11, 17.48it/s]     36%|###6      | 108/300 [00:06<00:10, 17.59it/s]     37%|###6      | 110/300 [00:06<00:10, 17.55it/s]     37%|###7      | 112/300 [00:06<00:10, 17.63it/s]     38%|###8      | 114/300 [00:06<00:10, 17.67it/s]     39%|###8      | 116/300 [00:06<00:10, 17.75it/s]     39%|###9      | 118/300 [00:07<00:10, 17.62it/s]     40%|####      | 120/300 [00:07<00:10, 17.61it/s]     41%|####      | 122/300 [00:07<00:10, 17.65it/s]     41%|####1     | 124/300 [00:07<00:10, 17.56it/s]     42%|####2     | 126/300 [00:07<00:09, 17.53it/s]     43%|####2     | 128/300 [00:07<00:10, 16.68it/s]     43%|####3     | 130/300 [00:07<00:09, 17.06it/s]     44%|####4     | 132/300 [00:07<00:09, 17.08it/s]     45%|####4     | 134/300 [00:07<00:10, 16.00it/s]     45%|####5     | 136/300 [00:08<00:10, 15.47it/s]     46%|####6     | 138/300 [00:08<00:10, 15.67it/s]     47%|####6     | 140/300 [00:08<00:09, 16.14it/s]     47%|####7     | 142/300 [00:08<00:09, 16.46it/s]     48%|####8     | 144/300 [00:08<00:09, 16.71it/s]     49%|####8     | 146/300 [00:08<00:10, 15.19it/s]     49%|####9     | 148/300 [00:08<00:09, 15.75it/s]     50%|#####     | 150/300 [00:09<00:09, 15.96it/s]     51%|#####     | 152/300 [00:09<00:09, 16.31it/s]     51%|#####1    | 154/300 [00:09<00:08, 16.42it/s]     52%|#####2    | 156/300 [00:09<00:08, 16.46it/s]     53%|#####2    | 158/300 [00:09<00:08, 16.23it/s]     53%|#####3    | 160/300 [00:09<00:08, 16.40it/s]     54%|#####4    | 162/300 [00:09<00:08, 15.61it/s]     55%|#####4    | 164/300 [00:09<00:09, 15.05it/s]     55%|#####5    | 166/300 [00:10<00:08, 15.57it/s]     56%|#####6    | 168/300 [00:10<00:08, 15.96it/s]     57%|#####6    | 170/300 [00:10<00:08, 16.22it/s]     57%|#####7    | 172/300 [00:10<00:07, 16.40it/s]     58%|#####8    | 174/300 [00:10<00:07, 16.13it/s]     59%|#####8    | 176/300 [00:10<00:08, 14.92it/s]     59%|#####9    | 178/300 [00:10<00:08, 14.30it/s]     60%|######    | 180/300 [00:10<00:08, 14.56it/s]     61%|######    | 182/300 [00:11<00:08, 13.92it/s]     61%|######1   | 184/300 [00:11<00:08, 13.85it/s]     62%|######2   | 186/300 [00:11<00:07, 14.65it/s]     63%|######2   | 188/300 [00:11<00:07, 15.12it/s]     63%|######3   | 190/300 [00:11<00:07, 15.31it/s]     64%|######4   | 192/300 [00:11<00:07, 15.04it/s]     65%|######4   | 194/300 [00:11<00:07, 14.77it/s]     65%|######5   | 196/300 [00:12<00:07, 13.67it/s]     66%|######6   | 198/300 [00:12<00:07, 13.85it/s]     67%|######6   | 200/300 [00:12<00:07, 13.56it/s]     67%|######7   | 202/300 [00:12<00:07, 13.49it/s]     68%|######8   | 204/300 [00:12<00:07, 13.53it/s]     69%|######8   | 206/300 [00:12<00:07, 12.76it/s]     69%|######9   | 208/300 [00:12<00:06, 13.21it/s]     70%|#######   | 210/300 [00:13<00:06, 13.81it/s]     71%|#######   | 212/300 [00:13<00:06, 14.39it/s]     71%|#######1  | 214/300 [00:13<00:05, 14.87it/s]     72%|#######2  | 216/300 [00:13<00:05, 14.84it/s]     73%|#######2  | 218/300 [00:13<00:05, 15.24it/s]     73%|#######3  | 220/300 [00:13<00:05, 14.97it/s]     74%|#######4  | 222/300 [00:13<00:05, 14.98it/s]     75%|#######4  | 224/300 [00:14<00:04, 15.28it/s]     75%|#######5  | 226/300 [00:14<00:04, 14.91it/s]     76%|#######6  | 228/300 [00:14<00:04, 15.34it/s]     77%|#######6  | 230/300 [00:14<00:04, 14.80it/s]     77%|#######7  | 232/300 [00:14<00:04, 14.24it/s]     78%|#######8  | 234/300 [00:15<00:07,  8.67it/s]     79%|#######8  | 236/300 [00:15<00:09,  7.10it/s]     79%|#######9  | 237/300 [00:15<00:10,  5.90it/s]     80%|#######9  | 239/300 [00:15<00:09,  6.57it/s]     80%|########  | 240/300 [00:16<00:11,  5.37it/s]     81%|########  | 242/300 [00:16<00:08,  6.61it/s]     81%|########1 | 244/300 [00:16<00:06,  8.10it/s]     82%|########2 | 246/300 [00:16<00:05,  9.42it/s]     83%|########2 | 248/300 [00:16<00:05, 10.15it/s]     83%|########3 | 250/300 [00:16<00:05,  9.50it/s]     84%|########4 | 252/300 [00:17<00:05,  8.33it/s]     84%|########4 | 253/300 [00:17<00:05,  8.55it/s]     85%|########5 | 255/300 [00:17<00:04,  9.52it/s]     86%|########5 | 257/300 [00:18<00:06,  6.69it/s]     86%|########6 | 258/300 [00:18<00:06,  6.67it/s]     86%|########6 | 259/300 [00:18<00:09,  4.26it/s]     87%|########6 | 260/300 [00:19<00:16,  2.50it/s]     87%|########7 | 261/300 [00:19<00:15,  2.52it/s]     87%|########7 | 262/300 [00:20<00:16,  2.36it/s]     88%|########7 | 263/300 [00:20<00:17,  2.13it/s]     88%|########8 | 264/300 [00:21<00:16,  2.21it/s]     88%|########8 | 265/300 [00:21<00:17,  1.94it/s]     89%|########8 | 266/300 [00:22<00:14,  2.32it/s]     89%|########9 | 267/300 [00:22<00:11,  2.86it/s]     89%|########9 | 268/300 [00:22<00:10,  3.06it/s]     90%|########9 | 269/300 [00:22<00:08,  3.63it/s]     90%|######### | 270/300 [00:22<00:07,  4.17it/s]     90%|######### | 271/300 [00:23<00:06,  4.59it/s]     91%|######### | 272/300 [00:23<00:05,  5.30it/s]     91%|#########1| 273/300 [00:23<00:04,  6.12it/s]     91%|#########1| 274/300 [00:23<00:03,  6.81it/s]     92%|#########1| 275/300 [00:23<00:03,  6.49it/s]     92%|#########2| 277/300 [00:23<00:03,  7.48it/s]     93%|#########2| 278/300 [00:23<00:02,  8.02it/s]     93%|#########3| 280/300 [00:23<00:02,  8.91it/s]     94%|#########3| 282/300 [00:24<00:01, 10.09it/s]     95%|#########4| 284/300 [00:24<00:01, 10.19it/s]     95%|#########5| 286/300 [00:24<00:01, 10.78it/s]     96%|#########6| 288/300 [00:24<00:01, 11.81it/s]     97%|#########6| 290/300 [00:24<00:00, 12.30it/s]     97%|#########7| 292/300 [00:24<00:00, 12.80it/s]     98%|#########8| 294/300 [00:25<00:00, 13.12it/s]     99%|#########8| 296/300 [00:25<00:00, 13.61it/s]     99%|#########9| 298/300 [00:25<00:00, 14.05it/s]    100%|##########| 300/300 [00:25<00:00, 14.26it/s]    100%|##########| 300/300 [00:25<00:00, 11.79it/s]
+      0%|          | 0/300 [00:00<?, ?it/s]      1%|1         | 4/300 [00:00<00:09, 30.15it/s]      3%|2         | 8/300 [00:00<00:09, 30.36it/s]      4%|4         | 12/300 [00:00<00:09, 30.12it/s]      5%|5         | 16/300 [00:00<00:09, 30.15it/s]      7%|6         | 20/300 [00:00<00:09, 30.11it/s]      8%|8         | 24/300 [00:00<00:09, 29.99it/s]      9%|9         | 28/300 [00:00<00:09, 30.08it/s]     11%|#         | 32/300 [00:01<00:08, 29.96it/s]     12%|#1        | 35/300 [00:01<00:08, 29.88it/s]     13%|#3        | 39/300 [00:01<00:08, 30.04it/s]     14%|#4        | 43/300 [00:01<00:08, 29.74it/s]     16%|#5        | 47/300 [00:01<00:08, 29.79it/s]     17%|#6        | 50/300 [00:01<00:08, 29.67it/s]     18%|#7        | 53/300 [00:01<00:08, 29.67it/s]     19%|#8        | 56/300 [00:01<00:08, 29.70it/s]     20%|#9        | 59/300 [00:01<00:08, 29.49it/s]     21%|##        | 62/300 [00:02<00:08, 29.60it/s]     22%|##1       | 65/300 [00:02<00:07, 29.67it/s]     23%|##2       | 68/300 [00:02<00:07, 29.69it/s]     24%|##3       | 71/300 [00:02<00:07, 29.75it/s]     25%|##4       | 74/300 [00:02<00:07, 28.62it/s]     26%|##5       | 77/300 [00:02<00:07, 28.75it/s]     27%|##6       | 80/300 [00:02<00:07, 28.88it/s]     28%|##7       | 83/300 [00:02<00:07, 29.09it/s]     29%|##8       | 86/300 [00:02<00:07, 28.73it/s]     30%|##9       | 89/300 [00:03<00:07, 28.93it/s]     31%|###       | 92/300 [00:03<00:07, 29.09it/s]     32%|###1      | 95/300 [00:03<00:07, 28.32it/s]     33%|###2      | 98/300 [00:03<00:07, 28.62it/s]     34%|###3      | 101/300 [00:03<00:06, 28.54it/s]     35%|###4      | 104/300 [00:03<00:06, 28.83it/s]     36%|###5      | 107/300 [00:03<00:06, 28.95it/s]     37%|###6      | 110/300 [00:03<00:06, 28.94it/s]     38%|###7      | 113/300 [00:03<00:06, 27.29it/s]     39%|###8      | 116/300 [00:03<00:06, 27.65it/s]     40%|###9      | 119/300 [00:04<00:06, 28.18it/s]     41%|####      | 122/300 [00:04<00:06, 28.34it/s]     42%|####1     | 125/300 [00:04<00:06, 28.03it/s]     43%|####2     | 128/300 [00:04<00:06, 27.75it/s]     44%|####3     | 131/300 [00:04<00:06, 28.04it/s]     45%|####4     | 134/300 [00:04<00:05, 28.04it/s]     46%|####5     | 137/300 [00:04<00:05, 28.06it/s]     47%|####6     | 140/300 [00:04<00:05, 27.50it/s]     48%|####7     | 143/300 [00:04<00:05, 27.18it/s]     49%|####8     | 146/300 [00:05<00:06, 25.64it/s]     50%|####9     | 149/300 [00:05<00:05, 26.31it/s]     51%|#####     | 152/300 [00:05<00:05, 26.54it/s]     52%|#####1    | 155/300 [00:05<00:05, 27.02it/s]     53%|#####2    | 158/300 [00:05<00:05, 27.13it/s]     54%|#####3    | 161/300 [00:05<00:05, 27.76it/s]     55%|#####4    | 164/300 [00:05<00:04, 27.96it/s]     56%|#####5    | 167/300 [00:05<00:04, 28.03it/s]     57%|#####6    | 170/300 [00:05<00:04, 28.21it/s]     58%|#####7    | 173/300 [00:06<00:04, 28.38it/s]     59%|#####8    | 176/300 [00:06<00:04, 28.24it/s]     60%|#####9    | 179/300 [00:06<00:04, 27.90it/s]     61%|######    | 182/300 [00:06<00:04, 27.38it/s]     62%|######1   | 185/300 [00:06<00:04, 27.53it/s]     63%|######2   | 188/300 [00:06<00:04, 27.46it/s]     64%|######3   | 191/300 [00:06<00:04, 27.16it/s]     65%|######4   | 194/300 [00:06<00:03, 27.19it/s]     66%|######5   | 197/300 [00:06<00:03, 27.32it/s]     67%|######6   | 200/300 [00:07<00:03, 27.50it/s]     68%|######7   | 203/300 [00:07<00:03, 27.46it/s]     69%|######8   | 206/300 [00:07<00:03, 27.59it/s]     70%|######9   | 209/300 [00:07<00:03, 26.52it/s]     71%|#######   | 212/300 [00:07<00:03, 26.69it/s]     72%|#######1  | 215/300 [00:07<00:03, 27.06it/s]     73%|#######2  | 218/300 [00:07<00:03, 27.21it/s]     74%|#######3  | 221/300 [00:07<00:02, 27.85it/s]     75%|#######4  | 224/300 [00:07<00:02, 27.79it/s]     76%|#######5  | 227/300 [00:08<00:02, 27.43it/s]     77%|#######6  | 230/300 [00:08<00:02, 27.15it/s]     78%|#######7  | 233/300 [00:08<00:02, 26.88it/s]     79%|#######8  | 236/300 [00:08<00:02, 25.87it/s]     80%|#######9  | 239/300 [00:08<00:02, 26.01it/s]     81%|########  | 242/300 [00:08<00:02, 26.43it/s]     82%|########1 | 245/300 [00:08<00:02, 27.20it/s]     83%|########2 | 248/300 [00:08<00:01, 27.73it/s]     84%|########3 | 251/300 [00:08<00:01, 27.24it/s]     85%|########4 | 254/300 [00:09<00:01, 27.15it/s]     86%|########5 | 257/300 [00:09<00:01, 27.77it/s]     87%|########6 | 260/300 [00:09<00:01, 27.11it/s]     88%|########7 | 263/300 [00:09<00:01, 25.81it/s]     89%|########8 | 266/300 [00:09<00:01, 25.04it/s]     90%|########9 | 269/300 [00:09<00:01, 25.01it/s]     91%|######### | 272/300 [00:09<00:01, 24.98it/s]     92%|#########1| 275/300 [00:09<00:00, 25.19it/s]     93%|#########2| 278/300 [00:09<00:00, 25.02it/s]     94%|#########3| 281/300 [00:10<00:00, 26.03it/s]     95%|#########4| 284/300 [00:10<00:00, 26.45it/s]     96%|#########5| 287/300 [00:10<00:00, 26.39it/s]     97%|#########6| 290/300 [00:10<00:00, 26.40it/s]     98%|#########8| 294/300 [00:10<00:00, 27.81it/s]     99%|#########9| 297/300 [00:10<00:00, 28.33it/s]    100%|##########| 300/300 [00:10<00:00, 28.78it/s]    100%|##########| 300/300 [00:10<00:00, 27.91it/s]
     Best alignment is with the first behavioral event shifted 0.00 s relative to the first synchronization event and has errors: min -3.82 ms, q1 -1.00 ms, med -0.02 ms, q3 0.89 ms, max 3.73 ms, 2 missed events
     Excluding events that have zero close synchronization events or more than one synchronization event within `max_len` time
     8 recovered (not excluded)
@@ -228,7 +226,7 @@ your own input depending on whether you want to keep the events or not.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-110
+.. GENERATED FROM PYTHON SOURCE LINES 97-107
 
 Find cessations of the photodiode deflections
 
@@ -241,7 +239,7 @@ into a console running python (ipython recommended), you can see how to
 interact with the window to accept or reject the recovered events by
 following the instructions.
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-115
+.. GENERATED FROM PYTHON SOURCE LINES 107-112
 
 .. code-block:: default
 
@@ -258,44 +256,46 @@ following the instructions.
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_007.png
-          :alt: Corrupted Event 144
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_007.png
+         :alt: Corrupted Event 8
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_007.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_008.png
-          :alt: Corrupted Event 144
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_008.png
+         :alt: Corrupted Event 144
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_008.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_009.png
-          :alt: Corrupted Event 144
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_009.png
+         :alt: Corrupted Event 144
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_009.png
+         :class: sphx-glr-multi-img
 
     *
 
-      .. image:: /auto_examples/images/sphx_glr_plot_recover_events_010.png
-          :alt: Corrupted Event 234
-          :class: sphx-glr-multi-img
+      .. image-sg:: /auto_examples/images/sphx_glr_plot_recover_events_010.png
+         :alt: Corrupted Event 234
+         :srcset: /auto_examples/images/sphx_glr_plot_recover_events_010.png
+         :class: sphx-glr-multi-img
 
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_9q7hw3p3/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_9q7hw3p3/sub-1_task-mytask_raw.fif...
-    Isotrak not found
+    Reading in /tmp/tmp_mne_tempdir__n31r5wk/sub-1_task-mytask_raw.fif
+    Opening raw data file /tmp/tmp_mne_tempdir__n31r5wk/sub-1_task-mytask_raw.fif...
         Range : 0 ... 2039599 =      0.000 ...  2039.599 secs
     Ready.
     Reading 0 ... 2039599  =      0.000 ...  2039.599 secs...
     Finding photodiode events
-      0%|          | 0/606 [00:00<?, ?it/s]     55%|#####4    | 332/606 [00:00<00:00, 3315.27it/s]     99%|#########9| 602/606 [00:00<00:00, 3102.75it/s]    100%|##########| 606/606 [00:00<00:00, 2995.91it/s]
+      0%|          | 0/606 [00:00<?, ?it/s]    100%|##########| 606/606 [00:00<00:00, 6930.14it/s]
     301 up-deflection photodiode candidate events found
+    8 recovered but discarded
     144 recovered (not excluded)
     234 recovered (not excluded)
     Overwriting existing file.
@@ -303,13 +303,13 @@ following the instructions.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-119
+.. GENERATED FROM PYTHON SOURCE LINES 113-116
 
 Check the results
 
 Finally, we'll check that the recovered events and the original events match.
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-132
+.. GENERATED FROM PYTHON SOURCE LINES 116-129
 
 .. code-block:: default
 
@@ -332,20 +332,17 @@ Finally, we'll check that the recovered events and the original events match.
 
 .. rst-class:: sphx-glr-script-out
 
- Out:
-
  .. code-block:: none
 
-    Reading in /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_9q7hw3p3/sub-1_task-mytask_raw.fif
-    Opening raw data file /var/folders/s4/y1vlkn8d70jfw7s8s03m9p540000gn/T/tmp_mne_tempdir_9q7hw3p3/sub-1_task-mytask_raw.fif...
-    Isotrak not found
+    Reading in /tmp/tmp_mne_tempdir__n31r5wk/sub-1_task-mytask_raw.fif
+    Opening raw data file /tmp/tmp_mne_tempdir__n31r5wk/sub-1_task-mytask_raw.fif...
         Range : 0 ... 2039599 =      0.000 ...  2039.599 secs
     Ready.
     Used Annotations descriptions: ['Stim Off', 'Stim On']
     Original: [  65602  989660 1595483]
-    Recovered: [  65602  989660 1595483]
+    Recovered: [  65601  989659 1595482]
     Original off: [  66236  990198 1596131]
-    Recovered off: [  66236  990197 1596130]
+    Recovered off: [  73495  997039 1603414]
 
 
 
@@ -353,28 +350,23 @@ Finally, we'll check that the recovered events and the original events match.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  35.956 seconds)
+   **Total running time of the script:** ( 0 minutes  15.498 seconds)
 
 
 .. _sphx_glr_download_auto_examples_plot_recover_events.py:
 
+.. only:: html
 
-.. only :: html
-
- .. container:: sphx-glr-footer
-    :class: sphx-glr-footer-example
+  .. container:: sphx-glr-footer sphx-glr-footer-example
 
 
+    .. container:: sphx-glr-download sphx-glr-download-python
 
-  .. container:: sphx-glr-download sphx-glr-download-python
+      :download:`Download Python source code: plot_recover_events.py <plot_recover_events.py>`
 
-     :download:`Download Python source code: plot_recover_events.py <plot_recover_events.py>`
+    .. container:: sphx-glr-download sphx-glr-download-jupyter
 
-
-
-  .. container:: sphx-glr-download sphx-glr-download-jupyter
-
-     :download:`Download Jupyter notebook: plot_recover_events.ipynb <plot_recover_events.ipynb>`
+      :download:`Download Jupyter notebook: plot_recover_events.ipynb <plot_recover_events.ipynb>`
 
 
 .. only:: html
