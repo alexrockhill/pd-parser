@@ -44,25 +44,8 @@ jobs:
       with:
         node-version: 16
     - name: Install BIDS validator (stable)
-      if: "matrix.os != 'ubuntu-latest'"
       run: |
         npm install -g bids-validator
-    - name: Install BIDS validator (main)
-      if: "matrix.os == 'ubuntu-latest'"
-      run: |
-        pushd ..
-        git clone --depth 1 https://github.com/bids-standard/bids-validator
-        npm install -g bids-validator/bids-validator
-        cd bids-validator
-        # Generate the full development node_modules
-        npm install
-        # Build & bundle the bids-validator CLI package
-        npm -w bids-validator run build
-        # Generate a package to install globally
-        npm -w bids-validator pack
-        # Install the package globally
-        bash -c "npm install -g bids-validator-*.tgz"
-        popd
     - name: Install pd-parser
       run: pip install --no-deps .
     - name: Run pytest
