@@ -1,6 +1,6 @@
 """A toolbox for parsing potentially corrupted photodiode events."""
 
-__version__ = 'v0.9dev'
+__version__ = 'v0.9.dev0'
 
 
 from pd_parser.parse_pd import (find_pd_params, parse_pd, parse_audio, # noqa
