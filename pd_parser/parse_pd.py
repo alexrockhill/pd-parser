@@ -36,6 +36,9 @@ def _read_tsv(fname):
             for i, data in enumerate(line_data):
                 numeric = all([c.isdigit() or c in ('.', '-')
                                for c in data])
+                for operand in ('.', '-'):  # only one . or -
+                    if len([c for c in data if c == operand]) > 1:
+                        numeric = False
                 if numeric:
                     if data.isdigit():
                         df[headers[i]].append(int(data))

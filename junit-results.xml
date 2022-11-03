@@ -1,1 +1,405 @@
-<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="45.541" timestamp="2022-09-19T13:24:58.878885" hostname="james"><testcase classname="pd_parser.tests.test_parse_pd" name="test_examples" time="44.792" /></testsuite></testsuites>
+<?xml version="1.0" encoding="utf-8"?><testsuites><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="10" time="168.316" timestamp="2022-11-03T11:21:43.461711" hostname="james"><testcase classname="pd_parser.tests.test_parse_pd" name="test_inputs" time="0.359" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_core" time="0.477" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_resync" time="0.386" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_two_pd_alignment" time="0.396" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_beh_with_nas" time="0.418" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_plotting" time="0.305" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_parse_pd" time="19.320"><failure message="FileNotFoundError: [Errno 2] No such file or directory: 'bids-validator'">_bids_validate = &lt;function _bids_validate.&lt;locals&gt;._validate at 0x7f70fc5d7b50&gt;
+
+    @pytest.mark.filterwarnings('ignore::RuntimeWarning')
+    @pytest.mark.filterwarnings('ignore::DeprecationWarning')
+    def test_parse_pd(_bids_validate):
+        # load in data
+        behf = op.join(basepath, 'pd_beh.tsv')
+        events = _read_tsv(op.join(basepath, 'pd_events.tsv'))
+        events_relative = _read_tsv(op.join(basepath, 'pd_relative_events.tsv'))
+        raw_tmp = mne.io.read_raw_fif(op.join(basepath, 'pd_data-raw.fif'),
+                                      preload=True)
+        with raw_tmp.info._unlock():
+            raw_tmp.info['dig'] = None
+            raw_tmp.info['line_freq'] = 60
+        out_dir = _TempDir()
+        fname = op.join(out_dir, 'pd_data-raw.fif')
+        raw_tmp.save(fname)
+        # this needs to be tested with user interaction, this
+        # just tests that it launches
+        pd_parser.find_pd_params(fname, pd_ch_names=['pd'])
+        plt.close('all')
+        # test core functionality
+        annot, samples = pd_parser.parse_pd(fname, beh=behf, pd_ch_names=['pd'],
+                                            zscore=20, resync=0.125)
+        plt.close('all')
+        raw = mne.io.read_raw_fif(fname)
+        raw.set_annotations(annot)
+        events2, event_id = mne.events_from_annotations(raw)
+        np.testing.assert_array_equal(
+            events2[:, 0], [e for e in events['pd_parser_sample'] if e != 'n/a'])
+        assert samples == events['pd_parser_sample']
+        # test add_pd_off_events
+        annot = pd_parser.add_pd_off_events(fname, off_event_name=off_event_name,
+                                            zscore=20)
+        raw.set_annotations(annot)
+        assert off_event_name in annot.description
+        events2, event_id = mne.events_from_annotations(raw)
+        off_events = events2[events2[:, 2] == event_id[off_event_name]]
+        np.testing.assert_array_equal(
+            off_events[:, 0], [e for e in events['off_sample'] if e != 'n/a'])
+        '''
+        df = dict(trial=range(300), pd_parser_sample=samples, off_sample=list())
+        i = 0
+        for s in samples:
+            df['off_sample'].append('n/a' if s == 'n/a' else off_events[i, 0])
+            i += s != 'n/a'
+        '''
+        # test add_pd_relative_events
+        pd_parser.add_relative_events(
+            raw, behf,
+            relative_event_keys=['fix_duration', 'go_time', 'response_time'],
+            relative_event_names=['ISI Onset', 'Go Cue', 'Response'])
+        annot, pd_ch_names, beh = _load_data(raw)
+        raw.set_annotations(annot)
+        events2, event_id = mne.events_from_annotations(raw)
+        np.testing.assert_array_equal(events2[:, 0], events_relative['sample'])
+        assert pd_ch_names == ['pd']
+        np.testing.assert_array_equal(
+            events2[:, 2], [event_id[tt] for tt in events_relative['trial_type']])
+        # test add_pd_events_to_raw
+        raw2 = pd_parser.add_events_to_raw(raw, keep_pd_channels=True)
+        events3, event_id2 = mne.events_from_annotations(raw2)
+        np.testing.assert_array_equal(events3, events2)
+        assert event_id2 == event_id
+        # test pd_parser_save_to_bids
+        bids_dir = op.join(out_dir, 'bids_dir')
+        pd_parser.save_to_bids(bids_dir, fname, '1', 'test', verbose=False)
+&gt;       _bids_validate(bids_dir)
+
+_bids_validate = &lt;function _bids_validate.&lt;locals&gt;._validate at 0x7f70fc5d7b50&gt;
+annot      = &lt;Annotations | 1433 segments: Fixation (288), Go Cue (288), ISI Onset ...&gt;
+beh        = {'fix_duration': [0.6, 0.7, 0.4, 0.4, 0.5, 0.7, ...], 'fix_onset_time': [40923.295, 40931.0775, 40938.977, 40946.7271,...8, 1.3289, 1.0254, 1.4241, 1.5237, ...], 'pd_parser_sample': ['n/a', 210633, 218529, 226292, 233756, 241635, ...], ...}
+behf       = '/home/alexrockhill/projects/pd-parser/pd_parser/tests/data/pd_beh.tsv'
+bids_dir   = '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir'
+event_id   = {'Fixation': 1, 'Go Cue': 2, 'ISI Onset': 3, 'Response': 4, ...}
+event_id2  = {'Fixation': 1, 'Go Cue': 2, 'ISI Onset': 3, 'Response': 4, ...}
+events     = {'off_sample': ['n/a', 211334, 218930, 226677, 234240, 242336, ...], 'pd_parser_sample': ['n/a', 210633, 218529, 226292, 233756, 241635, ...], 'trial': [0, 1, 2, 3, 4, 5, ...]}
+events2    = array([[ 210633,       0,       1],
+       [ 211333,       0,       3],
+       [ 211334,       0,       5],
+       ...,
+       [2636340,       0,       3],
+       [2636971,       0,       2],
+       [2637579,       0,       4]])
+events3    = array([[ 210633,       0,       1],
+       [ 211333,       0,       3],
+       [ 211334,       0,       5],
+       ...,
+       [2636340,       0,       3],
+       [2636971,       0,       2],
+       [2637579,       0,       4]])
+events_relative = {'duration': [0.100006103515625, 0.0999908447265625, 0.100006103515625, 0.0999908447265625, 0.100006103515625, 0.10000...': ['Fixation', 'ISI Onset', 'Stim Off', 'Go Cue', 'Response', 'Fixation', ...], 'value': [1, 3, 5, 2, 4, 1, ...], ...}
+fname      = '/tmp/tmp_mne_tempdir_4r2jt8dz/pd_data-raw.fif'
+off_events = array([[ 211334,       0,       2],
+       [ 218930,       0,       2],
+       [ 226677,       0,       2],
+       [ 2...       2],
+       [2620448,       0,       2],
+       [2628328,       0,       2],
+       [2636324,       0,       2]])
+out_dir    = '/tmp/tmp_mne_tempdir_4r2jt8dz'
+pd_ch_names = ['pd']
+raw        = &lt;Raw | pd_data-raw.fif, 1 x 2818158 (2819.8 s), ~7 kB, data not loaded&gt;
+raw2       = &lt;Raw | pd_data-raw.fif, 1 x 2818158 (2819.8 s), ~7 kB, data not loaded&gt;
+raw_tmp    = &lt;Raw | pd_data-raw.fif, 1 x 2818158 (2819.8 s), ~21.5 MB, data loaded&gt;
+samples    = ['n/a', 210633, 218529, 226292, 233756, 241635, ...]
+
+pd_parser/tests/test_parse_pd.py:425: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+pd_parser/tests/test_parse_pd.py:91: in _validate
+    run_subprocess(cmd, shell=shell)
+        bids_root  = '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir'
+        bids_validator_exe = ['bids-validator', '--config.error=41']
+        cmd        = ['bids-validator', '--config.error=41', '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir']
+        shell      = False
+&lt;decorator-gen-1&gt;:12: in run_subprocess
+    ???
+        args       = ()
+        command    = ['bids-validator', '--config.error=41', '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir']
+        do_level_change = False
+        kwargs     = {'shell': False}
+        return_code = False
+        verbose    = None
+../mne-python/mne/utils/misc.py:127: in run_subprocess
+    with running_subprocess(command, *args, **kwargs) as p:
+        all_err    = ''
+        all_out    = ''
+        args       = ()
+        command    = ['bids-validator', '--config.error=41', '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir']
+        control_stderr = True
+        control_stdout = True
+        err_q      = &lt;queue.Queue object at 0x7f70fc116350&gt;
+        kwargs     = {'shell': False}
+        out_q      = &lt;queue.Queue object at 0x7f70fc116410&gt;
+        return_code = False
+        verbose    = None
+../../software/anaconda3/envs/mne/lib/python3.10/contextlib.py:135: in __enter__
+    return next(self.gen)
+        self       = &lt;contextlib._GeneratorContextManager object at 0x7f70fc116b90&gt;
+../mne-python/mne/utils/misc.py:256: in running_subprocess
+    p = subprocess.Popen(command, *args, **kwargs)
+        after      = 'wait'
+        args       = ()
+        command    = ['bids-validator', '--config.error=41', '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir']
+        command_name = 'bids-validator'
+        command_str = 'bids-validator --config.error=41 /tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir'
+        contexts   = ['stderr', 'stdout']
+        env        = environ({'SHELL': '/bin/bash', 'SESSION_MANAGER': 'local/james:@/tmp/.ICE-unix/3548,unix/james:/tmp/.ICE-unix/3548', '...est', 'OLDPWD': '/home/alexrockhill', 'PYTEST_CURRENT_TEST': 'pd_parser/tests/test_parse_pd.py::test_parse_pd (call)'})
+        kwargs     = {'shell': False, 'stderr': -1, 'stdout': -1}
+        stdxxx     = 'stdout'
+        verbose    = None
+../../software/anaconda3/envs/mne/lib/python3.10/subprocess.py:969: in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+        args       = ['bids-validator', '--config.error=41', '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir']
+        bufsize    = -1
+        c2pread    = 24
+        c2pwrite   = 25
+        close_fds  = True
+        creationflags = 0
+        cwd        = None
+        encoding   = None
+        env        = None
+        errors     = None
+        errread    = 26
+        errwrite   = 27
+        executable = None
+        extra_groups = None
+        f          = &lt;_io.BufferedReader name=26&gt;
+        gid        = None
+        gids       = None
+        group      = None
+        p2cread    = -1
+        p2cwrite   = -1
+        pass_fds   = ()
+        pipesize   = -1
+        preexec_fn = None
+        restore_signals = True
+        self       = &lt;Popen: returncode: 255 args: ['bids-validator', '--config.error=41', '/tmp/...&gt;
+        shell      = False
+        start_new_session = False
+        startupinfo = None
+        stderr     = -1
+        stdin      = None
+        stdout     = -1
+        text       = None
+        uid        = None
+        umask      = -1
+        universal_newlines = None
+        user       = None
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;Popen: returncode: 255 args: ['bids-validator', '--config.error=41', '/tmp/...&gt;
+args = ['bids-validator', '--config.error=41', '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir']
+executable = b'bids-validator', preexec_fn = None, close_fds = True
+pass_fds = (), cwd = None, env = None, startupinfo = None, creationflags = 0
+shell = False, p2cread = -1, p2cwrite = -1, c2pread = 24, c2pwrite = 25
+errread = 26, errwrite = 27, restore_signals = True, gid = None, gids = None
+uid = None, umask = -1, start_new_session = False
+
+    def _execute_child(self, args, executable, preexec_fn, close_fds,
+                       pass_fds, cwd, env,
+                       startupinfo, creationflags, shell,
+                       p2cread, p2cwrite,
+                       c2pread, c2pwrite,
+                       errread, errwrite,
+                       restore_signals,
+                       gid, gids, uid, umask,
+                       start_new_session):
+        """Execute program (POSIX version)"""
+    
+        if isinstance(args, (str, bytes)):
+            args = [args]
+        elif isinstance(args, os.PathLike):
+            if shell:
+                raise TypeError('path-like args is not allowed when '
+                                'shell is true')
+            args = [args]
+        else:
+            args = list(args)
+    
+        if shell:
+            # On Android the default shell is at '/system/bin/sh'.
+            unix_shell = ('/system/bin/sh' if
+                      hasattr(sys, 'getandroidapilevel') else '/bin/sh')
+            args = [unix_shell, "-c"] + args
+            if executable:
+                args[0] = executable
+    
+        if executable is None:
+            executable = args[0]
+    
+        sys.audit("subprocess.Popen", executable, args, cwd, env)
+    
+        if (_USE_POSIX_SPAWN
+                and os.path.dirname(executable)
+                and preexec_fn is None
+                and not close_fds
+                and not pass_fds
+                and cwd is None
+                and (p2cread == -1 or p2cread &gt; 2)
+                and (c2pwrite == -1 or c2pwrite &gt; 2)
+                and (errwrite == -1 or errwrite &gt; 2)
+                and not start_new_session
+                and gid is None
+                and gids is None
+                and uid is None
+                and umask &lt; 0):
+            self._posix_spawn(args, executable, env, restore_signals,
+                              p2cread, p2cwrite,
+                              c2pread, c2pwrite,
+                              errread, errwrite)
+            return
+    
+        orig_executable = executable
+    
+        # For transferring possible exec failure from child to parent.
+        # Data format: "exception name:hex errno:description"
+        # Pickle is not used; it is complex and involves memory allocation.
+        errpipe_read, errpipe_write = os.pipe()
+        # errpipe_write must not be in the standard io 0, 1, or 2 fd range.
+        low_fds_to_close = []
+        while errpipe_write &lt; 3:
+            low_fds_to_close.append(errpipe_write)
+            errpipe_write = os.dup(errpipe_write)
+        for low_fd in low_fds_to_close:
+            os.close(low_fd)
+        try:
+            try:
+                # We must avoid complex work that could involve
+                # malloc or free in the child process to avoid
+                # potential deadlocks, thus we do all this here.
+                # and pass it to fork_exec()
+    
+                if env is not None:
+                    env_list = []
+                    for k, v in env.items():
+                        k = os.fsencode(k)
+                        if b'=' in k:
+                            raise ValueError("illegal environment variable name")
+                        env_list.append(k + b'=' + os.fsencode(v))
+                else:
+                    env_list = None  # Use execv instead of execve.
+                executable = os.fsencode(executable)
+                if os.path.dirname(executable):
+                    executable_list = (executable,)
+                else:
+                    # This matches the behavior of os._execvpe().
+                    executable_list = tuple(
+                        os.path.join(os.fsencode(dir), executable)
+                        for dir in os.get_exec_path(env))
+                fds_to_keep = set(pass_fds)
+                fds_to_keep.add(errpipe_write)
+                self.pid = _posixsubprocess.fork_exec(
+                        args, executable_list,
+                        close_fds, tuple(sorted(map(int, fds_to_keep))),
+                        cwd, env_list,
+                        p2cread, p2cwrite, c2pread, c2pwrite,
+                        errread, errwrite,
+                        errpipe_read, errpipe_write,
+                        restore_signals, start_new_session,
+                        gid, gids, uid, umask,
+                        preexec_fn)
+                self._child_created = True
+            finally:
+                # be sure the FD is closed no matter what
+                os.close(errpipe_write)
+    
+            self._close_pipe_fds(p2cread, p2cwrite,
+                                 c2pread, c2pwrite,
+                                 errread, errwrite)
+    
+            # Wait for exec to fail or succeed; possibly raising an
+            # exception (limited in size)
+            errpipe_data = bytearray()
+            while True:
+                part = os.read(errpipe_read, 50000)
+                errpipe_data += part
+                if not part or len(errpipe_data) &gt; 50000:
+                    break
+        finally:
+            # be sure the FD is closed no matter what
+            os.close(errpipe_read)
+    
+        if errpipe_data:
+            try:
+                pid, sts = os.waitpid(self.pid, 0)
+                if pid == self.pid:
+                    self._handle_exitstatus(sts)
+                else:
+                    self.returncode = sys.maxsize
+            except ChildProcessError:
+                pass
+    
+            try:
+                exception_name, hex_errno, err_msg = (
+                        errpipe_data.split(b':', 2))
+                # The encoding here should match the encoding
+                # written in by the subprocess implementations
+                # like _posixsubprocess
+                err_msg = err_msg.decode()
+            except ValueError:
+                exception_name = b'SubprocessError'
+                hex_errno = b'0'
+                err_msg = 'Bad exception data from child: {!r}'.format(
+                              bytes(errpipe_data))
+            child_exception_type = getattr(
+                    builtins, exception_name.decode('ascii'),
+                    SubprocessError)
+            if issubclass(child_exception_type, OSError) and hex_errno:
+                errno_num = int(hex_errno, 16)
+                child_exec_never_called = (err_msg == "noexec")
+                if child_exec_never_called:
+                    err_msg = ""
+                    # The error must be from chdir(cwd).
+                    err_filename = cwd
+                else:
+                    err_filename = orig_executable
+                if errno_num != 0:
+                    err_msg = os.strerror(errno_num)
+&gt;               raise child_exception_type(errno_num, err_msg, err_filename)
+E               FileNotFoundError: [Errno 2] No such file or directory: 'bids-validator'
+
+args       = ['bids-validator', '--config.error=41', '/tmp/tmp_mne_tempdir_4r2jt8dz/bids_dir']
+c2pread    = 24
+c2pwrite   = 25
+child_exception_type = &lt;class 'OSError'&gt;
+child_exec_never_called = False
+close_fds  = True
+creationflags = 0
+cwd        = None
+env        = None
+env_list   = None
+err_filename = 'bids-validator'
+err_msg    = 'No such file or directory'
+errno_num  = 2
+errpipe_data = bytearray(b'OSError:2:')
+errpipe_read = 28
+errpipe_write = 29
+errread    = 26
+errwrite   = 27
+exception_name = bytearray(b'OSError')
+executable = b'bids-validator'
+executable_list = (b'/home/alexrockhill/.rbenv/shims/bids-validator', b'/usr/local/opt/sphinx-doc/bin/bids-validator', b'/home/alexrockh...ill/software/freesurfer/tktools/bids-validator', b'/home/alexrockhill/software/freesurfer/mni/bin/bids-validator', ...)
+fds_to_keep = {29}
+gid        = None
+gids       = None
+hex_errno  = bytearray(b'2')
+low_fds_to_close = []
+orig_executable = 'bids-validator'
+p2cread    = -1
+p2cwrite   = -1
+part       = b''
+pass_fds   = ()
+pid        = 614610
+preexec_fn = None
+restore_signals = True
+self       = &lt;Popen: returncode: 255 args: ['bids-validator', '--config.error=41', '/tmp/...&gt;
+shell      = False
+start_new_session = False
+startupinfo = None
+sts        = 65280
+uid        = None
+umask      = -1
+
+../../software/anaconda3/envs/mne/lib/python3.10/subprocess.py:1845: FileNotFoundError</failure></testcase><testcase classname="pd_parser.tests.test_parse_pd" name="test_long_events" time="0.326" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_parse_audio" time="5.928" /><testcase classname="pd_parser.tests.test_parse_pd" name="test_cli" time="7.863" /><testcase time="0.000" /></testsuite></testsuites>
